@@ -1,3 +1,9 @@
+FollowerForge 3.7.1 (development audit; parent 3.7.0 preserved)
+
+Status: local repair candidate; 495 tests passed; not released.
+Artifact and remaining audit gaps: FollowerForge 3.7.1/VALIDATION.md.
+
+Previous release:
 FollowerForge 3.7.0
 
 Parent: FollowerForge 3.6.1 (released: GitHub v3.6.1)

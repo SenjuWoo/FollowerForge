@@ -1,5 +1,3 @@
-# CHANGELOG — FollowerForge
-
 ## [3.7.1] - Local repair candidate
 - Correct MO2 modlist disk-order normalization (highest-first to lowest-first).
 - Reject a missing explicitly selected head mesh rather than publishing without its face.
@@ -9,6 +7,8 @@
 - Add batch-failure logs to the regression test and six regression checks.
 Validation: 495 Release tests passed, including configured C: to Z: publication.
 Unresolved: initial parent batch flake; exhaustive UI/Papyrus/in-game audit not completed.
+
+# CHANGELOG — FollowerForge
 
 ================================================================================
 ## [3.7.0] - 2026-08-26 - transform into anything, and stop blocking a build that was fine
@@ -64,240 +64,215 @@ Evidence:
 
 
 ================================================================================
-## [3.6.0] - 2026-08-19 - complete frontend redesign - CRASH FIXED + UI POLISH PASSES 2-5 + RELEASE-READINESS
+## [3.6.1] - 2026-08-22 - Copy diagnostics, and release plumbing that tells the truth
+Agent: Claude Code (Opus 5)
+Parent: FollowerForge 3.6.0
+
+Added:
+  - "Copy diagnostics" on the Review page and in the Ctrl+K palette. One click puts a
+    plain-text report on the clipboard: app version, OS, manager and profile, plugin and
+    catalogue counts, chosen face/race/voice, and the findings from the last build.
+    Why: every 3.x fix so far started from a report too vague to act on ("body/face colour
+    mismatch", "can't add arrows", "MO2 can't find my mods"), each costing a round-trip
+    before any work could begin.
+  - Home paths are written as %USERPROFILE% / %LOCALAPPDATA%, so a report pasted in a public
+    Nexus comment does not publish the reporter's Windows account name.
+
+Fixed (user report: "how do you unselect items? … all of my selections were stuck in place
+with no button to delete them, nor any instruction on how to unselect them"):
+  - Every optional picker now has a "Clear" button beside its Browse button — all seven armor
+    slots, weapons, ammo, belongings, spells, perks, and the single-choice face, combat style,
+    legacy outfit, body, and transform pickers. Race, voice, class and location deliberately
+    have none; they always need a value.
+  - Clearing one armor slot no longer touches the others. The seven slots share one remembered
+    set, so this uses the same offered-keys scoping the deck's Apply uses.
+  - The Expert Deck has a "Clear selection" button, and its hint now states how selection
+    actually works: click a row to select, Ctrl+click to add or remove.
+  - The deck's checkbox column was headed "Selected" inside a read-only grid, so it looked like
+    the control for selection and could not be clicked. Renamed to "In cart" and marked
+    read-only explicitly — it reports state, it does not set it.
+  - Root cause of the confusion: "Remove selected" buttons existed on Kin and custom lines and
+    nowhere else, so the app taught people to look for a button that 18 other pickers lacked.
+    Click-again-to-deselect worked on the multi lists all along but was never stated anywhere.
+
+Fixed:
+  - Narrow windows were clipped on the right. Below 1180px the follower dossier hides itself,
+    but its 312px grid column did not shrink, so every page kept being measured 312px narrower
+    than the window — content cut off ("CHECK BEFOR…") with a dead strip beside it, and no way
+    to scroll to it because these pages disable horizontal scrolling. Found by rendering the
+    Review page at the window's own MinWidth, which nothing had ever done.
+  - The build action row wraps instead of clipping, so a fourth button can never become
+    unreachable on a small window.
+  - CI installed the .NET 9 SDK (a 298 MB download) for projects that target net10.0. It was
+    green only because the windows-latest image happens to preinstall .NET 10 — the day that
+    image changes, or anyone adds a global.json, the build stops. Now asks for 10.0.x.
+  - Removed the stale `FollowerForge 3.6.0/dist` ZIP. It was rebuilt three minutes AFTER the
+    release upload from the same commit and did not match it (99,209,827 B / dbec86e8… local
+    vs 99,245,718 B / 3efa07d9… shipped), so any later hash check would have verified a file
+    nobody downloaded. Both hashes are recorded in VALIDATION.md instead.
+  - Docs caught up with reality: PLAN.md still had the 3.6.0 release unchecked and STATE.md
+    still said the push was unauthorized, three days after it shipped to GitHub and Nexus.
+    NEXUS-UPLOAD staged 3.5.0 while Nexus was serving 3.6.0.
+
+Known, unchanged:
+  - RaceMenu body/face OVERLAYS (tattoos, warpaint) still do not transfer to a built
+    follower — no NiOverride.AddOverlays path exists. 3.6.1 does not warn about this yet;
+    that is the next piece of work, and it is a warning first, not a fix.
+  - MO2 modlist.txt priority direction is still UNVERIFIED (PluginLists.cs).
+
+================================================================================
+## [3.6.0] - 2026-08-19 - Studio workspace and Expert Deck
 Agent: Codex
 Parent: FollowerForge 3.5.0
 
 Release readiness (Agent: Grok, 2026-08-19):
-  Expert Deck Apply no longer wipes sibling armor/belongings slices: each deck commits only
-  the keys it offered. Empty drafts no longer paint Identity/Review as Error (missing name is
-  Needs attention; empty loadout is Optional; Review is Error only after a must-fix build or
-  a real setup failure). Command palette Enter runs the highlighted row instead of the first
-  hit; arrows do not refilter. Escape no longer swallows textbox cancel. Expert Deck EditorID
-  is the plugin EditorID (including races, not the display name). Palette also runs Build,
-  Paths, MO2 setup, and Switch manager. Multi-select Apply honours checkbox ticks. Ctrl
-  shortcuts do not drive the page behind a deck/palette overlay. 461 Release tests pass.
+  - Expert Deck Apply commits only the keys that deck offered, so armor families and
+    belongings slices (books/misc/food/ingredients) no longer wipe each other.
+  - Empty drafts: missing name is Needs attention, empty loadout is Optional, Review is
+    Error only after a must-fix build or a real setup failure.
+  - Command palette: Enter runs the highlighted command; arrows/caret keys do not refilter;
+    palette also offers Build, Paths, MO2 setup, and Switch manager.
+  - Escape only dismisses an open overlay; it no longer eats textbox Escape.
+  - Expert Deck EditorID column uses the plugin EditorID, including races (NordRace, not Nord).
+  - Multi-select Apply honours DataGrid checkbox ticks, not only SelectedItems.
+  - Ctrl+K/E/0-7 do not navigate behind a deck or palette overlay.
+  - 461 Release tests pass.
 
-Crash fix (Agent: Kimi, 2026-08-18, evidence: Windows Application event 1026, FollowerForge.exe 3.6.0.0):
-  Opening any single-choice Expert Deck catalogue (race, face, voice, class, combat style,
-  outfit, body, transform race/spell, location) crashed the whole app:
-  InvalidOperationException "Can only change SelectedItems collection in Extended selection
-  mode" from WizardWindow.RefreshDeck. Root cause: RefreshDeck always mutated the DataGrid
-  SelectedItems collection, which Avalonia only allows in Extended mode; single-choice decks
-  run the grid in Single mode. Fix: selection sync is mode-aware (SelectedItems only in
-  Extended; SelectedItem otherwise), regression-pinned by tests.
-  Scroll-menu compression addressed in the UI polish pass below; user re-rating pending.
+Crash fix (Agent: Kimi, 2026-08-18):
+  - Opening any single-choice Expert Deck catalogue (race, face, voice, class, combat style,
+    outfit, body records, transform race/spell, location) crashed the app with
+    InvalidOperationException "Can only change SelectedItems collection in Extended selection
+    mode" (Windows Application event 1026, FollowerForge.exe 3.6.0.0).
+  - Root cause: WizardWindow.RefreshDeck always mutated the DataGrid SelectedItems collection;
+    Avalonia only allows that in Extended mode and single-choice decks run the grid in Single.
+  - Fix: DeckGridSelection.SyncSelected applies selection mode-aware (SelectedItems only in
+    Extended, SelectedItem in Single). Four regression tests pin the behavior.
 
 UI polish (Agent: Kimi, 2026-08-18):
-  - Density and clarity pass: roomier cards, taller list/grid rows, 8pt spacing, clearer
-    type hierarchy, hover/pressed buttons, larger catalogue lists (Raycast/Linear-style
-    token guidance; research via kimi_search_v2 — Firecrawl not installed on this machine).
-  - Theme leaks fixed: badge chips bind DynamicResource class styles and repaint live on
-    theme switch; MO2/paths setup windows moved off hardcoded dark/gold hex onto tokens.
-  - ThemePalette gains Info + OnStatus slots on all five themes; ThemeCoverageTests pin
-    palette completeness, zero hardcoded brushes in Ui XAML, and chip-class wiring.
+  - Density and clarity pass across the Studio: roomier cards (20px padding, 12px radius),
+    taller list rows (46px) and grid rows (40px), 38px buttons with hover/pressed feedback,
+    larger catalogue lists, wider sidebar (256px), and a 13px/19 hint type tier, following
+    Raycast/Linear-style token guidance (8pt spacing grid, rationed accent, hairline borders).
+  - Theme leak fixes: badge chips (Good/Caution/Warning/etc.) now bind to chip class styles
+    via DynamicResource and repaint live on theme switch; the MO2 setup and first-run paths
+    setup windows are converted from hardcoded dark/gold hex to theme tokens.
+  - ThemePalette gains Info and OnStatus (ink on colored chips) slots across all five themes.
+  - New ThemeCoverageTests pin palette completeness, contrast sanity, zero hardcoded brushes
+    in Ui XAML, and chip-class wiring. Suite now 454 tests.
 
 UI polish pass 3 (Agent: Kimi, 2026-08-18; user feedback: "no differences, error still yellow"):
   - Root cause of the still-frozen look: pass 2 fixed the plumbing (chips follow theme
     tokens), but every theme's Warning/Danger tokens held nearly the same amber/red hex, so
     a theme switch visibly repainted nothing. Warning and Danger hues are now distinct per
     theme (gold / peach / straw / lime-amber / dark-amber warnings; red / rose / coral /
-    vermilion / brick dangers), pinned by a per-theme distinctness test.
+    vermilion / brick dangers).
   - Badge chips redesigned Raycast/Linear-style: translucent tinted fill with colored text
     (new SuccessSoft/InfoSoft/WarningSoft/DangerSoft tokens) instead of solid color blocks;
-    pill radius, 11px semibold labels. Suite now 456 tests.
-  - Flake note: two Phase6 build-pipeline tests fail intermittently under full-suite IO load
-    (Directory.Move publish step); green isolated and on retry; unrelated to the UI diff.
+    pills (radius 999), 11px semibold labels.
+  - New tests pin per-theme status distinctness and soft-fill alpha range. Suite now 456 tests.
 
-UI polish pass 4 (Agent: Kimi, 2026-08-19; screenshot-verified with new headless harness):
-  - Overlay dim raised 80%→95% opaque: sidebar status labels no longer ghost through the
-    deck/palette overlay (the user's "chips overlay the yellow labels").
-  - Light theme fixed: App.axaml hardcoded RequestedThemeVariant=Dark, leaving Fluent
-    buttons white-on-cream; the variant now follows the palette and default Button/ComboBox
-    styles draw from tokens.
-  - Sidebar statuses are tinted pills; studio cards auto-height; picker lists use MaxHeight
-    (collapse when empty, grow with content); deck family/inspector panels flattened.
-  - tools/UiScreenshots renders the real window headlessly to PNG per theme — UI changes
-    are screenshot-verified before shipping from now on.
+UI polish pass 4 (Agent: Kimi, 2026-08-19; screenshot-verified via new headless render harness):
+  - Fixed overlay bleed: deck/palette dim was only 80% opaque, so bright sidebar status
+    labels ghosted through (the user's "chips overlay the yellow labels"). Now ~95% opaque.
+  - Fixed Light-theme invisible buttons: App.axaml hardcoded RequestedThemeVariant=Dark, so
+    Fluent kept button text white-on-cream. ThemeResources.Apply now switches the Fluent
+    variant with the palette, and default Button/ComboBox styles draw from tokens.
+  - Sidebar readiness labels are tinted pills (same chip system as catalogue rows) instead of
+    bare yellow text, driven by ReadinessLevel.
+  - De-blockify: studio cards auto-height (no fixed 280x172 blocks), picker lists use
+    MaxHeight instead of fixed Height so empty lists collapse and populated lists breathe,
+    deck family/inspector panels flattened, DataGrid gets a hairline border + rounded corners.
+  - New tools/UiScreenshots harness renders the real WizardWindow headlessly (Avalonia
+    Headless + Skia) to PNG per theme; UI changes are now screenshot-verified before shipping.
 
-UI polish pass 5 (Agent: Kimi, 2026-08-19; user 2560x1440 screenshots: "space allocation is
-trash, overlay still happening"):
-  - Wasted-space root cause, three layers deep: category host was a plain Panel (arranges
-    children at desired size, never stretches), page ScrollViewers allowed unconstrained
-    horizontal measure, and the Fluent Expander defaults to left alignment. Fixed: host is
-    now a Grid, all eight page ScrollViewers set HorizontalScrollBarVisibility=Disabled, and
-    the Expander style sets HorizontalAlignment/HorizontalContentAlignment=Stretch. Pages,
-    sections, search boxes and lists now fill the full content column at any window size.
-    Diagnosed via a container-painting diagnostic render (StackPanel provably stretched;
-    Expanders were the narrow element), then pixel-verified in the 1440p harness frame.
-  - Overlay dim is now FULLY opaque (FF) per theme — 95% still ghosted bright pills on the
-    user's display. Pixel-verified: ring pixels render exactly the overlay token (9,10,12).
-  - All 26 catalogue/picker list MaxHeights raised ~1.5x (armor 170-190→280-320, weapons
-    230→380, ammo 220→360, race/face/voice 260-280→400-420, spells/perks/lore 260→400,
-    outfit/skin 210→340, places 300→440, alternates 150→240, kin 160-200→260-320, classes
-    220→340, lines 240→360, transform 190→300). Still MaxHeight: empty lists collapse.
-  - Harness gained a 2560x1440 Loadout shot with populated lists to catch wide-screen
-    regressions; 20 frames reviewed across 5 themes.
+UI polish pass 5 (Agent: Kimi, 2026-08-19; user feedback: "space allocation is trash, overlay
+still happening" — verified at the user's 2560x1440 resolution):
+  - Root cause of the wasted right half of wide windows: the category host was a plain Panel
+    (arranges children at desired size, never stretches), every page ScrollViewer allowed
+    unconstrained horizontal measure, and the Fluent Expander theme left-aligns by default.
+    Fixed all three: host is now a Grid, all eight page ScrollViewers disable horizontal
+    scrolling, and the Expander style sets HorizontalAlignment/HorizontalContentAlignment
+    to Stretch. Pages, expanders, search boxes and lists now fill the full content column.
+  - Overlay dim is now FULLY opaque (FF alpha) per theme: even 95% still let bright sidebar
+    pills faintly ghost through on the user's display. Pixel-verified: ring pixels render
+    exactly the overlay token, zero bleed.
+  - Cramped lists raised ~1.5x (weapons 230 to 380, ammo 220 to 360, armor slots 170-190 to
+    280-320, race/face/voice 260-280 to 400-420, places 300 to 440, etc.) — still MaxHeight,
+    so empty lists collapse and populated ones use the tall window.
+  - Harness now also renders the Loadout category at 2560x1440 with populated lists so
+    wide-screen regressions are caught by the screenshot gate.
 
-Shipped locally:
-  - Replaced the seven-page control wall with Studio → Focus Cards → Expert Deck.
-  - Added persistent dossier, readiness summaries, searchable installed-record catalogues,
-    selection cart, command palette, keyboard navigation, and Guided/Expert preference.
-  - Added Obsidian Gold, Arcane Amethyst, Nordic Frost, Forge Teal, and Light themes.
-  - Preserved all 158 named 3.5.0 controls and existing profile/build contracts.
-  - Added atomic UI-only preferences and grouped actual validation findings on Review.
+Changed:
+  - Replaced the seven-step tab wizard with a Studio dashboard, seven Focus categories,
+    persistent dossier, bottom action bar, and responsive narrow-window drawer.
+  - Added Guided and Expert experiences. Expert category entry opens the primary installed-
+    record Deck while the complete Focus category remains available.
+  - Added reusable Expert Deck search, inspector, selection cart, single/multi selection,
+    cancel rollback, and commit back to the existing canonical picker controls.
+  - Added Ctrl+K command palette, Ctrl+0..7 navigation, Ctrl+E experience toggle, and Escape
+    overlay dismissal.
+  - Added five semantic themes and atomic UI-only preferences under LocalAppData.
+  - Grouped actual build findings into Must fix, Check before building, and Information.
 
-Verify: 456 Release tests pass (441 + 4 deck regression + 11 theme/polish tests); build 0
-  warnings/errors; packaged desktop boot passed ("window stayed up"); 20 headless frames
-  reviewed (5 themes x studio/appearance/deck/loadout-1440p); overlay ring pixels exact;
-  archive rebuilt with pass-5 notes.
-Archive: 111,277,638 bytes; SHA-256 A9D302602647D3479A04D47B3DCB20FFD277EAED8EAA85DF6653F63B1675F778
-  (flat root layout from Publish-FollowerForge.ps1; supersedes pass-4 99,240,266-byte archive
-  4E0EF712…E6688F, replaced; earlier D076092D…CABA18, 318B7F6A…, A182E8EE… and broken
-  296E6EA5… also replaced/deleted)
-Runtime: tool-validated; real-user Skyrim confirmation pending.
-GitHub release: not published in this run.
-================================================================================
-## [3.5.0] - 2026-08-16 - werewolf revert after combat
-Agent: Grok
-Parent: FollowerForge 3.4.0
+Compatibility and safety:
+  - All 158 named 3.5.0 controls are preserved exactly once and covered by a migration ledger.
+  - UI navigation, themes, experience, and Deck state do not alter serialized follower data.
+  - Existing Vortex/MO2 discovery, catalogue, profile construction, build, packaging, and
+    no-write boundaries are unchanged.
+  - FollowerForge 3.5.0 remains the immutable rollback snapshot.
 
-Reported: the werewolf option did not revert once the battle ended.
-
-Root cause (read from Skyrim.esm + vanilla source, not guessed):
-  WerewolfChangeFX (0F8208) is named "Beast Form". Its magic effect runs
-  WerewolfTransformVisual.psc, which Utility.Wait(10) then SetRace(Werewolf)
-  on the target. FF_Transform cast that spell AND SetRace itself, then
-  Revert() called SetRace() on combat end. Ten seconds later the vanilla
-  visual script set them back to werewolf. They stayed wolves after the fight.
-  A short fight also hit the 2s delay: Revert ran during Wait, then Transform
-  continued and changed form after combat.
-
-Fix:
-  - Werewolf no longer attaches WerewolfChangeFX. Race swap is SetRace only.
-  - After the delay, GetCombatState()==0 aborts so they cannot change after the fight.
-  - originalRace is stored; Revert uses that (and SetRace() as fallback).
-  - OnUpdate backup if the engine never delivers combat-state 0.
-  - OnLoad undoes a leftover beast form so a save mid-transform cannot stick.
-  - FF_Transform.pex recompiled from the new source.
-
-Verify: 388 tests pass (386 from 3.4.0 + 2 new; one old werewolf FX assertion inverted).
-Nexus: pending publish
 ================================================================================
 ## [3.4.0] - 2026-08-16 - paths, pronouns, gear FormIDs
 Agent: Grok
 Parent: FollowerForge 3.3.0
 
-Reported by a user who actually used the 3.3.0 wizard:
+See workspace-root CHANGELOG.txt for the full 3.4.0 notes. Snapshot parent 3.3.0 is preserved.
 
-  1. xVASynth installed via Steam was not found, and built mods only land in %LocalAppData%.
-  2. Sex is asked on step 1 but every label still says she/her.
-  3. Gear variants that share a display name (Makeshift Eyeglasses) cannot be told apart.
-
-Added:
-  - Paths dialog (sidebar "Paths..."). Manual xVASynth folder and a user-chosen output folder,
-    persisted in LocalAppData\FollowerForge\app-settings.json. Empty boxes keep automatic detection.
-    xVASynth discovery now scans every Steam library the same way the game-root finder does,
-    instead of only C:\Program Files (x86)\Steam\steamapps\common\xVASynth. Env FFORGE_XVASYNTH
-    and CLI --xvasynth still win.
-  - Custom output writes each follower as a subfolder of the chosen path (so a Vortex/MO2 mods
-    folder becomes one installable mod per follower). Staging stays under LocalAppData. Game Data
-    and saves stay blocked. Default layout is unchanged: workspace\builds\<name>.
-  - UI pronouns follow Sex. Female keeps the old she/her copy. Male switches she/he, her/him,
-    her/his, hers/his, herself/himself on the rail, headings, hints, combo items, and build log.
-  - Armor, weapons, ammo, belongings, and body-skin rows show the catalogue FormID
-    (XXXXXX:Plugin.esp) and EditorID when it differs from the name. Search matches the FormID.
-
-Verify: 386 tests pass (367 from 3.3.0 + 19 new).
-Nexus: pending publish
 ================================================================================
-## [3.3.0] - 2026-08-11 - arrows, stack counts, and honest names
-Agent: Claude
-Parent: FollowerForge 3.2.9
-
-Reported by users on 3.2.9:
-  1. "Can't add arrows for bows/crossbows"      - correct, and the cause was total.
-  2. "Can't change quantity of items"           - correct.
-  3. "Can't show non-English letters"           - HALF correct; see below.
-  4. "Body/face color mismatch in 3.2.9"        - NOT caused by 3.2.9; see below.
-
-Added:
-  - Ammo. IndexedRecordType had no Ammo member at all, so AMMO records were never indexed and
-    arrows could not be picked, validated or written. Now indexed, with an "Arrows & bolts" tab
-    in step 5 and a stack-count spinner (default 100).
-    Ammo goes in INVENTORY ONLY, deliberately: checked against Faendal (013480:Skyrim.esm), the
-    game's own archer follower, who carries Steel Arrow (01397F) in Items with a clothes-only
-    outfit. A query for vanilla outfits referencing that arrow returns zero, so an earlier
-    attempt to also write ammo into the generated outfit was removed rather than shipped.
-  - Item stack counts. RecordRef gained an optional Count (default 1), so older profile JSON
-    still loads unchanged. The compiler used a hardcoded Count = 1. Belongings get their own
-    count spinner; 0 or negative clamps to 1 rather than writing an empty stack.
-  - Catalogue index_version. A catalogue built by an earlier version is now treated as stale, so
-    existing users get the Ammo records automatically instead of opening an empty arrows list.
-
-Fixed:
-  - `fforge index` no longer dies on a damaged cache. It quarantined and rebuilt in the wizard
-    but threw SqliteException in the CLI, so the one command that repairs the catalogue was the
-    one command a corrupt catalogue could brick. Hit for real during this session's testing.
-  - Non-English names now say what will happen instead of silently mangling. Measured: "Ëlïna Ökÿ"
-    already writes correctly (cb 6c ef 6e 61 20 d6 6b ff - valid Windows-1252), but "Ζωή Аня"
-    becomes literal '?' bytes (3f 3f 3f). A plugin stores one single-byte codepage, so Cyrillic,
-    Greek and CJK cannot survive; writing cp1251 instead would just move the breakage onto
-    everyone whose game is not Russian. New NAME_CHARACTERS_LOST warning names the exact
-    characters that will be lost. Deliberately NOT adding per-language encoding support.
-
-Not a 3.2.9 regression - body/face colour:
-  Diffed 3.2.7 -> 3.2.9 across the whole source tree. The only compiler changes are cell
-  placement, worldspace and FormVersion 44. Nothing in the face, tint, QNAM/TextureLighting,
-  HeadTexture or skin path was touched. This is the pre-existing tone/seam behaviour: a preset
-  whose SkinTone is non-neutral tints the head while the body keeps whatever skin the player has
-  installed. Diagnosing it needs the reporter's preset and screenshot.
-
-Verify: 367 tests pass. Built with the published CLI and read back with houseCARL:
-  Steel Arrow Count = 100, stacked potion Count = 5, no ammo in the outfit,
-  check_errors 0 dangling refs / 0 missing masters.
-Nexus: YES
-================================================================================
-## [3.2.9] - 2026-08-10 - race name false-positives, manual placement, cell FormVersion
+## [3.2.9] - 2026-08-10 - race false-positives, manual placement, cell FormVersion
 Agent: Grok
 Parent: FollowerForge 3.2.8
 
-Fixed:
-  - Playable races with real FaceGen head data are no longer forced to Creature just because the
-    EditorID contains a word like "horse" (BDHorseRace and other anthro races).
-  - Manual Placement.Cell + X/Y/Z no longer hardcodes WhiterunWorld; the specified cell is used.
-  - Optional Placement.Worldspace for exterior worldspace top cells.
-  - Cell override DeepCopy always sets FormVersion 44, so the ship gate no longer fails on copied
-    Skyrim.esm cells that still carried formVersion 40.
+Fixed (from user/CLI MO2 session reports on 3.2.7, after 3.2.8 MO2 masters fix):
+  - RaceSuitability no longer force-flags a *playable* race with real head data as Creature
+    solely because the EditorID contains a blocklist word (e.g. "horse" → BDHorseRace).
+    Non-playable blocklist hits (Dremora, Elk, …) stay Creature.
+  - Manual Placement.Cell + X/Y/Z no longer ignores the cell and hardcodes WhiterunWorld.
+  - Optional Placement.Worldspace for exterior worldspace-persistent cells outside Whiterun.
+  - Cell overrides DeepCopy always set FormVersion 44 (source Skyrim cells are often 40);
+    ship-gate no longer rejects those CELL records.
+  - Placed ACHR also stamped FormVersion 44; cellSource resolved for manual Cell paths.
 
-Reported by: a long CLI + MO2 session building custom anthro followers (BD Ungulate / BD Cat).
+Known gap (not fixed in 3.2.9):
+  - RaceMenu body overlays still need NiOverride.AddOverlays (or a bake step) before node
+    overrides apply. jslot overlay data parses; runtime application path remains incomplete.
+    User baking experiments ongoing — do not claim overlays work yet.
 
-Known, not fixed:
-  - RaceMenu body overlays. The jslot data is parsed but nothing calls NiOverride.AddOverlays and
-    there is no bake path, so overlays stay invisible in game. Explicitly not claimed as fixed.
+Retained from 3.2.8:
+  - MO2 master expansion / ValidateInstalledMasters / CharGen via PluginDataPath + mod folders.
 
-Verify: 357 tests pass (checked on this machine before the GitHub push).
-  Published zip SHA-256 C7EA9E121910700E4603FD832200CDA3A9C03E6DF8008698DD5CD85E50C0D49F matches
-  NEXUS-UPLOAD/FollowerForge-3.2.9-win-x64-SHA256.txt.
+Verify: unit tests (race, location/FormVersion, MO2 masters) + full suite + publish.
 Nexus: YES
 ================================================================================
-## [3.2.8] - 2026-08-10 - MO2 builds find their masters
+## [3.2.8] - 2026-08-10 - MO2 master expansion uses plugin view, not Steam Data
 Agent: Grok
 Parent: FollowerForge 3.2.7
 
 Fixed:
-  - After 3.2.7 could browse ModOrganizer.ini and pick a profile, builds still looked for plugin
-    masters (e.g. SOSVoices.esm) only in the Steam game Data folder. MO2 never puts them there -
-    they live in enabled mod folders - so the build failed with "Required master ... is not
-    installed in ...\Skyrim Special Edition\Data".
-  - ExpandMasterChain now uses PluginDataPath (the FollowerForge hardlink plugin view) under MO2,
-    after Mo2DataView.Ensure.
-  - ValidateInstalledMasters resolves masters through MO2 mod priority, not only game Data.
-  - RecordResolver / CellSourceResolver open plugins from the same MO2 plugin view.
-  - CharGen discovery during a build uses the MO2-aware scanner when the manager is MO2.
+  - Build-time master chain expansion (PluginWriter ExpandMasterChain) now reads from the
+    MO2 hardlink plugin view (PluginDataPath) after Mo2DataView.Ensure, not bare Steam Data.
+  - This fixes "Required master 'SOSVoices.esm' is not installed in '...Skyrim Special Edition\\Data'".
+  - ValidateInstalledMasters resolves masters through MO2 mod priority / overwrite.
+  - RecordResolver and CellSourceResolver open plugins from the same plugin view.
+  - CharGen export lookup during build uses the MO2-aware scanner (mods + overwrite + Data).
+  - Face texture and own-hub asset copy fall back to MO2 loose files when not in Steam Data.
+  - Vortex behavior unchanged (PluginReadRoot still equals GameDataPath).
 
-Vortex paths and behaviour are unchanged (PluginDataPath still equals GameDataPath).
-Rollback: reinstall 3.2.7; MO2 settings under LocalAppData\FollowerForge are unchanged.
+Safety:
+  - Still read-only against game Data, MO2 instance/mods/profiles, and Vortex staging.
+  - No change to saved mo2-settings.json schema.
+
+Verify: unit tests including Mo2MasterRootTests; full test suite + publish when packaging.
 Nexus: YES
 ================================================================================
 ## [3.2.7] - 2026-08-09 - deterministic MO2 instance/profile setup
@@ -305,107 +280,22 @@ Agent: Codex
 Parent: FollowerForge 3.2.6
 
 Fixed:
-  - GUI ModOrganizer.ini picker and detected profile selector.
-  - MO2 base_directory, %BASE_DIR%, environment-variable, absolute, and relative path resolution.
-  - Strict manual validation with no silent instance/profile/manager fallback.
-  - Persisted FollowerForge-owned selection and cancellation-safe re-indexing.
-  - Catalogue freshness includes the exact profile, instance, and staging path.
-  - CLI --mo2-profile support.
+  - Added a GUI `MO2 setup...` dialog with an exact ModOrganizer.ini picker and profile selector.
+  - Added correct Settings/base_directory and case-insensitive %BASE_DIR% expansion.
+  - Relative mods/profiles/overwrite paths are now anchored to MO2's resolved base directory.
+  - Manual profile selection validates modlist.txt plus plugins.txt or loadorder.txt before indexing.
+  - Invalid manual choices no longer fall through to another MO2 instance, profile, or Vortex.
+  - Saved selections cancel stale indexing and start one serialized re-index for the chosen profile.
+  - Catalogue freshness now keys the exact profile, instance, and staging path, preventing stale cross-profile reuse when timestamps match.
+  - Added CLI --mo2-profile for deterministic command-line indexing.
 
-Vortex behavior and all Skyrim follower output formats are unchanged.
-Rollback: reinstall 3.2.6; optionally remove LocalAppData\FollowerForge\mo2-settings.json.
-================================================================================
-## [3.2.7] - 2026-08-09 - planned: reliable MO2 instance and profile setup
-Agent: Codex
-Parent: FollowerForge 3.2.6
+Safety:
+  - Saved selection is FollowerForge-owned LocalAppData only.
+  - No MO2, Vortex, Skyrim Data, or save file is modified.
+  - Vortex discovery behavior is unchanged.
 
-Reported:
-  - MO2 users can still fail to index in 3.2.6 and asked for a user-overridable MO2 path plus profile selector.
-
-Confirmed in 3.2.6 source:
-  - CLI/environment callers can force an MO2 instance, but the GUI only offers a manager toggle.
-  - The GUI cannot browse to ModOrganizer.ini or select an MO2 profile.
-  - A missing selected_profile silently falls back to the first directory under profiles.
-  - MO2 `%BASE_DIR%` paths are not expanded before mods/profiles/overwrite paths are canonicalized.
-
-Planned fix:
-  - Add a read-only MO2 Setup dialog with ModOrganizer.ini browse, validated profile dropdown,
-    saved manual selection, Save and Re-index, and Return to automatic detection.
-  - Resolve `%BASE_DIR%`, environment variables, absolute paths, and relative paths deterministically.
-  - In manual mode, fail clearly on a stale instance/profile instead of silently indexing another profile.
-  - Preserve Vortex behavior and existing CLI/environment override compatibility.
-
-Validation: pending implementation; design specification added.
-Runtime: untested.
-Nexus: pending.
-================================================================================
-## [3.2.6] - 2026-08-07 - fix a broken faction on every follower ever built
-Agent: Claude
-Parent: FollowerForge 3.2.5
-
-Fixed:
-  - PlayerFaction was 0x0000DB. The real FormID is 0x000DB1 - a transposition that has been in
-    VanillaForms since the faction code was written. Every follower FollowerForge has ever built
-    carries a link to a record that does not exist, and none of them are actually in PlayerFaction.
-    Found by sweeping a freshly built plugin with houseCARL's load-order integrity check, not by
-    reading the code: the value looks plausible and compiles fine.
-
-Evidence:
-  - Intent confirmed correct: Lydia (HousecarlWhiterun 0A2C8E:Skyrim.esm) has 000DB1 as
-    Factions[0], so vanilla followers do carry PlayerFaction. The design was right, the digits
-    were not.
-  - houseCARL check_errors on a built plugin, before: 1 dangling ref
-    (000800:FF_VeraForge.esp -> 0000DB:Skyrim.esm). After: 0 dangling, 0 missing masters.
-  - All 27 other hardcoded vanilla FormIDs were read back out of the installed Skyrim.esm and
-    matched to their EditorIDs. Only PlayerFaction was wrong.
-
-Added:
-  - src/Tests/VanillaFormIdTests.cs pins the verified ids so a typo cannot slip back in.
-
-Known, not fixed (cosmetic):
-  - A hand-written profile JSON can set Protected and Essential together; the compiler writes both
-    flags and the engine just lets Essential win. The wizard cannot produce it (one dropdown).
-
-Verify: 325 tests pass. Published zip boot-checked; rebuilt follower sweeps clean.
-Nexus: YES - worth shipping over 3.2.5.
-================================================================================
-## [3.2.5] - 2026-08-06 - choose her body; find the game and MO2 off drive C:
-Agent: Claude
-Parent: FollowerForge 3.2.4
-
-Added:
-  - Step 5 gains a "Body" tab: pick the skin ARMO she wears as her body, or leave it empty
-    (the default) so she uses whatever body the player installed - which is what OBody needs
-    in order to reshape her. Costs no storage: it is a FormID reference, so asset-hub bodies
-    and standalone follower skins work without copying a mesh.
-  - Skin records are identified by MajorFlags NonPlayable + torso slot. Verified against
-    Orimagen's Fauna: 00081A:Fauna.esp FaunaBody is NonPlayable over slots 30-33/37/40/55 and
-    is that follower's WornArmor.
-  - BODY_PINNED build note: pinning a body makes that mod a hard requirement for anyone who
-    installs her, and stops OBody reshaping her.
-
-Fixed (reported by users):
-  - "FollowerForge only uses the default paths (no one has Steam files on drive C:)" - correct.
-    ResolveGameRoot tried exactly one hardcoded path. New GameRootResolver searches every fixed
-    drive: known Steam roots, every library listed in each steamapps/libraryfolders.vdf, and a
-    bare "<drive>\Skyrim Special Edition". The old C: path is now the last resort, not the only
-    candidate. Used by BOTH the Vortex and MO2 paths.
-  - MO2 instances were only looked for under %LOCALAPPDATA%\ModOrganizer, so PORTABLE installs -
-    the common setup - were never found. Portable folder names are now probed on every drive.
-  - An MO2 instance whose ModOrganizer.ini gamePath is stale/missing now falls back to the same
-    drive-wide search instead of giving up.
-  - FaceGenSwapperTests no longer hardcodes a C: CharGen path (the same bug, inside a test, which
-    made it silently test nothing on other machines) and no longer fails the suite when one
-    export on the user's disk is not convertible.
-
-Known unresolved:
-  - Whether MO2's modlist.txt stores highest-priority-first or last is NOT confirmed. The code
-    consumes it as "last entry wins" and now says so in a comment. Settling it needs a real MO2
-    instance; if MO2 users report the wrong file winning a conflict, reverse ParseMo2ModList.
-
-Verify: 297 tests pass, 0 failed. Published zip boot-checked; `env` on this machine still
-  resolves Vortex + 2911 enabled plugins.
-Nexus: YES
+Rollback:
+  - Reinstall 3.2.6 and optionally remove LocalAppData\FollowerForge\mo2-settings.json.
 ================================================================================
 ## [3.2.4] - 2026-08-06 - MO2 switch during load; Export Head not false NO SCULPT
 Agent: Grok

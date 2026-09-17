@@ -1,0 +1,9 @@
+FollowerForge 3.7.1 - reliability fixes
+
+- MO2 conflict winners now follow the actual modlist.txt priority order.
+- Missing explicitly selected head meshes now fail validation instead of silently building without the face.
+- Output overrides cannot bypass game-directory and standard saves-directory protections.
+- Follower output can be published on another drive. The previous build is retained until the replacement is prepared; caught replacement failures restore it.
+- Batch-test failures now include the internal build log.
+
+No gameplay features or plugin FormIDs intentionally changed. In-game testing is still required.

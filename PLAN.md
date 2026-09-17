@@ -1,3 +1,16 @@
+# FollowerForge 3.7.1 repair pass
+
+- [x] Preserve released parent; verified 240-file snapshot.
+- [x] Reproduce/fix MO2 priority, missing explicit mesh, output guard, cross-drive publication.
+- [x] Regression tests: 495 passed, including real cross-drive output.
+- [x] Local self-contained ZIP, boot check, CRC and extracted CLI sample-profile.
+- [ ] Complete broad UI/CLI/Papyrus/FaceGen review: delegated reviewers failed before inspection.
+- [ ] Diagnose initial intermittent parent batch failure; detailed test logging added.
+- [ ] Visual walkthrough and in-game confirmation.
+- [ ] GitHub publication (not performed).
+
+See FollowerForge 3.7.1/VALIDATION.md for exact evidence and remaining risks.
+
 # FollowerForge 3.7.0 plan
 
 1. [x] Snapshot 3.6.1 -> 3.7.0 (3.6.1 is released and immutable: GitHub v3.6.1). 238 files
