@@ -231,38 +231,7 @@ public sealed class FollowerBuilder(ILogger log)
             return new BuildResult(false, staging, stagedPlugin, manifest, report);
         }
 
-        // Prepare on the destination volume before touching a previous successful build.
-        Directory.CreateDirectory(finalParent);
-        var incoming = Path.Combine(finalParent, ".ff-incoming-" + Guid.NewGuid().ToString("N"));
-        var backup = Path.Combine(finalParent, ".ff-backup-" + Guid.NewGuid().ToString("N"));
-        try
-        {
-            Directory.CreateDirectory(incoming);
-            foreach (var file in Directory.EnumerateFiles(staging, "*", SearchOption.AllDirectories))
-            {
-                var target = Path.Combine(incoming, Path.GetRelativePath(staging, file));
-                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
-                File.Copy(file, target);
-            }
-            if (Directory.Exists(finalDir)) Directory.Move(finalDir, backup);
-            try { Directory.Move(incoming, finalDir); }
-            catch
-            {
-                if (Directory.Exists(backup)) Directory.Move(backup, finalDir);
-                throw;
-            }
-        }
-        finally
-        {
-            if (Directory.Exists(incoming)) Directory.Delete(incoming, recursive: true);
-        }
-        // Publication succeeded. Cleanup failure must not misreport it as a failed build.
-        foreach (var obsolete in new[] { backup, staging })
-        {
-            try { if (Directory.Exists(obsolete)) Directory.Delete(obsolete, recursive: true); }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            { log.Warning(ex, "Published successfully; could not remove {Directory}", obsolete); }
-        }
+        DirectoryPublisher.Publish(staging, finalDir, log);
         var publishedPlugin = Path.Combine(finalDir, pluginRel);
         log.Information("Published follower {Name} → {Dir}", profile.Name, finalDir);
         return new BuildResult(true, finalDir, publishedPlugin, manifest, report);

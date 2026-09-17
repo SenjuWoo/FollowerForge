@@ -4,6 +4,8 @@ FollowerForge 3.7.1 - reliability fixes
 - Missing explicitly selected head meshes now fail validation instead of silently building without the face.
 - Output overrides cannot bypass game-directory and standard saves-directory protections.
 - Follower output can be published on another drive. The previous build is retained until the replacement is prepared; caught replacement failures restore it.
+- Hub rebuilds use the same protected replacement path; a locked asset no longer causes deletion of the previous plugin.
+- Empty hub names and asset folders that escape staging are rejected before writing.
 - Batch-test failures now include the internal build log.
 
 No gameplay features or plugin FormIDs intentionally changed. In-game testing is still required.

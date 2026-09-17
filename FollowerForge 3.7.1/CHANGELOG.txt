@@ -4,8 +4,10 @@
 - Enforce game/standard saves destination protection in the builder, not only the UI.
 - Prepare cross-volume output before replacing a previous follower; rollback on caught replacement failure.
 - Preserve other running app instances when packaging; no process-name-wide termination.
-- Add batch-failure logs to the regression test and six regression checks.
-Validation: 495 Release tests passed, including configured C: to Z: publication.
+- Share the tested replacement/rollback path between followers and hubs; preserve empty hub folders.
+- Reject empty hub names and non-relative/traversing hub asset folders before writing.
+- Add batch-failure logging and regression checks.
+Validation: 501 Release tests passed, including configured C: to Z: publication and locked hub preservation.
 Unresolved: initial parent batch flake; exhaustive UI/Papyrus/in-game audit not completed.
 
 # CHANGELOG — FollowerForge

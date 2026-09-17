@@ -50,6 +50,44 @@ public sealed class Phase6Tests : IDisposable
     }
 
     [Fact]
+    public void Hub_RebuildWithLockedAsset_PreservesPreviousOutput()
+    {
+        var builder = new HubBuilder(Log);
+        var first = builder.Build("KeepHub", FakeEnv(), _ws);
+        Assert.True(first.Success);
+        var pluginBytes = File.ReadAllBytes(first.PluginPath);
+        var asset = Path.Combine(first.OutputDirectory, "textures", "KeepHub", "body", "keep.dds");
+        File.WriteAllText(asset, "original asset");
+        using (var locked = File.Open(asset, FileMode.Open, FileAccess.Read, FileShare.Read))
+        {
+            Assert.ThrowsAny<IOException>(() => builder.Build("KeepHub", FakeEnv(), _ws));
+            Assert.True(File.Exists(first.PluginPath), "Failed rebuild deleted the previous hub plugin.");
+            Assert.Equal(pluginBytes, File.ReadAllBytes(first.PluginPath));
+            Assert.True(File.Exists(Path.Combine(first.OutputDirectory, "hub-manifest.json")));
+        }
+        Assert.Equal("original asset", File.ReadAllText(asset));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("...")]
+    [InlineData("   ")]
+    public void Hub_EmptySanitizedName_IsRejectedBeforeWriting(string name)
+    {
+        Assert.Throws<ArgumentException>(() => new HubBuilder(Log).Build(name, FakeEnv(), _ws));
+        Assert.False(Directory.Exists(_ws));
+    }
+
+    [Theory]
+    [InlineData("../outside")]
+    [InlineData("textures/../../outside")]
+    public void Hub_AssetFolderOutsideStaging_IsRejectedBeforeWriting(string folder)
+    {
+        Assert.Throws<ArgumentException>(() => new HubBuilder(Log).Build("SafeHub", FakeEnv(), _ws, [folder]));
+        Assert.False(Directory.Exists(_ws));
+    }
+
+    [Fact]
     public void LoadProfiles_FromDirectory_ReadsAllJson()
     {
         var dir = Path.Combine(_ws, "profiles");

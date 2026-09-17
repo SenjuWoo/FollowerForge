@@ -16,7 +16,7 @@ This is a verified repair pass, NOT an exhaustive audit or proof of perfection. 
 ## Executed verification
 - Initial unchanged parent suite: 488 passed, 1 failed (Phase6Tests.Batch_BuildsAllProfiles expected 2, actual 1).
 - Repeated unchanged parent suite: 489 passed. Isolated Phase6Tests with crash/hang collection: 4 passed on each snapshot. Initial failure remains intermittent and unexplained.
-- Final new suite with FFORGE_TEST_PUBLISH_ROOT set to the Z: snapshot test-output directory: 495 passed, 0 failed, 0 skipped.
+- Final new suite with FFORGE_TEST_PUBLISH_ROOT set to the Z: snapshot test-output directory: 501 passed, 0 failed, 0 skipped.
 - Publish-FollowerForge.ps1 -Version 3.7.1: exit 0, self-contained UI/CLI produced; staging GUI stayed alive during 12-second boot check.
 - Final ZIP: CRC check passed; five entries: FollowerForge.exe, cli/FollowerForge.Cli.exe, README.md, CHANGELOG.txt, NEXUS-CHANGELOG-3.7.1.txt.
 - Fresh extraction: packaged CLI sample-profile command exited 0 and produced parseable JSON (Aria Forge / FF_AriaForge.esp).
@@ -24,16 +24,20 @@ This is a verified repair pass, NOT an exhaustive audit or proof of perfection. 
 - Git whitespace check reports four inherited Markdown hard-break lines in the copied 2026-08-18 design specification. Preserved as inherited document formatting.
 - Packaged CLI --help prints usage but exits 2 as an unknown command; this inherited behavior is not corrected in this pass.
 
+## Final packaging follow-up
+- Final Publish-FollowerForge.ps1 run exited 0 after hub fixes, with boot check and ZIP creation successful. Final archive CRC check passed during extraction.
+- First final smoke attempt used an incorrect positional sample-profile argument. Corrected invocation with --out then passed from a fresh extraction at C:/Users/karlo/AppData/Local/Temp/ff-verified-0yf9cxxd: sample-profile exit 0; build --profile sample.json --out work --zip exit 0, BUILD OK, 926-byte ESP, ship gate pass and 9-file follower ZIP.
+
 ## Artifact
 File: dist/FollowerForge-3.7.1-win-x64.zip
-Bytes: 99253049
-SHA-256: 5250f37a563f02b20f0d10631a240107596a57f8833841eecff5637442b5db07
+Bytes: 99254250
+SHA-256: 82271deaad1029c77e0a72fe2d789580e7de386f6312e9152d82ed15b4e3f8fa
 
 ## Remaining work / risks
-- Full UI/CLI interaction and saved-profile audit is incomplete; no visual walkthrough claimed.
+- Full UI/CLI interaction and saved-profile audit remains incomplete. The existing headless renderer completed all five themes; inspected dark/light review at 1040x700 and teal loadout at 2560x1440. No overlapping displayed controls in those frames. This is not a complete interaction walkthrough. Renderer emitted MSB3246 and obsolete Bitmap.Save warnings; the UI still shows inherited CREATOR STUDIO 3.6 branding.
 - Papyrus was read, not recompiled/decompiled or verified in Skyrim. Transformation save/reload/combat behavior remains unconfirmed. Earlier conversational claim of matching PEX was withdrawn.
 - Complete FaceGen fidelity and RaceMenu overlays remain unverified.
-- HubBuilder still uses delete-then-move; the follower cross-volume fix does not claim to repair hub publishing.
+- HubBuilder now shares DirectoryPublisher with followers. Locked-asset regression failed before repair (previous plugin deleted), then passed; empty-name and escaping-folder regressions also failed before validation was added, then passed. Empty reserved directories are preserved.
 - ProfileIo still directly writes JSON; power-failure-safe saving remains a candidate improvement.
 - Path guards are lexical; junction-based paths and unusual save locations have not been audited.
 - GitHub main is two documentation-only commits ahead of local parent 70e28aa. Old ShugokiFable repo redirects to SenjuWoo. Preserve upstream README/community files before any future publication.

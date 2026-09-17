@@ -1,6 +1,6 @@
 # FollowerForge 3.7.1 — local repair candidate
 
-Verified repair pass: 495 Release tests passed, including real cross-drive publishing and locked-output preservation. Final self-contained ZIP built, CRC checked, extracted CLI sample-profile passed. See VALIDATION.md for exact artifact hash and incomplete audit areas. Both review subagents failed before producing findings. No GitHub publication or gameplay test.
+Verified repair pass: 501 Release tests passed, including cross-drive follower publication and locked hub preservation. Final self-contained ZIP rebuilt and CRC checked. Final extracted CLI sample-profile and full follower build/ZIP passed after correcting the smoke command arguments. See VALIDATION.md for exact artifact hash and incomplete audit areas. Both review subagents failed before producing findings. No GitHub publication or gameplay test.
 
 ## Intake notes (historical)
 

@@ -36,9 +36,19 @@ public sealed class HubBuilder(ILogger log)
         var guard = EnvironmentDiscovery.CreateGuard(env);
         guard.EnsureWritable(workspaceRoot);
 
-        var pluginName = $"{Sanitize(hubName)}.esm";
-        var staging = Path.Combine(workspaceRoot, ".staging", "hub_" + Sanitize(hubName));
-        var finalDir = Path.Combine(workspaceRoot, "hubs", Sanitize(hubName));
+        var prefix = Sanitize(hubName);
+        if (string.IsNullOrWhiteSpace(prefix))
+            throw new ArgumentException("Hub name must contain a letter, digit, underscore or hyphen.", nameof(hubName));
+        var folders = assetFolders ?? DefaultAssetFolders(hubName);
+        foreach (var folder in folders)
+        {
+            if (string.IsNullOrWhiteSpace(folder) || Path.IsPathRooted(folder)
+                || folder.Contains(':') || folder.Split('/', '\\').Any(part => part == ".."))
+                throw new ArgumentException("Hub asset folders must be Data-relative and cannot contain '..'.", nameof(assetFolders));
+        }
+        var pluginName = $"{prefix}.esm";
+        var staging = Path.Combine(workspaceRoot, ".staging", "hub_" + prefix);
+        var finalDir = Path.Combine(workspaceRoot, "hubs", prefix);
         if (Directory.Exists(staging)) Directory.Delete(staging, recursive: true);
         Directory.CreateDirectory(staging);
 
@@ -51,7 +61,6 @@ public sealed class HubBuilder(ILogger log)
         EspHeaderValidator.Validate(pluginPath, report, requireEsl: true);
 
         // Reserve shared-asset folders under a hub-specific prefix so followers can point at them.
-        var folders = assetFolders ?? DefaultAssetFolders(hubName);
         foreach (var f in folders)
             Directory.CreateDirectory(Path.Combine(staging, f));
 
@@ -66,9 +75,7 @@ public sealed class HubBuilder(ILogger log)
             return new HubBuildResult(false, staging, pluginPath, report);
         }
 
-        if (Directory.Exists(finalDir)) Directory.Delete(finalDir, recursive: true);
-        Directory.CreateDirectory(Path.GetDirectoryName(finalDir)!);
-        Directory.Move(staging, finalDir);
+        DirectoryPublisher.Publish(staging, finalDir, log);
         log.Information("Published hub {Hub} → {Dir}", hubName, finalDir);
         return new HubBuildResult(true, finalDir, Path.Combine(finalDir, pluginName), report);
     }

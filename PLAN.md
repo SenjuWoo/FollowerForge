@@ -2,7 +2,7 @@
 
 - [x] Preserve released parent; verified 240-file snapshot.
 - [x] Reproduce/fix MO2 priority, missing explicit mesh, output guard, cross-drive publication.
-- [x] Regression tests: 495 passed, including real cross-drive output.
+- [x] Regression tests: 501 passed, including real cross-drive output.
 - [x] Local self-contained ZIP, boot check, CRC and extracted CLI sample-profile.
 - [ ] Complete broad UI/CLI/Papyrus/FaceGen review: delegated reviewers failed before inspection.
 - [ ] Diagnose initial intermittent parent batch failure; detailed test logging added.
