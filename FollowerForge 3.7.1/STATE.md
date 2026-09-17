@@ -1,6 +1,6 @@
 # FollowerForge 3.7.1 — local repair candidate
 
-Verified repair pass: 501 Release tests passed, including cross-drive follower publication and locked hub preservation. Final self-contained ZIP rebuilt and CRC checked. Final extracted CLI sample-profile and full follower build/ZIP passed after correcting the smoke command arguments. See VALIDATION.md for exact artifact hash and incomplete audit areas. Both review subagents failed before producing findings. No GitHub publication or gameplay test.
+Verified repair pass: 501 Release tests passed, including cross-drive follower publication and locked hub preservation. Final self-contained ZIP rebuilt and CRC checked. Final extracted CLI sample-profile and full follower build/ZIP passed after correcting the smoke command arguments. Released as GitHub v3.7.1 (Latest) on 2026-09-17 from green SHA 20af6e5; repo CI and CodeQL both success on that SHA; published asset SHA-256 matches the tested ZIP. See VALIDATION.md for remaining audit gaps. Both review subagents failed before producing findings. No gameplay test.
 
 ## Intake notes (historical)
 

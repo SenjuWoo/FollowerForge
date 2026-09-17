@@ -1,6 +1,6 @@
 # CHANGELOG — FollowerForge
 
-## [3.7.1] - Local repair candidate
+## [3.7.1] - 2026-09-17 - reliable publishing (GitHub v3.7.1)
 - Correct MO2 modlist disk-order normalization (highest-first to lowest-first).
 - Reject a missing explicitly selected head mesh rather than publishing without its face.
 - Enforce game/standard saves destination protection in the builder, not only the UI.

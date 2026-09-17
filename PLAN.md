@@ -6,8 +6,9 @@
 - [x] Local self-contained ZIP, boot check, CRC and extracted CLI sample-profile.
 - [ ] Complete broad UI/CLI/Papyrus/FaceGen review: delegated reviewers failed before inspection.
 - [ ] Diagnose initial intermittent parent batch failure; detailed test logging added.
+- [x] GitHub v3.7.1 published from green SHA 20af6e5 (CI + CodeQL success, asset bytes verified).
+- [ ] Nexus upload of FollowerForge-3.7.1-win-x64.zip (owner step; changelog text delivered).
 - [ ] Visual walkthrough and in-game confirmation.
-- [ ] GitHub publication (not performed).
 
 See FollowerForge 3.7.1/VALIDATION.md for exact evidence and remaining risks.
 

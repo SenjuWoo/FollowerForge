@@ -1,18 +1,4 @@
-FollowerForge 3.7.1 (development audit; parent 3.7.0 preserved)
-
-Status: local repair candidate; 501 tests passed; not released.
-Artifact and remaining audit gaps: FollowerForge 3.7.1/VALIDATION.md.
-
-Previous release:
-FollowerForge 3.7.0
-
-Parent: FollowerForge 3.6.1 (released: GitHub v3.6.1)
-Created: 2026-08-26
-Change: Creature races can be transformed into. Plus the real cause of the "Must be fixed"
-        report - armour with a legacy outfit was a guaranteed hard error - and a warning
-        for the RaceMenu body shape that has never transferred.
-
-Status: RELEASED - GitHub v3.7.0 (Latest), built from eb4c2de, CI green on that commit
-Runtime: tool-validated (plugin bytes read back); in-game creature transform not confirmed
-Nexus:   NOT yet uploaded. Page still serves 3.6.0; 3.6.1 never went up, so the staged
-         3.7.0 upload in NEXUS-UPLOAD/ delivers both.
+FollowerForge 3.7.1 — RELEASED as GitHub v3.7.1 (Latest, 2026-09-17) from green SHA 20af6e5.
+Repo CI (xunit suite) and CodeQL both success on that SHA; published asset bytes verified against the tested ZIP.
+501 tests passed. Nexus upload of FollowerForge-3.7.1-win-x64.zip is the owner step; user-facing changelog delivered.
+Remaining audit gaps and evidence: FollowerForge 3.7.1/VALIDATION.md.

@@ -29,6 +29,9 @@ This is a verified repair pass, NOT an exhaustive audit or proof of perfection. 
 - Final Publish-FollowerForge.ps1 run exited 0 after hub fixes, with boot check and ZIP creation successful. Final archive CRC check passed during extraction.
 - First final smoke attempt used an incorrect positional sample-profile argument. Corrected invocation with --out then passed from a fresh extraction at C:/Users/karlo/AppData/Local/Temp/ff-verified-0yf9cxxd: sample-profile exit 0; build --profile sample.json --out work --zip exit 0, BUILD OK, 926-byte ESP, ship gate pass and 9-file follower ZIP.
 
+## Release
+- Pushed SHA 20af6e58c456a4c0e7136159aaac35c324fd26ac after rebase onto upstream docs commits. Repo CI (xunit suite) success on that SHA; CodeQL dynamic scan completed success. Tag v3.7.1 annotated at that SHA. Release published as Latest with the tested ZIP; downloaded-asset SHA-256 re-verified byte-identical.
+
 ## Artifact
 File: dist/FollowerForge-3.7.1-win-x64.zip
 Bytes: 99254250
