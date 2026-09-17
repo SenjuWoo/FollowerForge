@@ -15,7 +15,7 @@ This is a verified repair pass, NOT an exhaustive audit or proof of perfection. 
 
 ## Executed verification
 - Initial unchanged parent suite: 488 passed, 1 failed (Phase6Tests.Batch_BuildsAllProfiles expected 2, actual 1).
-- Repeated unchanged parent suite: 489 passed. Isolated Phase6Tests with crash/hang collection: 4 passed on each snapshot. Initial failure remains intermittent and unexplained.
+- Repeated unchanged parent suite: 489 passed. Isolated Phase6Tests with crash/hang collection: 4 passed on each snapshot. The flake reproduced a third time on unchanged 3.7.0 (488/1, background baseline run completing after the 3.7.1 work): every reproduction is on 3.7.0, zero on 3.7.1. BatchBuilder catches per-item exceptions and the 3.7.0 test discarded logs; 3.7.1's BatchTestLog sink now surfaces the internal reason on recurrence. No production batch change claimed.
 - Final new suite with FFORGE_TEST_PUBLISH_ROOT set to the Z: snapshot test-output directory: 501 passed, 0 failed, 0 skipped.
 - Publish-FollowerForge.ps1 -Version 3.7.1: exit 0, self-contained UI/CLI produced; staging GUI stayed alive during 12-second boot check.
 - Final ZIP: CRC check passed; five entries: FollowerForge.exe, cli/FollowerForge.Cli.exe, README.md, CHANGELOG.txt, NEXUS-CHANGELOG-3.7.1.txt.
