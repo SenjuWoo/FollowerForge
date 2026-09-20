@@ -1,3 +1,14 @@
+# FollowerForge 3.7.2 community-fix pass
+
+- [x] Diagnose four Nexus reports against current code; reproduce relationship mis-map and head-part silent drop.
+- [x] Fix: relationship/kin pickers bound to enum order (defaults now display what they write).
+- [x] Fix: unresolved preset head parts counted + warned (picker + PRESET_HEADPART_UNRESOLVED).
+- [x] Fix: tint-without-complexion warning (PRESET_NO_HEAD_TEXTURE); sculpt guidance made concrete.
+- [x] Regression tests: 516 passed (15 new); package built, boot-checked, extracted-CLI smoke pass.
+- [ ] Publication (GitHub release / Nexus upload) is the owner's call; changelog text in NEXUS-CHANGELOG-3.7.2.txt.
+
+See FollowerForge 3.7.2/VALIDATION.md for exact evidence and remaining risks.
+
 # FollowerForge 3.7.1 repair pass
 
 - [x] Preserve released parent; verified 240-file snapshot.
