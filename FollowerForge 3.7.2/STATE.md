@@ -1,6 +1,6 @@
 # FollowerForge 3.7.2 — community-reported fixes
 
-Fix cycle for four user reports on the Nexus page: the relationship picker wrote a different rank than the label chosen (picked Ally, record said Friend — the combo list order did not match the enum the record stores); preset head parts that could not be resolved were silently dropped (bald follower despite a green report); tint without complexion produced a face/body tone mismatch with no guidance; and the sculpt-export message left users guessing. 516 Release tests passed (15 new regressions). The released 3.7.1 stays frozen at GitHub v3.7.1 (Latest, SHA 20af6e5).
+Fix cycle for four user reports on the Nexus page: the relationship picker wrote a different rank than the label chosen (picked Ally, record said Friend — the combo list order did not match the enum the record stores); preset head parts that could not be resolved were silently dropped (bald follower despite a green report); tint without complexion produced a face/body tone mismatch with no guidance; and the sculpt-export message left users guessing. 516 Release tests passed (15 new regressions). RELEASED as GitHub v3.7.2 (Latest, 2026-09-20) from green SHA 026a70e; repo CI success on that SHA, published asset bytes verified. 3.7.1 remains at v3.7.1 (SHA 20af6e5).
 
 ## 3.7.1 (historical)
 

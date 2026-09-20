@@ -5,7 +5,8 @@
 - [x] Fix: unresolved preset head parts counted + warned (picker + PRESET_HEADPART_UNRESOLVED).
 - [x] Fix: tint-without-complexion warning (PRESET_NO_HEAD_TEXTURE); sculpt guidance made concrete.
 - [x] Regression tests: 516 passed (15 new); package built, boot-checked, extracted-CLI smoke pass.
-- [ ] Publication (GitHub release / Nexus upload) is the owner's call; changelog text in NEXUS-CHANGELOG-3.7.2.txt.
+- [x] Publication: GitHub v3.7.2 published from green SHA 026a70e (repo CI success; asset bytes verified; CodeQL tracked to completion).
+- [ ] Nexus upload of FollowerForge-3.7.2-win-x64.zip (owner step; changelog text delivered).
 
 See FollowerForge 3.7.2/VALIDATION.md for exact evidence and remaining risks.
 

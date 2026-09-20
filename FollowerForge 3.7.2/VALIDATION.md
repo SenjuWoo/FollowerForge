@@ -27,4 +27,7 @@ Entries: 5 (FollowerForge.exe, cli/FollowerForge.Cli.exe, README.md, CHANGELOG.t
 - Reporter-specific reproduction was not possible (no jslot/environment from the reporters); the fixes address verified code paths that match the reported symptoms.
 - In-game behavior remains unverified (relationship rank display in-game, hair resolution with the reporter's preset, face/body tones with a complexion mod installed).
 - Inherited from 3.7.1: batch flake never reproduced on 3.7.x code (3x on 3.7.0 only, log capture in place); CLI --help exits 2; inherited UI branding strings; Papyrus read but not decompiled.
-- No publication performed. 3.7.1 remains the published Latest until the owner decides.
+- No gameplay reproduction was performed; 3.7.1 remains available at v3.7.1 (SHA 20af6e5).
+
+## Release
+- Pushed SHA 026a70ea7fa95234b7772bc870d11e93909bba96 (fast-forward, no upstream divergence). Repo CI (xunit suite) completed success on that SHA. Tag v3.7.2 annotated at that SHA (verified via API deref). Release published as Latest with the tested ZIP; downloaded-asset SHA-256 re-verified byte-identical (fad550196d7c3f889a41f3cd8e5b53ba28171196cf48ea0a4592bd68d34db9ef, 99256131 bytes).

@@ -1,4 +1,4 @@
-FollowerForge 3.7.2 — community-reported fixes; 516 Release tests passed (15 new regressions).
-Fixes: relationship picker recorded the wrong rank; unresolvable preset head parts (hair) silently dropped; tint-without-complexion now warned; sculpt guidance made concrete.
-3.7.1 stays released at GitHub v3.7.1 (Latest, SHA 20af6e5). Packaging in progress; publication is the owner's call.
+FollowerForge 3.7.2 — RELEASED as GitHub v3.7.2 (Latest, 2026-09-20) from green SHA 026a70e.
+Repo CI success on that SHA; published asset bytes verified against the tested ZIP (fad55019…4db9ef).
+516 tests passed (15 new regressions). Nexus upload of FollowerForge-3.7.2-win-x64.zip is the owner step; changelog text delivered.
 Details: FollowerForge 3.7.2/VALIDATION.md and STATE.md.
