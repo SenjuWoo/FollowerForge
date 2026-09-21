@@ -1,6 +1,6 @@
 # FollowerForge 3.7.3 — face-tint slot
 
-Parent: released 3.7.2 (GitHub v3.7.2, SHA 026a70e). 246 files copied, bin/obj/dist excluded. Not published.
+Parent: released 3.7.2 (GitHub v3.7.2, SHA 026a70e). 246 files copied, bin/obj/dist excluded. Released as GitHub v3.7.3 from 110d17e. Nexus upload remains the owner's step.
 
 The reported warnings are one skipped head, printed twice. FACEGEN_CK_HANDOFF is the real reason. FACEGEN_MANUAL only said "see ck-handoff-report.json" and did not include the path or the Ctrl+F4 steps. The summary line said "Face: default" whenever the swap declined, which reads as if no face had been selected.
 

@@ -19,8 +19,14 @@ Local only. Not uploaded to GitHub or Nexus.
 - Entries: FollowerForge.exe, cli/FollowerForge.Cli.exe, README.md, CHANGELOG.txt, NEXUS-CHANGELOG-3.7.3.txt
 - Both exes report FileVersion 3.7.3.0
 
+## Release
+- Tag v3.7.3 is the annotated tag whose commit is 110d17eef718a5d975cf094c459f2a18d239eab3.
+- CI xunit suite and both CodeQL analyses completed success on that SHA before the tag.
+- Release: https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.7.3
+- Downloaded asset SHA-256 matches the local zip: ed520ea8296d9ad24fd5ad17b5c8e07eeddca5b08e25f18bdc974284a9d71dee, 99263297 bytes.
+
 ## Not done
-- Not published to GitHub or Nexus. 3.7.2 remains the GitHub Latest release.
+- Nexus upload is still the owner's step. GitHub Latest is v3.7.3.
 - No in-game look at a rebuilt follower. Ctrl+F4 was not run. Creation Kit was not launched.
 - The reporter's exact NIF was not attached, so this pass proves the slot bug and the warning text, not that their particular mesh now converts.
 

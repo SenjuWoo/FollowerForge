@@ -1,4 +1,4 @@
-FollowerForge 3.7.3 — local fix, not published.
-Parent: FollowerForge 3.7.2, still the GitHub Latest release (2026-09-20, SHA 026a70e, asset fad55019…4db9ef).
-3.7.3: 524 Release tests passed. Face-tint slot fix. Local ZIP only (ed520ea8…a9d71dee, 99263297 bytes). Not uploaded.
+FollowerForge 3.7.3 — RELEASED as GitHub v3.7.3 (Latest) from green SHA 110d17e.
+Repo CI and CodeQL success on that SHA. Published asset bytes match the tested ZIP (ed520ea8…a9d71dee, 99263297 bytes).
+524 Release tests passed (8 new). Parent release remains v3.7.2 at 026a70e.
 Details: FollowerForge 3.7.3/VALIDATION.md and STATE.md.
