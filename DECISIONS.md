@@ -1,5 +1,12 @@
 # FollowerForge decisions
 
+## 2026-09-21 - 3.7.3: face tint is slot 6
+
+- BSShaderTextureSet slot 6 is the face tint (NifSkope's 7th texture line). Slot 7 is the specular map. A real RaceMenu export on this machine (AAA_GirlHeads) and a CK-style head (MaleHeadArgonian) both store the tint on slot 6 and `*_s.dds` on slot 7. The jslot faceTextures index 7 is FemaleHead_S.dds, which matches.
+- A path that contains `\chargen\` or `\facetint\`, or whose file name is the tint DDS beside the mesh, is the tint reference. Rewrite that slot. Do not guess slot 7.
+- When no such path exists, claim slot 6 only if it is empty or already a tint path, and only on a shape that is a head (name contains "head", or the diffuse file name does). Otherwise refuse and say how to Ctrl+F4.
+- One skipped head produces one warning. The build summary must not call that outcome the default face.
+
 ## 2026-08-26 - 3.7.0: creature transformation, and the outfit branch (Claude Code)
 
 - A creature race is excluded from the IDENTITY picker because it carries no head data, so no

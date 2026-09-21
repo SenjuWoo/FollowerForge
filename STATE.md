@@ -1,5 +1,9 @@
 # FollowerForge state
 
+Active snapshot: `FollowerForge 3.7.3` (parent `FollowerForge 3.7.2`, still the GitHub Latest release). See that folder's STATE.md. 3.7.3 is a local face-tint fix, not published.
+
+# FollowerForge state
+
 - Date: 2026-08-26
 - Current snapshot: `FollowerForge 3.7.0` (parent `FollowerForge 3.6.1` preserved)
 - Active owner application: Claude Code (Opus 5)

@@ -1,5 +1,17 @@
 # CHANGELOG — FollowerForge
 
+## [3.7.3] - 2026-09-21 - the face-tint warning
+- An exported head whose tint was not labeled as a CharGen file was either skipped or retargeted on the wrong texture slot. The face tint is shader slot 6 (the 7th line in NifSkope). Slot 7 is the specular map. Writing the tint there left the real tint mask in place and replaced the specular map.
+- Existing facetint paths are recognized. A head shape can be identified from its skin texture when the name does not contain "head", including heads under 1000 vertices.
+- The build no longer prints two warnings for one skipped head. The remaining warning says the head was not copied, gives the Ctrl+F4 steps, and gives the path of ck-handoff-report.json. The summary line no longer calls that result the default face.
+- The publish script copies NEXUS-CHANGELOG for the version being built. It had stayed pointed at the 3.7.1 notes.
+
+## [3.7.2] - 2026-09-19 - picking what you meant (community fixes)
+- The "How she regards you" and kin-rank pickers recorded a different relationship rank than the label chosen: their list order did not match what the RELA record stores, so picking Ally could write Friend and only Confidant lined up. Both pickers now list ranks in record order, and the untouched default writes exactly what it displays.
+- A preset head part RaceMenu could not resolve (no readable formIdentifier and no matching mods entry — hair is the usual victim) was silently dropped: the follower built with a green report and appeared bald in game. Unresolved parts are now counted and warned about on the face picker and in the build report (PRESET_HEADPART_UNRESOLVED).
+- An appearance with tint layers but no complexion (head texture set) now warns that her face can disagree with her body, with the fix spelled out (PRESET_NO_HEAD_TEXTURE).
+- The "no sculpt" guidance names the exact action: close the console, Sculpt tab, [F5] Export Head, save under the preset's name so it lands in Data\SKSE\Plugins\CharGen.
+
 ## [3.7.1] - 2026-09-17 - reliable publishing (GitHub v3.7.1)
 - Correct MO2 modlist disk-order normalization (highest-first to lowest-first).
 - Reject a missing explicitly selected head mesh rather than publishing without its face.
