@@ -1,0 +1,11 @@
+FollowerForge 3.7.2 — Reliable Picking
+
+Bug-fix release for four community reports. No new features, and nothing about your existing followers changes. No FormIDs were touched.
+
+Fixed
+- **"How she regards you" recorded the wrong rank.** The picker's list order did not match what the plugin record stores — picking Ally could write Friend (SSEEdit showed Friend even though the picker said Ally). Both the player-relationship and kin pickers now list ranks in record order, and what you see selected is what gets written.
+- **Hair (or eyes/brows) missing on the built follower.** If RaceMenu could not resolve a preset head part to a record — most often hair from a mod missing from the preset's own mods list — FollowerForge silently dropped it: the build finished green and the follower appeared bald in game. Unresolvable parts are now counted and reported on the face picker and in the build report, with what to do about it.
+- **Face color not matching body color.** The most common cause is a preset that carries tint layers but no complexion (head texture set). The build report now warns when that happens and explains the fix: re-save the preset in RaceMenu so it records the complexion, and install that complexion mod.
+- Clearer guidance when the head export has no sculpt data: close the console, then in RaceMenu's Sculpt tab press [F5] Export Head and save it under the preset's name so it lands in Data\SKSE\Plugins\CharGen.
+
+Verified: 516 automated tests (15 new regressions covering each report), full pipeline and packaging checks.

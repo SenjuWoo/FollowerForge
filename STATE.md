@@ -1,6 +1,6 @@
 # FollowerForge state
 
-Active snapshot: `FollowerForge 3.7.3` (parent `FollowerForge 3.7.2`). GitHub Latest is v3.7.3, commit 110d17e. See that folder's STATE.md.
+Active snapshot: `FollowerForge 3.7.4` (parent `FollowerForge 3.7.3`). GitHub Latest is still v3.7.3, commit 110d17e. See that folder's STATE.md.
 
 # FollowerForge state
 

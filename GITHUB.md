@@ -2,12 +2,12 @@
 
 | | |
 |--|--|
-| **Repo** | https://github.com/ShugokiFable/FollowerForge |
-| **Clone** | `git clone https://github.com/ShugokiFable/FollowerForge.git` |
-| **Account** | ShugokiFable |
+| **Repo** | https://github.com/SenjuWoo/FollowerForge |
+| **Clone** | `git clone https://github.com/SenjuWoo/FollowerForge.git` |
+| **Account** | SenjuWoo (the old ShugokiFable URL redirects here) |
 | **Default branch** | `main` |
 | **Owner work root** | workspace `FollowerForge` (versioned snapshots under this folder) |
-| **Current ship tree** | `FollowerForge 3.6.0/` (see `CURRENT.txt`) |
+| **Current ship tree** | `FollowerForge 3.7.4/` (see `CURRENT.txt`) |
 | **This folder** | canonical publish home for this app |
 
 ## What to push
@@ -26,8 +26,8 @@ Publish FollowerForge **CURRENT** snapshot: `src/`, `docs/`, build/publish scrip
 
 ```powershell
 # from a clean staging copy of CURRENT (or this folder if it is the ship root)
-git remote -v   # must be https://github.com/ShugokiFable/FollowerForge.git
-git add -A
+git remote -v   # https://github.com/SenjuWoo/FollowerForge.git
+git add -- "FollowerForge 3.7.4" CURRENT.txt STATE.md
 git commit -m "Describe the change"
 git push origin main
 ```
@@ -36,7 +36,7 @@ git push origin main
 
 ```powershell
 git init -b main
-git remote add origin https://github.com/ShugokiFable/FollowerForge.git
+git remote add origin https://github.com/SenjuWoo/FollowerForge.git
 # then add/commit/push as above (first push may need --force-with-lease only if rewriting intentional)
 ```
 

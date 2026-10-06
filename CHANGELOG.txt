@@ -1,5 +1,12 @@
 # CHANGELOG — FollowerForge
 
+## [3.7.4] - 2026-10-06 - tint that saves, faces on disk, Whiterun plaza
+- A head whose texture list stops before slot 6 now grows to the nine slots a Skyrim SE head uses, and the follower tint is written on slot 6. A specular map already on slot 7 is not replaced. That is why 3.7.3 could still report FACEGEN_TINT_NOT_SET after it aimed at the right slot.
+- Head meshes in SKSE\Plugins\CharGen\Exported and Presets are indexed, not only meshes in the CharGen folder itself. The same name is kept once. An empty face list names the folders that were scanned.
+- When a selected head has shapes but no tint path that can be claimed, the mesh is still copied. The face line says the mesh was copied and the tint path was left as exported.
+- The built-in Whiterun drop, used when no cell is chosen, was about 4100 units past the Gildergreen. She now stands on the plaza in front of that tree. Already-built followers keep the old spot until you build them again. A location you picked is unchanged. Sandbox package links were not changed.
+- Not in this build: a Fallout 4 port, or one zip of several followers. GitHub #2 (hair that fills the room) was not a bad head-part id.
+
 ## [3.7.3] - 2026-09-21 - the face-tint warning
 - An exported head whose tint was not labeled as a CharGen file was either skipped or retargeted on the wrong texture slot. The face tint is shader slot 6 (the 7th line in NifSkope). Slot 7 is the specular map. Writing the tint there left the real tint mask in place and replaced the specular map.
 - Existing facetint paths are recognized. A head shape can be identified from its skin texture when the name does not contain "head", including heads under 1000 vertices.

@@ -12,13 +12,13 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ShugokiFable/FollowerForge/actions/workflows/ci.yml"><img src="https://github.com/ShugokiFable/FollowerForge/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/SenjuWoo/FollowerForge/actions/workflows/ci.yml"><img src="https://github.com/SenjuWoo/FollowerForge/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-d5a84b?labelColor=101114" alt="MIT License"></a>
-  <a href="https://github.com/ShugokiFable/FollowerForge/releases/tag/v3.7.0"><img src="https://img.shields.io/badge/release-v3.7.0-e5bc69?labelColor=101114" alt="v3.7.0"></a>
+  <a href="https://github.com/SenjuWoo/FollowerForge/releases/latest"><img src="https://img.shields.io/github/v/release/SenjuWoo/FollowerForge?label=release&color=e5bc69&labelColor=101114" alt="Latest release"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/ShugokiFable/FollowerForge/releases/latest">Download</a>
+  <a href="https://github.com/SenjuWoo/FollowerForge/releases/latest">Download</a>
   ·
   <a href="#quick-start">Quick start</a>
   ·
@@ -35,7 +35,7 @@
 
 ## Quick start
 
-Latest release: **[v3.7.0](https://github.com/ShugokiFable/FollowerForge/releases/tag/v3.7.0)** (`FollowerForge-3.7.0-win-x64.zip`). Self-contained Windows x64; no separate .NET install.
+Download the Windows x64 zip from the [latest GitHub release](https://github.com/SenjuWoo/FollowerForge/releases/latest). It is self-contained. No separate .NET install.
 
 1. Extract the ZIP **anywhere outside Skyrim `Data`**.
 2. Run `FollowerForge.exe`.
@@ -45,7 +45,7 @@ Latest release: **[v3.7.0](https://github.com/ShugokiFable/FollowerForge/release
 
 RaceMenu **Export Head** NIF/DDS files are required for a custom face. A slider-only preset without usable exported head geometry may not reproduce the face on an NPC.
 
-Recommended face workflow: [FaceForge](https://github.com/ShugokiFable/FaceForge) → RaceMenu Export Head → FollowerForge.
+Recommended face workflow: [FaceForge](https://github.com/SenjuWoo/FaceForge) → RaceMenu Export Head → FollowerForge.
 
 ## Vortex and Mod Organizer 2
 
@@ -57,7 +57,7 @@ Empty path boxes keep automatic detection. Game `Data` and the Skyrim saves fold
 
 Do not point FollowerForge at a houseCARL Vortex shim unless you intentionally override the safety gate.
 
-Detailed MO2 notes: [`FollowerForge 3.7.0/docs/MO2.md`](FollowerForge%203.7.0/docs/MO2.md).
+Detailed MO2 notes: [`FollowerForge 3.7.4/docs/MO2.md`](FollowerForge%203.7.4/docs/MO2.md).
 
 ## Studio (3.6.0+)
 
@@ -102,25 +102,29 @@ FollowerForge does not grant redistribution rights for third-party assets. Check
 
 Verified in this tree:
 
-- `FollowerForge 3.7.0/` is the ship snapshot (`CURRENT.txt`)
-- 489 Release tests (478 inherited + 11 new)
-- End-to-end CLI build of legacy outfit + armour pieces + a creature transform race: **BUILD OK**, one warning, no errors
-- Published plugin VMAD carries the chosen beast race; ship gate reads `HEDR=1.71`, ESL light
+- `FollowerForge 3.7.4/` is the ship snapshot (`CURRENT.txt`)
+- 532 Release tests passed on that snapshot before the commit that added it. CI on the pushed commit is the release gate
+- A short head texture list is grown to nine slots and the tint is written on slot 6. An existing specular map on slot 7 is left alone
+- Head meshes that live only under CharGen `Exported` or `Presets` are listed
+- With no location chosen, the follower is placed on the Whiterun plaza in front of the Gildergreen. A location you pick is unchanged
 
 Not claimed:
 
-- A creature transform surviving a real fight in game. `SetRace()` on a follower is engine behaviour this build cannot exercise
-- That a RaceMenu body shape or overlay transfers into the plugin — they do not. The build now warns when shaped `bodyMorphs` are present
-- Nexus upload of 3.7.0 (GitHub release is current; Nexus still lagged when this snapshot shipped)
+- In-game confirmation of the tint, the face list, or the new Whiterun spot. Rebuild to pick up the new drop. An already-built plugin keeps the old coordinates
+- Black face from warpaints, and GitHub issue #2. Those were not a bad head-part id on the preset that was checked
+- A creature transform surviving a real fight. `SetRace()` is engine behaviour this build cannot exercise
+- That a RaceMenu body shape or overlay transfers into the plugin. They do not. The build warns when shaped `bodyMorphs` are present
+- A Fallout 4 port, or one zip that contains several followers
+- Nexus upload. That stays a manual page edit. The GitHub release is cut only after CI on this commit is green
 
 ## Build from source
 
-Ship tree: `FollowerForge 3.7.0\`. Needs the .NET 8 SDK.
+Ship tree: `FollowerForge 3.7.4\`. Needs the .NET 10 SDK.
 
 ```powershell
-cd "FollowerForge 3.7.0"
+cd "FollowerForge 3.7.4"
 .\Build-FollowerForge.ps1
-.\Publish-FollowerForge.ps1 -Version 3.7.0
+.\Publish-FollowerForge.ps1 -Version 3.7.4
 ```
 
 ## Credits
@@ -130,6 +134,12 @@ Skyrim, Vortex, Mod Organizer 2, RaceMenu, and related names belong to their own
 ## License
 
 [MIT](LICENSE)
+
+## Notes in 3.7.4
+
+- Face tint is written on shader slot 6 even when the exported head's texture list is shorter than that slot
+- Faces exported only into CharGen `Exported` or `Presets` show up in the face list
+- Skipping the location picker no longer drops her past the Gildergreen
 
 ## Notes in 3.7.0
 

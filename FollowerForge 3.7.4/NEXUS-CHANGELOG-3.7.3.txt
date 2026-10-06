@@ -1,0 +1,10 @@
+FollowerForge 3.7.3 — Face tint
+
+Bug-fix release. No new features. Existing followers are unchanged. No FormIDs were touched.
+
+Fixed
+- **The "could not locate the face-tint texture" warning.** Two things were wrong. The warning was a pair of engineer notes that did not say what to do, and the fallback behind it wrote the tint onto the specular texture (shader slot 7) instead of the face-tint slot (slot 6, the 7th texture line in NifSkope). That leaves the old tint mask in place and can grey or blotch the face. Slot 6 is now the one that is retargeted. A head that already points at a CharGen or facetint texture is picked up even when the shape is not named "head".
+- When the head still cannot be converted safely, the build says so once: the exported head was not copied, the plugin is still valid, and the Creation Kit step is Ctrl+F4 on that actor. The same steps are written to ck-handoff-report.json next to the build. Ctrl+F4 bakes the sliders and colors stored on the actor. It does not include a RaceMenu sculpt.
+- The build summary no longer calls a skipped export the default face.
+
+Verified: 524 automated tests, including the slot-6 cases taken from real exported heads. In-game appearance of a rebuilt follower was not checked.

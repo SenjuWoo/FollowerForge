@@ -1,4 +1,4 @@
-FollowerForge 3.7.3 — RELEASED as GitHub v3.7.3 (Latest) from green SHA 110d17e.
-Repo CI and CodeQL success on that SHA. Published asset bytes match the tested ZIP (ed520ea8…a9d71dee, 99263297 bytes).
-524 Release tests passed (8 new). Parent release remains v3.7.2 at 026a70e.
-Details: FollowerForge 3.7.3/VALIDATION.md and STATE.md.
+FollowerForge 3.7.4 — local snapshot, not published. Parent remains GitHub v3.7.3 (Latest) at SHA 110d17e.
+Parent asset bytes: ed520ea8…a9d71dee, 99263297 bytes. Parent Release tests: 524.
+3.7.4 is the tint-persistence, Exported-face scan, and Whiterun plaza drop. 532 Release tests passed. Details: FollowerForge 3.7.4/VALIDATION.md and STATE.md.
+Nexus upload and a GitHub release of 3.7.4 have not been done.

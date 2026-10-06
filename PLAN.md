@@ -1,3 +1,70 @@
+# FollowerForge 3.7.4 — tint persistence, exported faces, Whiterun plaza
+
+Status: implemented in `FollowerForge 3.7.4`. Parent `FollowerForge 3.7.3` was not edited.
+
+- [x] Short texture sets grow to nine slots; tint writes on slot 6; an existing slot 7 specular is kept.
+- [x] CharGen nifs under Exported and Presets are indexed. The same stem is kept once, root first.
+- [x] A shaped head with no claimable tint is still copied. The face line says so.
+- [x] No-location Whiterun drop moved to the plaza in front of the Gildergreen (24606, -4167, -2986). Package FormIDs unchanged.
+- [x] 532 Release tests passed locally before the snapshot commit. In-game appearance was not checked.
+- [ ] GitHub release after CI on that commit, then the Nexus changelog paste.
+
+# FollowerForge 3.8.0 plan — follower packs (N followers, one plugin, one zip)
+
+Status: draft plan — owner approval pending. Nothing started. Version number provisional.
+Requested in the Build a Follower comments: "create a follower pack, putting multiple followers
+into one single .zip file". Package generation lives here because BAF is a runtime Papyrus tool
+and cannot write plugins.
+
+Budget, measured rather than assumed:
+- ESL cap: 2048 new records universally (FormIDs 0x800-0xFFF); 4096 only on game 1.6.1130+
+  (UESP; esplugin #40). EspHeaderValidator already enforces the universal range, so packs inherit it.
+- Per follower: NPC + [CSTY] + RELA + ACHR = 3-4 records (fixed allocation order,
+  FollowerCompiler.cs:60); dialogue (QUST/DIAL/INFO) is allocated last and only when the profile
+  has it.
+- A 100-follower pack is roughly 20% of the cap. "Too much" is not a realistic pack size; the
+  guard below is insurance, not a design limit.
+
+1. [ ] Not started. When it starts, copy the released 3.7.4 snapshot. Do not edit 3.7.3 or 3.7.2.
+2. [ ] Prove first on a spike: two profiles -> ONE SkyrimMod -> write -> EspHeaderValidator
+       (requireEsl) passes + two FaceGen swaps land. No feature work before this holds.
+3. [ ] Split compile-from-mod: Compile builds its own SkyrimMod from profile.PluginName
+       (FollowerCompiler.cs:56-57). Give it a caller-provided mod path (or move the per-profile
+       record builders behind a PackCompiler that owns one mod). Keep the fixed per-follower
+       allocation order and a stable follower order (ordinal by name) so DeterministicBuildId
+       does not drift between runs.
+4. [ ] Budget guard on the staged bytes: count new-record FormIDs (the validator already walks the
+       file); error above 2048 with a "split into Pack A/B" message; warn at 1536 (75%).
+5. [ ] Masters: union across members, deterministic order; ValidateMasterClosure /
+       ValidateInstalledMasters run against the union; the checklist lists it.
+6. [ ] FaceGen per member: FaceGenSwapper is already per-NPC (NpcFormId + PluginName,
+       FaceGenSwapper.cs:21,29) — call it once per member with the pack plugin name; assert every
+       NIF/DDS pair lands under the pack plugin's facegeom/facetint folders.
+7. [ ] Assets: reuse the HubMode path — a hub ships shared assets once; pack-local mode ships only
+       generated FaceGen (the shape FollowerBuilder.cs:1093 already documents).
+8. [ ] Output: one staging folder -> one zip; SHARE-CHECKLIST lists every member and the master
+       union; RSVexclude.ini merges member texture paths.
+9. [ ] Surfaces: CLI verb "pack" beside build/batch/hub (Program.cs:57-64 switch), profiles loaded
+       the batch way (BatchBuilder.LoadProfiles); Studio: select profiles -> Build pack.
+10. [ ] Tests (src/Tests/): budget error >2048 / warn at 1536; masters union; per-member FaceGen
+        naming; two-build determinism (byte-identical); dialogue-in-pack; hub+pack; 3-member
+        end-to-end through the CLI.
+11. [ ] Docs and release via the standard pipeline: README, IMPLEMENTATION-MAP, NEXUS changelog;
+        CI green SHA, tag, asset bytes verified, NEXUS-UPLOAD refreshed.
+
+Deliberately NOT in this plan:
+- Non-ESL pack output. Only needed past 2048 records — split packs first; a plain ESP costs one of
+  the 254 full slots. Revisit only if a real pack hits the cap.
+- Cross-pack dedup or runtime merging of packs.
+- Editing a built pack in place (rebuild instead), and per-member enable/disable toggles.
+
+Owner decisions before starting:
+- Release train: 3.8.0, or ride it into a later version.
+- Pack plugin naming: author-prefix rule (SharePackageDocuments.NormalizeAuthorPrefix) — one
+  prefix per pack?
+- Hub: required for packs, or standalone-first with hub as an option?
+- Studio UX: where packs live; whether member order is user-visible or build-internal only.
+
 # FollowerForge 3.7.2 community-fix pass
 
 - [x] Diagnose four Nexus reports against current code; reproduce relationship mis-map and head-part silent drop.

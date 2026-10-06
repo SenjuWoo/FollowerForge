@@ -1,5 +1,14 @@
 # FollowerForge decisions
 
+## 2026-10-06 - 3.7.4: short texture lists, and the Whiterun drop
+
+- nifly `SetTextureSlot` does not grow the texture vector. A list shorter than slot 6 drops the write. 3.7.4 resizes to nine slots (the SE head count), then writes slot 6. New slots are empty. An existing slot 7 specular is not rewritten.
+- When the tint path cannot be identified, the shaped head is still saved. The player text says the mesh was copied. Ctrl+F4 still does not include a RaceMenu sculpt.
+- CharGen discovery scans the folder, then `Exported`, then `Presets`. The first stem wins. Root beats a subfolder of the same name.
+- The no-location placement is WhiterunWorld coordinates. The old point (28878, -4122, -2618) was about 4100 units past GildergreenXMarkerREF 02158F (24775.6, -4061.4, -2968). The new point (24606, -4167, -2986) is about 200 units from that tree toward the inner gate door 01B1F3. City NPC refs with small coordinates are interior or cell-local and are not a substitute.
+- Sandbox packages stay 01B217, 09361E, 0956B8, and 01B210. Their EditorIDs matched. They were not edited.
+- GitHub #2 was not a bad `formIdentifier` translation. A checked preset resolved a real Hair head part whose mesh is skinned to the head. The issue screenshot is a blown-up mesh. No parser change.
+
 ## 2026-09-21 - 3.7.3: face tint is slot 6
 
 - BSShaderTextureSet slot 6 is the face tint (NifSkope's 7th texture line). Slot 7 is the specular map. A real RaceMenu export on this machine (AAA_GirlHeads) and a CK-style head (MaleHeadArgonian) both store the tint on slot 6 and `*_s.dds` on slot 7. The jslot faceTextures index 7 is FemaleHead_S.dds, which matches.
