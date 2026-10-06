@@ -7,7 +7,7 @@ Status: implemented in `FollowerForge 3.7.4`. Parent `FollowerForge 3.7.3` was n
 - [x] A shaped head with no claimable tint is still copied. The face line says so.
 - [x] No-location Whiterun drop moved to the plaza in front of the Gildergreen (24606, -4167, -2986). Package FormIDs unchanged.
 - [x] 532 Release tests passed locally before the snapshot commit. In-game appearance was not checked.
-- [ ] GitHub release after CI on that commit, then the Nexus changelog paste.
+- [x] GitHub release v3.7.4 from 77e6b0b. Nexus paste is still the owner's step.
 
 # FollowerForge 3.8.0 plan — follower packs (N followers, one plugin, one zip)
 

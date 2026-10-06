@@ -103,7 +103,7 @@ FollowerForge does not grant redistribution rights for third-party assets. Check
 Verified in this tree:
 
 - `FollowerForge 3.7.4/` is the ship snapshot (`CURRENT.txt`)
-- 532 Release tests passed on that snapshot before the commit that added it. CI on the pushed commit is the release gate
+- 532 Release tests passed on GitHub CI for `77e6b0b` (snapshot `FollowerForge 3.7.4`). CodeQL succeeded on that commit
 - A short head texture list is grown to nine slots and the tint is written on slot 6. An existing specular map on slot 7 is left alone
 - Head meshes that live only under CharGen `Exported` or `Presets` are listed
 - With no location chosen, the follower is placed on the Whiterun plaza in front of the Gildergreen. A location you pick is unchanged
@@ -115,7 +115,7 @@ Not claimed:
 - A creature transform surviving a real fight. `SetRace()` is engine behaviour this build cannot exercise
 - That a RaceMenu body shape or overlay transfers into the plugin. They do not. The build warns when shaped `bodyMorphs` are present
 - A Fallout 4 port, or one zip that contains several followers
-- Nexus upload. That stays a manual page edit. The GitHub release is cut only after CI on this commit is green
+- Nexus upload of 3.7.4. GitHub Latest is [v3.7.4](https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.7.4) from `77e6b0b`. The zip is 99266848 bytes, SHA-256 `a468e7dc6444c0c3e02509a5185e1122558d397f54e57f68db52ae8561691276`
 
 ## Build from source
 

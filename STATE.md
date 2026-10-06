@@ -1,6 +1,6 @@
 # FollowerForge state
 
-Active snapshot: `FollowerForge 3.7.4` (parent `FollowerForge 3.7.3`). GitHub Latest is still v3.7.3, commit 110d17e. See that folder's STATE.md.
+Active snapshot: `FollowerForge 3.7.4` (parent `FollowerForge 3.7.3`). GitHub Latest is v3.7.4, commit 77e6b0b. Asset SHA-256 a468e7dc6444c0c3e02509a5185e1122558d397f54e57f68db52ae8561691276, 99266848 bytes. Nexus paste is still the owner's step. See that folder's STATE.md.
 
 # FollowerForge state
 

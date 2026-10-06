@@ -1,6 +1,6 @@
 # 3.7.4 tint persistence and exported faces — validation
 
-Parent: released FollowerForge 3.7.3 (GitHub v3.7.3, SHA 110d17e). This snapshot was copied from 3.7.3 before the edits. 3.7.3 was not modified. Not published. No Nexus upload. No GitHub release.
+Parent: released FollowerForge 3.7.3 (GitHub v3.7.3, SHA 110d17e). This snapshot was copied from 3.7.3 before the edits. 3.7.3 was not modified. GitHub v3.7.4 is Latest, annotated tag on 77e6b0bca03de2038e50e27a25480d0cf070511c. Release asset FollowerForge-3.7.4-win-x64.zip is 99266848 bytes, SHA-256 a468e7dc6444c0c3e02509a5185e1122558d397f54e57f68db52ae8561691276. The downloaded asset and the GitHub digest match that hash. Both exes report FileVersion 3.7.4.0 and ProductVersion 3.7.4+77e6b0bca03de2038e50e27a25480d0cf070511c. Boot check: window stayed up. Nexus upload is still the owner's step.
 
 ## What was checked
 - `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.4`: 532 passed, 0 failed, 0 skipped. Parent baseline was 524. The new cases are the short texture set, the 9-slot specular guard, a head with no claimable tint, a nif only under Exported, the same name in the CharGen root and Exported, an MO2 overwrite nif, the empty-catalogue message, and the Whiterun plaza distance check.
@@ -17,7 +17,8 @@ Parent: released FollowerForge 3.7.3 (GitHub v3.7.3, SHA 110d17e). This snapshot
   - 0956B8 Package DefaultSandboxCurrentLocation256, winner Skyrim.esm
   - 01B210 Package DefaultSleepEditorLoc24x8, winner Skyrim.esm
   VanillaForms already uses those four EditorIDs. No package constant was changed. The Z_Reynila override is this load order, not a FollowerForge FormID error.
-- Native housecarl tools are not in this Grok process. The server is registered in C:\Users\karlo\.grok\config.toml. A full restart is required before chat can call them. SSEEdit and the Creation Kit were not launched. Rick7's MaleHeadBreton.nif was not on the deployed CharGen tree (0 nifs there earlier in this work). The tint tests use a nifly-generated head.
+- The houseCARL reads above were made in this session after the restart. SSEEdit and the Creation Kit were not launched. Rick7's MaleHeadBreton.nif was not on the deployed CharGen tree (0 nifs there earlier in this work). The tint tests use a nifly-generated head.
+- GitHub CI run 37536673926 on 77e6b0b tested snapshot FollowerForge 3.7.4 and reported 532 passed, 0 failed. CodeQL run 37536673797 (C# and Actions) completed success on the same SHA. Publish-FollowerForge.ps1 then produced the zip above. In-game appearance was not checked.
 
 # 3.7.3 face-tint slot — validation
 

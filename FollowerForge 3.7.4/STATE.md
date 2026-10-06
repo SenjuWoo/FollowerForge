@@ -1,6 +1,6 @@
 # FollowerForge 3.7.4 — tint persistence and exported faces
 
-Parent: released 3.7.3 (GitHub v3.7.3, SHA 110d17e). Snapshot copied from 3.7.3 before these edits. Not published. Nexus upload remains the owner's step. GitHub Latest stays v3.7.3 until a release is cut from this tree.
+Parent: released 3.7.3 (GitHub v3.7.3, SHA 110d17e). Snapshot copied from 3.7.3 before these edits. Released as GitHub v3.7.4 from 77e6b0b (CI 532 passed, CodeQL success). Asset SHA-256 a468e7dc6444c0c3e02509a5185e1122558d397f54e57f68db52ae8561691276, 99266848 bytes. Nexus upload remains the owner's step.
 
 Rick7 on 3.7.3 still got FACEGEN_TINT_FALLBACK on MaleHeadBreton and then FACEGEN_TINT_NOT_SET. The fallback aimed at slot 6. nifly SetTextureSlot does nothing when the BSShaderTextureSet is shorter than that slot, so the path never landed. 3.7.4 grows a short list to the nine slots a Skyrim SE head uses, then writes slot 6. A specular path already in slot 7 is kept. Confirmed with a generated 6-slot head and a 9-slot head. The 6-slot head reloaded with 9 slots.
 

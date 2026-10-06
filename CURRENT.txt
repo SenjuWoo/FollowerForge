@@ -1,4 +1,4 @@
-FollowerForge 3.7.4 — local snapshot, not published. Parent remains GitHub v3.7.3 (Latest) at SHA 110d17e.
-Parent asset bytes: ed520ea8…a9d71dee, 99263297 bytes. Parent Release tests: 524.
-3.7.4 is the tint-persistence, Exported-face scan, and Whiterun plaza drop. 532 Release tests passed. Details: FollowerForge 3.7.4/VALIDATION.md and STATE.md.
-Nexus upload and a GitHub release of 3.7.4 have not been done.
+FollowerForge 3.7.4 — GitHub Latest v3.7.4, tag on 77e6b0b. Parent remains v3.7.3 at SHA 110d17e.
+Asset: FollowerForge-3.7.4-win-x64.zip, 99266848 bytes, SHA-256 a468e7dc6444c0c3e02509a5185e1122558d397f54e57f68db52ae8561691276.
+CI on 77e6b0b: xunit 532 passed (snapshot FollowerForge 3.7.4), CodeQL C# and Actions success. Both exes FileVersion 3.7.4.0. Boot check stayed up.
+Nexus upload of 3.7.4 is still the owner's paste. In-game appearance was not checked. Details: FollowerForge 3.7.4/VALIDATION.md and STATE.md.
