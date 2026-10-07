@@ -60,7 +60,7 @@ bake in RaceMenu.
 - xVASynth (custom spoken lines)
 - RDO / dialogue overhauls (marriage coverage honesty)
 - High Poly Head, FSMP (only if your assets need them)
-- [FaceForge](https://github.com/ShugokiFable/FaceForge) — photo → RaceMenu preset before bake
+- [FaceForge](https://github.com/SenjuWoo/FaceForge) — photo → RaceMenu preset before bake
 
 ---
 
@@ -81,5 +81,5 @@ grant redistribution rights for third-party meshes/textures.
 
 **FaceForge** (face preset) → RaceMenu Export Head → **FollowerForge** (NPC plugin).
 
-GitHub: https://github.com/ShugokiFable/FollowerForge  
-Release: https://github.com/ShugokiFable/FollowerForge/releases/tag/v3.2.2
+GitHub: https://github.com/SenjuWoo/FollowerForge  
+Release: https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.2.2

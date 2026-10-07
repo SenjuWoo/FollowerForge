@@ -38,4 +38,4 @@ Also includes `cli\FollowerForge.Cli.exe` for the same engine from the command l
 
 ## Related
 
-- [FaceForge](https://github.com/ShugokiFable/FaceForge) — photograph → RaceMenu starting preset
+- [FaceForge](https://github.com/SenjuWoo/FaceForge) — photograph → RaceMenu starting preset

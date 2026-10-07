@@ -23,4 +23,4 @@ Unzip anywhere → **FollowerForge.exe**. Self-contained.
 
 ## Related
 
-- [FaceForge](https://github.com/ShugokiFable/FaceForge)
+- [FaceForge](https://github.com/SenjuWoo/FaceForge)

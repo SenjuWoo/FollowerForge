@@ -1157,7 +1157,7 @@ Completeness audit (asked to double-check nothing was forgotten) - gaps found an
     voice files confirmed PRESENT inside the BSA, ship-gate PASS.
   - Tests 77 -> 83.
   GitHub (product version 2.0.0 — not Skyrim Forge 4.x):
-  - Repo: https://github.com/ShugokiFable/FollowerForge
+  - Repo: https://github.com/SenjuWoo/FollowerForge
   - Tag: v2.0.0 on the completeness-audit commit (marriage + loadout + body + 83 tests)
   - Release asset: FollowerForge-2.0.0-win-x64.zip (self-contained win-x64)
   STILL OPEN (deliberately, not forgotten):

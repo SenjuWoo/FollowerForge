@@ -6,7 +6,7 @@
 | **Upload** | `NEXUS-UPLOAD\FollowerForge-3.2.4-win-x64.zip` |
 | **Size** | 99154348 bytes |
 | **SHA-256** | `9CECB04D96AAB135185B82F6B6296C6A8E61FB718473F08F0B3BA313F6DB94D9` |
-| **GitHub** | https://github.com/ShugokiFable/FollowerForge/releases/tag/v3.2.4 |
+| **GitHub** | https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.2.4 |
 
 ## Short changelog (paste)
 

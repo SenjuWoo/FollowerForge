@@ -12,4 +12,4 @@
 - `FollowerForge-3.2.2-win-x64.zip` — unzip and run `FollowerForge.exe`
 
 ## Pair
-Use with [FaceForge](https://github.com/ShugokiFable/FaceForge) for photo → RaceMenu preset → bake head → build NPC here.
+Use with [FaceForge](https://github.com/SenjuWoo/FaceForge) for photo → RaceMenu preset → bake head → build NPC here.

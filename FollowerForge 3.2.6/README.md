@@ -74,7 +74,7 @@ Do **not** point FollowerForge at a houseCARL shim instance.
 - xVASynth (custom spoken lines)
 - RDO / dialogue overhauls (marriage coverage honesty)
 - High Poly Head, FSMP (only if your assets need them)
-- [FaceForge](https://github.com/ShugokiFable/FaceForge) â€” photo â†’ RaceMenu preset before bake
+- [FaceForge](https://github.com/SenjuWoo/FaceForge) â€” photo â†’ RaceMenu preset before bake
 
 ---
 
@@ -95,5 +95,5 @@ grant redistribution rights for third-party meshes/textures.
 
 **FaceForge** (face preset) â†’ RaceMenu Export Head â†’ **FollowerForge** (NPC plugin).
 
-GitHub: https://github.com/ShugokiFable/FollowerForge  
-Release: https://github.com/ShugokiFable/FollowerForge/releases/tag/v3.2.3
+GitHub: https://github.com/SenjuWoo/FollowerForge  
+Release: https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.2.3

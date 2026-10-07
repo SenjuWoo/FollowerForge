@@ -266,7 +266,7 @@ Explicitly stage the final intended paths and commit `Release FollowerForge 3.2.
 
 - [ ] **Step 6: Push and open the scoped pull request**
 
-Push `agent/mo2-manual-setup` to the existing `https://github.com/ShugokiFable/FollowerForge` remote, open a pull request to `main`, verify remote branch/PR contents and checks, and merge only if repository policy and checks permit. Do not create another repository or upload temporary test files.
+Push `agent/mo2-manual-setup` to the existing `https://github.com/SenjuWoo/FollowerForge` remote, open a pull request to `main`, verify remote branch/PR contents and checks, and merge only if repository policy and checks permit. Do not create another repository or upload temporary test files.
 
 - [ ] **Step 7: Verify publication artifacts**
 

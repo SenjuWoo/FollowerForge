@@ -68,6 +68,6 @@ Optional integrations include xVASynth, dialogue overhauls, High Poly Head, and 
 
 FollowerForge does not grant redistribution rights for third-party assets. Check each asset author's permissions before uploading a generated follower.
 
-Face workflow: [FaceForge](https://github.com/ShugokiFable/FaceForge) -> RaceMenu Export Head -> FollowerForge.
+Face workflow: [FaceForge](https://github.com/SenjuWoo/FaceForge) -> RaceMenu Export Head -> FollowerForge.
 
-Repository: https://github.com/ShugokiFable/FollowerForge
+Repository: https://github.com/SenjuWoo/FollowerForge
