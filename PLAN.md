@@ -1,3 +1,16 @@
+# FollowerForge 3.7.5 — the head-part audit
+
+Status: implemented in `FollowerForge 3.7.5`. Parent `FollowerForge 3.7.4` was not edited.
+
+- [x] Every build lists the head part it writes: slot, FormID, EditorID.
+- [x] `PRESET_HEADPART_OTHER_RACE` names a part whose ValidRaces omits her race.
+- [x] `PRESET_HAIR_OTHER_RACE` names an unrestricted hair when the preset belongs to another race, with its mesh path — the mechanism behind GitHub #2.
+- [x] `PRESET_HEADPART_DUPLICATE` and `PRESET_NO_HAIR_PART` for the other two silent arrangements.
+- [x] The preset is parsed once per build; the body-shape count comes from the same read.
+- [x] 541 Release tests (532 parent + 9 new). No in-game check.
+- [ ] GitHub release v3.7.5 from the green SHA.
+- [ ] Nexus upload (owner step).
+
 # FollowerForge 3.7.4 — tint persistence, exported faces, Whiterun plaza
 
 Status: implemented in `FollowerForge 3.7.4`. Parent `FollowerForge 3.7.3` was not edited.

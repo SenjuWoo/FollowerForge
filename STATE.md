@@ -1,6 +1,6 @@
 # FollowerForge state
 
-Active snapshot: `FollowerForge 3.7.4` (parent `FollowerForge 3.7.3`). GitHub Latest is v3.7.4, commit 77e6b0b. Asset SHA-256 a468e7dc6444c0c3e02509a5185e1122558d397f54e57f68db52ae8561691276, 99266848 bytes. Nexus paste is still the owner's step. See that folder's STATE.md.
+Active snapshot: `FollowerForge 3.7.5` (parent `FollowerForge 3.7.4`, released as v3.7.4 on 77e6b0b). 3.7.5 adds the head-part audit that names what the build writes and flags the two arrangements the game completes differently — the mechanism behind GitHub issue #2. 541 Release tests. Release step outstanding: push, CI, tag v3.7.5, asset. Nexus paste is still the owner's step. See that folder's STATE.md.
 
 # FollowerForge state
 
