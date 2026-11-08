@@ -60,22 +60,21 @@ shortcut suppressed the symptom for one preset and is unsound in general.
   index 4 (`0x4000800`…), NPC carries its head parts and two `PKID` package entries.
 
 ## Build and package (local, not published)
-- Windows self-contained publish from committed tree `7d678fe`→`be133fb`, `dist` cleared first so
-  no stale artifact could be measured. Zip `FollowerForge-3.7.7-win-x64.zip`, **99407212 bytes**,
-  SHA-256 `32a78d80eac0d75b5a9560973c532b8980519d42b83e5defc1681b9b116df728`, taken after the
-  publish finished.
-- **The previous candidate hash `4cb4d00b…` is superseded and must not be reused**: the resolver
-  changed after that zip was built.
+- Windows self-contained publish from committed tree `be133fb`→`1bfbe95`, `dist` cleared first so
+  no stale artifact could be measured. Zip `FollowerForge-3.7.7-win-x64.zip`, **99408491 bytes**,
+  SHA-256 `fe917650b311f9165395be160b0f4b75ea3ea5a2ec00dfbcfd7260e62644a6e8`, taken after the
+  publish process exited.
+- **Superseded candidate hashes, none of which may be quoted as current:** `4cb4d00b…` (pre-FLST
+  fix) and `32a78d80…` (pre-HDPT-override fix).
 - Zip contents listed with `unzip -l`: exactly five entries — `FollowerForge.exe`,
-  `cli\FollowerForge.Cli.exe`, `README.md` (10007 bytes, carrying the 3.7.7 notes and the 558 test
-  count), `CHANGELOG.txt`, `NEXUS-CHANGELOG-3.7.7.txt`. No `Data` folder, no plugin, no manager
-  metadata.
+  `cli\FollowerForge.Cli.exe`, `README.md` (10007 bytes, 3.7.7 notes and the 565 test count),
+  `CHANGELOG.txt`, `NEXUS-CHANGELOG-3.7.7.txt`. No `Data` folder, no plugin, no manager metadata.
 - Version stamping: both executables report FileVersion `3.7.7.0` and ProductVersion
-  `3.7.7+be133fbcb4b140e51f2f18ea917fbae9c432bfa0`.
+  `3.7.7+1bfbe95f68600b9979beb387d808066807276de6`.
 - Launch test: `FollowerForge.exe` from the packaged folder started, stayed up with
   `Responding = True` for 12 s, then was closed. The packaged `cli\FollowerForge.Cli.exe` ran `env`
-  against this machine and reported the live profile, 7 presets and 0 head exports.
-- CI on `be133fb`: required check `xunit suite (latest snapshot)` succeeded.
+  against this machine: Vortex, 2955 enabled plugins, 0 CharGen exports.
+- CI on `1bfbe95`: required check `xunit suite (latest snapshot)` succeeded.
 - **Not released.** No tag, no GitHub release, no Nexus upload; `CURRENT.txt` says so.
 
 ## What this does not claim

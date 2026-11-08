@@ -50,9 +50,11 @@ follower looks like, and it does not repair hair, faces or warpaint.
   the list and the races inside it.
 - The list is read from the plugin its own record ID names, so a list kept in a shared-lists plugin
   or a master is found.
-- If a later plugin overrides that list, the override is used when the app has an index for the run;
-  without one the base record is read and the report says so.
-- A list that cannot be read is reported as unknown instead of being guessed either way.
+- The head part record itself is also read from its load-order winner, because an override can change
+  which race list it uses.
+- If a later plugin overrides either record, the override is used when the app has an index for the
+  run; without one the defining records are read and the report says so.
+- A list or head part that cannot be read is reported as unknown instead of being guessed either way.
 - Vampires are judged against the vampire race they actually carry.
 
 Earlier in the 3.7.x line: a follower built from the default profile could be placed at the world

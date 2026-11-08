@@ -4,15 +4,15 @@
 |--|--|
 | **Version** | 3.7.7 — candidate, not published |
 | **Upload** | `FollowerForge-3.7.7-win-x64.zip` (5 files, self-contained) |
-| **Size** | 99407212 bytes |
-| **SHA-256** | `32a78d80eac0d75b5a9560973c532b8980519d42b83e5defc1681b9b116df728` |
-| **Binary revision** | `be133fbcb4b140e51f2f18ea917fbae9c432bfa0` |
+| **Size** | 99408491 bytes |
+| **SHA-256** | `fe917650b311f9165395be160b0f4b75ea3ea5a2ec00dfbcfd7260e62644a6e8` |
+| **Binary revision** | `1bfbe95f68600b9979beb387d808066807276de6` |
 | **GitHub** | https://github.com/SenjuWoo/FollowerForge/releases — tag `v3.7.7` is created on approval |
 
 This is an out-of-game Windows tool. It is **not** a Skyrim mod: do not install it into `Data`,
 Vortex or MO2. Only the follower package it generates is installed as a mod.
 
-The published GitHub release is still **v3.7.6**. CI passed on the 3.7.7 source commit `be133fb`
+The published GitHub release is still **v3.7.6**. CI passed on the 3.7.7 source commit `1bfbe95`
 (xunit suite, Analyze (csharp), Analyze (actions)). No in-game testing was performed.
 
 ## Page copy
