@@ -21,6 +21,28 @@
   round-trip, four FaceGen statuses, partial inventory labels, head-part race resolution, HEDR 1.71
   / formVersion 44 / ESPFE checks.
 
+## Build and package (local, not published)
+- First publish attempt failed at the zip step with `PermissionDenied` on `FollowerForge.exe`; no
+  artifact was produced. The second attempt, with no FollowerForge process running, reported
+  `PUBLISH SUCCEEDED` and "window stayed up".
+- Zip `FollowerForge-3.7.10-win-x64.zip`, **99416514 bytes**, SHA-256
+  `dfbc2c075caf36e41f79d1864e3ad8184ed3493bd51738366d8c4094a700e7b3`, measured after the publish process exited. Five entries: `FollowerForge.exe`,
+  `cli\FollowerForge.Cli.exe`, `README.md` (10707 bytes, 609 tests), `CHANGELOG.txt`,
+  `NEXUS-CHANGELOG-3.7.10.txt`.
+- Both executables report FileVersion `3.7.10.0` and ProductVersion `3.7.10+55e53f16518893ca401bd4cdc744528435709930`.
+- Packaged GUI launched, `Responding = True` after 14 s, then closed.
+- CI on `55e53f1`: `xunit suite (latest snapshot)`, `Analyze (csharp)` and `Analyze (actions)` all
+  succeeded.
+
+## Live load-order acceptance (packaged CLI)
+- `FF_AuditMatch` and `FF_AuditVamp`: no head-part warnings, `SHIP_GATE_PASS` with
+  `HEDR=1.71 numRec=13 formVersion=44 (6 records) ESL=True`, `FaceGen : default`.
+- `FF_AuditMismatch` (Nord built from a KaPoTun preset): five `PRESET_HEADPART_OTHER_RACE` warnings.
+- Generated plugin parsed independently: HEDR 1.71, numRecords 13, ESL flag set, four masters
+  (`Skyrim.esm`, `Update.esm`, `Dragonborn.esm`, `DWKaPoTunRace.esp`), records `NPC_`, `WRLD`,
+  `CELL`, `ACHR`, `RELA`, `CLFM`, every record formVersion 44, zero trailing bytes.
+- FaceGen live conversion: **NOT RUN** — 0 CharGen head exports on this machine.
+
 ## Not tested in Skyrim
 
 No gameplay session. Unverified: hair, eyes, brows and face geometry; face and body tint; hire and
