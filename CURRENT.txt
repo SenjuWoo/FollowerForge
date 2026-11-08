@@ -1,5 +1,5 @@
-FollowerForge 3.7.5 — built, not yet released. Parent is the released v3.7.4 at 77e6b0b.
-Snapshot: FollowerForge 3.7.5 (541 Release tests, 532 parent + 9 new).
-Release step outstanding: push, wait for CI on the new SHA, tag v3.7.5, attach the dist zip.
-Nexus upload of 3.7.4 and 3.7.5 is still the owner's paste. In-game appearance was not checked.
+FollowerForge 3.7.5 — GitHub Latest v3.7.5, tag on 001cac8. Parent is the released v3.7.4 at 77e6b0b.
+Asset: FollowerForge-3.7.5-win-x64.zip, 99402205 bytes, SHA-256 6c176f83f63d301fbc18008ff4d932e4a69f867f70d914c45cf4987b51e6d61f.
+CI on 001cac8: xunit 541 passed (snapshot FollowerForge 3.7.5), Analyze (csharp) and Analyze (actions) success. Both exes FileVersion 3.7.5.0, ProductVersion 3.7.5+001cac8. Boot check stayed up and Responding.
+Nexus upload of 3.7.5 is still the owner's paste. In-game appearance was not checked.
 Details: FollowerForge 3.7.5/VALIDATION.md and STATE.md.

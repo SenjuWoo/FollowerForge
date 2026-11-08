@@ -102,29 +102,34 @@ FollowerForge does not grant redistribution rights for third-party assets. Check
 
 Verified in this tree:
 
-- `FollowerForge 3.7.4/` is the ship snapshot (`CURRENT.txt`)
-- 532 Release tests passed on GitHub CI for `77e6b0b` (snapshot `FollowerForge 3.7.4`). CodeQL succeeded on that commit
+- `FollowerForge 3.7.5/` is the ship snapshot (`CURRENT.txt`)
+- 541 Release tests passed on GitHub CI for `001cac8` (snapshot `FollowerForge 3.7.5`). CodeQL succeeded on that commit
+- Every build lists the head parts it writes, by slot, FormID and EditorID
+- A head part restricted to another race is named, and an unrestricted hair on a preset from another race is named with its mesh file
+- A preset with two parts for one slot, or with no Hair part, is flagged
 - A short head texture list is grown to nine slots and the tint is written on slot 6. An existing specular map on slot 7 is left alone
 - Head meshes that live only under CharGen `Exported` or `Presets` are listed
 - With no location chosen, the follower is placed on the Whiterun plaza in front of the Gildergreen. A location you pick is unchanged
 
 Not claimed:
 
-- In-game confirmation of the tint, the face list, or the new Whiterun spot. Rebuild to pick up the new drop. An already-built plugin keeps the old coordinates
-- Black face from warpaints, and GitHub issue #2. Those were not a bad head-part id on the preset that was checked
+- In-game confirmation of the tint, the face list, the head-part audit, or the Whiterun spot. Rebuild to pick up the audit. An already-built plugin keeps the old coordinates
+- That GitHub issue #2's reporter used a custom-race preset. The mechanism is proven on a preset that does; the audit is what makes the next report decidable
+- That FollowerForge moves or repairs a head part. It writes the preset's parts as given and says when they cannot fit
+- Black face from warpaints
 - A creature transform surviving a real fight. `SetRace()` is engine behaviour this build cannot exercise
 - That a RaceMenu body shape or overlay transfers into the plugin. They do not. The build warns when shaped `bodyMorphs` are present
 - A Fallout 4 port, or one zip that contains several followers
-- Nexus upload of 3.7.4. GitHub Latest is [v3.7.4](https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.7.4) from `77e6b0b`. The zip is 99266848 bytes, SHA-256 `a468e7dc6444c0c3e02509a5185e1122558d397f54e57f68db52ae8561691276`
+- Nexus upload of 3.7.5. GitHub Latest is [v3.7.5](https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.7.5) from `001cac8`. The zip is 99402205 bytes, SHA-256 `6c176f83f63d301fbc18008ff4d932e4a69f867f70d914c45cf4987b51e6d61f`
 
 ## Build from source
 
-Ship tree: `FollowerForge 3.7.4\`. Needs the .NET 10 SDK.
+Ship tree: `FollowerForge 3.7.5\`. Needs the .NET 10 SDK.
 
 ```powershell
-cd "FollowerForge 3.7.4"
+cd "FollowerForge 3.7.5"
 .\Build-FollowerForge.ps1
-.\Publish-FollowerForge.ps1 -Version 3.7.4
+.\Publish-FollowerForge.ps1 -Version 3.7.5
 ```
 
 ## Credits
@@ -134,6 +139,14 @@ Skyrim, Vortex, Mod Organizer 2, RaceMenu, and related names belong to their own
 ## License
 
 [MIT](LICENSE)
+
+## Notes in 3.7.5
+
+- Every build lists the head parts it writes — slot, FormID and EditorID. A build that writes the wrong hair now says which hair it wrote
+- A part restricted to another race is named; the engine leaves it off her
+- A preset made on one race and built as another is called out. A hair record with no race list is applied to every race, so a mesh modelled around one skull renders around another — the mechanism behind hair sitting low around a follower's jaw
+- Two parts for one slot, or no Hair part at all, now warns
+- The preset is read once per build instead of twice
 
 ## Notes in 3.7.4
 

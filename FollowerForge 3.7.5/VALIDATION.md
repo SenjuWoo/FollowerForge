@@ -35,6 +35,20 @@ Parent: released FollowerForge 3.7.4 (GitHub v3.7.4, SHA 77e6b0b). This snapshot
   `00080B:DWKaPoTunRace.esp` (defining plugin) ValidRaces `00083D:DWKaPoTunRace.esp`.
 - No in-game check. The follower was built into a scratch folder, not installed.
 
+## Release record
+- Commit `001cac8d0a1bd9c16a434eab26a0eba1fd26a149` pushed to `main`. Required check `xunit suite
+  (latest snapshot)` succeeded on that SHA; `Analyze (csharp)` and `Analyze (actions)` succeeded.
+- Tag `v3.7.5` on `001cac8`. GitHub release `v3.7.5` is Latest.
+- Asset `FollowerForge-3.7.5-win-x64.zip`: 99402205 bytes, SHA-256
+  `6c176f83f63d301fbc18008ff4d932e4a69f867f70d914c45cf4987b51e6d61f`, and the digest GitHub
+  reports for the uploaded asset is the same value.
+- Rebuilt from the committed tree so the binaries stamp the release SHA: both exes report
+  FileVersion `3.7.5.0`, ProductVersion `3.7.5+001cac8d0a1bd9c16a434eab26a0eba1fd26a149`.
+- Boot check: `FollowerForge.exe` from the published folder started and stayed up with
+  `Responding = True` for 12 s, then was closed.
+- Open Dependabot, code-scanning and secret-scanning alerts on the repository after the push: 0,
+  0, 0.
+
 ## What this does and does not claim
 - Claims: the build states which head part it writes, by slot and EditorID; a part restricted to
   another race is named; an unrestricted hair on a preset from another race is named with its
