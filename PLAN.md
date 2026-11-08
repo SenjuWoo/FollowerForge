@@ -1,3 +1,16 @@
+# FollowerForge 3.7.6 — placement and warning hotfix
+
+Status: implemented in `FollowerForge 3.7.6`. Parent `FollowerForge 3.7.5` was not edited.
+
+- [x] Default profile (Whiterun cell, no coordinates) places on the plaza instead of `(0,0,0)`.
+- [x] Coordinates a profile sets are still honoured exactly.
+- [x] `PRESET_HEADPART_OTHER_RACE` no longer fires for a variant race from the same plugin.
+- [x] The README shipped inside the zip matches the release.
+- [x] 546 Release tests (543 parent + 3 new). Placed-reference coordinates parsed from the built
+      plugin and confirmed.
+- [ ] GitHub release v3.7.6 from the green SHA.
+- [ ] Nexus upload (owner step).
+
 # FollowerForge 3.7.5 — the head-part audit
 
 Status: implemented in `FollowerForge 3.7.5`. Parent `FollowerForge 3.7.4` was not edited.

@@ -1,5 +1,10 @@
 # CHANGELOG — FollowerForge
 
+## [3.7.6] - 2026-11-08 - she stands where she was always meant to
+- A follower built from the default profile landed at the world origin. Studio's "no location picked" profile names the Whiterun persistent cell and no coordinates, and the plaza position only applied when no cell was named at all, so 0,0,0 was written to the placed reference. A named Whiterun cell without coordinates now means the plaza; coordinates you set are still used as given.
+- A head part restricted to a vampire or climate variant of her own race no longer warns. One race mod ships those variants and they share one head; 3.7.5 compared whole record IDs and called them a mismatch.
+- The README inside the published download said 3.7.4. It ships the current one.
+
 ## [3.7.5] - 2026-11-07 - the hair that sat wrong now has a name
 - Every build lists the head parts it writes: slot, FormID and EditorID. GitHub #2 asked why a follower's hair sat below the head, and no build had ever printed which hair the follower carried, so the screenshot could not be traced to a record.
 - A head part restricted to another race is named in the report. `ValidRaces` is what the engine filters on, and a part whose list omits her race is silently left off her.

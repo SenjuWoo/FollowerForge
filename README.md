@@ -124,12 +124,12 @@ Not claimed:
 
 ## Build from source
 
-Ship tree: `FollowerForge 3.7.5\`. Needs the .NET 10 SDK.
+Ship tree: `FollowerForge 3.7.6\`. Needs the .NET 10 SDK.
 
 ```powershell
-cd "FollowerForge 3.7.5"
+cd "FollowerForge 3.7.6"
 .\Build-FollowerForge.ps1
-.\Publish-FollowerForge.ps1 -Version 3.7.5
+.\Publish-FollowerForge.ps1 -Version 3.7.6
 ```
 
 ## Credits
@@ -139,6 +139,12 @@ Skyrim, Vortex, Mod Organizer 2, RaceMenu, and related names belong to their own
 ## License
 
 [MIT](LICENSE)
+
+## Notes in 3.7.6
+
+- A follower built from the default profile now stands on the Whiterun plaza. The default names the Whiterun cell with no coordinates, and those zeros used to be written as the position
+- A head part restricted to a vampire or climate variant of her own race no longer warns
+- The README inside the download matches the release
 
 ## Notes in 3.7.5
 

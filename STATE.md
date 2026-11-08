@@ -1,6 +1,6 @@
 # FollowerForge state
 
-Active snapshot: `FollowerForge 3.7.5`, released as GitHub v3.7.5 (Latest) from `001cac8`; parent is the released 3.7.4 on 77e6b0b. 3.7.5 adds the head-part audit that names what the build writes and flags the two arrangements the game completes differently — the mechanism behind GitHub issue #2. 541 Release tests, CI green on that SHA. Asset `FollowerForge-3.7.5-win-x64.zip`, 99402205 bytes, SHA-256 `6c176f83f63d301fbc18008ff4d932e4a69f867f70d914c45cf4987b51e6d61f`. Nexus paste is still the owner's step. See that folder's STATE.md.
+Active snapshot: `FollowerForge 3.7.6` (parent `FollowerForge 3.7.5`, released as v3.7.5 on 001cac8). 3.7.6 is a hotfix: the default profile placed the follower at the world origin instead of the Whiterun plaza, and the 3.7.5 race warning fired on the correct race. 546 Release tests. Release step outstanding: push, CI, tag v3.7.6, asset. Nexus paste is still the owner's step. See that folder's STATE.md.
 
 # FollowerForge state
 
