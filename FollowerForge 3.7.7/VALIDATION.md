@@ -54,18 +54,22 @@ shortcut suppressed the symptom for one preset and is unsound in general.
   index 4 (`0x4000800`…), NPC carries its head parts and two `PKID` package entries.
 
 ## Build and package (local, not published)
-- Windows self-contained publish from the committed tree: `FollowerForge 3.7.7/dist`. Zip
-  `FollowerForge-3.7.7-win-x64.zip`, **99405977 bytes**, SHA-256
-  `4cb4d00bb09057e987c7bd43b3523fcd46c93d4f771e63c4287913331679e246`.
+- Windows self-contained publish from committed tree `7d678fe`→`be133fb`, `dist` cleared first so
+  no stale artifact could be measured. Zip `FollowerForge-3.7.7-win-x64.zip`, **99407212 bytes**,
+  SHA-256 `32a78d80eac0d75b5a9560973c532b8980519d42b83e5defc1681b9b116df728`, taken after the
+  publish finished.
+- **The previous candidate hash `4cb4d00b…` is superseded and must not be reused**: the resolver
+  changed after that zip was built.
 - Zip contents listed with `unzip -l`: exactly five entries — `FollowerForge.exe`,
-  `cli\FollowerForge.Cli.exe`, `README.md` (9945 bytes, carrying the 3.7.7 notes), `CHANGELOG.txt`,
-  `NEXUS-CHANGELOG-3.7.7.txt`. No `Data` folder, no plugin, no manager metadata.
+  `cli\FollowerForge.Cli.exe`, `README.md` (10007 bytes, carrying the 3.7.7 notes and the 558 test
+  count), `CHANGELOG.txt`, `NEXUS-CHANGELOG-3.7.7.txt`. No `Data` folder, no plugin, no manager
+  metadata.
 - Version stamping: both executables report FileVersion `3.7.7.0` and ProductVersion
-  `3.7.7+7d678fed36113f02edc3732a9018e834d8b42541`.
-- Launch test: `FollowerForge.exe` from the published folder started, stayed up with
-  `Responding = True` for 12 s, then was closed.
-- CI on `7d678fe`: required check `xunit suite (latest snapshot)` succeeded. Open Dependabot,
-  code-scanning and secret-scanning alerts: 0, 0, 0.
+  `3.7.7+be133fbcb4b140e51f2f18ea917fbae9c432bfa0`.
+- Launch test: `FollowerForge.exe` from the packaged folder started, stayed up with
+  `Responding = True` for 12 s, then was closed. The packaged `cli\FollowerForge.Cli.exe` ran `env`
+  against this machine and reported the live profile, 7 presets and 0 head exports.
+- CI on `be133fb`: required check `xunit suite (latest snapshot)` succeeded.
 - **Not released.** No tag, no GitHub release, no Nexus upload; `CURRENT.txt` says so.
 
 ## What this does not claim
