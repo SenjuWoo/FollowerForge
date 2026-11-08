@@ -33,6 +33,20 @@ Four claims were checked against the source rather than assumed:
 - The live FaceGen test printed `NOT RUN (no CharGen NIF+DDS pair found)` — this machine has zero
   head exports, so no real export was converted.
 
+## Build and package (local, not published)
+- Publish from `FollowerForge 3.7.8` with `dist` cleared first: `PUBLISH SUCCEEDED`, boot check
+  "window stayed up". Zip `FollowerForge-3.7.8-win-x64.zip`, **99414017 bytes**, SHA-256
+  `026b14290eb3892063b232a331268ae914a3d14ad69a792902abe8d09983a1f4`, measured after the publish process exited. Five entries: `FollowerForge.exe`,
+  `cli\FollowerForge.Cli.exe`, `README.md` (10404 bytes, 577 tests), `CHANGELOG.txt`,
+  `NEXUS-CHANGELOG-3.7.8.txt`.
+- Both executables report FileVersion `3.7.8.0` and ProductVersion
+  `3.7.8+6b4c959b9fa475343817b95e0c8e7cbf820e2ee3`.
+- Packaged GUI launched, `Responding = True` after 14 s, then closed. Packaged CLI ran `env`:
+  Vortex, 2955 enabled plugins.
+- CI on `6b4c959`: `xunit suite (latest snapshot)`, `Analyze (csharp)` and `Analyze (actions)` all
+  succeeded.
+- No earlier candidate hash applies; this is the first 3.7.8 package.
+
 ## Not tested in Skyrim
 
 No gameplay session was run. Unverified and unclaimed: hair, eyes, brows and face geometry; face and
@@ -141,6 +155,20 @@ Three profiles built through `cli\FollowerForge.Cli.exe build` against this mach
 - `SHIP_GATE_PASS: HEDR=1.71 numRec=13 formVersion=44 (6 records) ESL=True` in all three.
 - FaceGen: these builds used the default FaceGen path (`FaceGen : default`) because this machine has
   **0 CharGen head exports**. A custom-face build's NIF/DDS paths were not exercised here.
+
+## Build and package (local, not published)
+- Publish from `FollowerForge 3.7.8` with `dist` cleared first: `PUBLISH SUCCEEDED`, boot check
+  "window stayed up". Zip `FollowerForge-3.7.8-win-x64.zip`, **99414017 bytes**, SHA-256
+  `026b14290eb3892063b232a331268ae914a3d14ad69a792902abe8d09983a1f4`, measured after the publish process exited. Five entries: `FollowerForge.exe`,
+  `cli\FollowerForge.Cli.exe`, `README.md` (10404 bytes, 577 tests), `CHANGELOG.txt`,
+  `NEXUS-CHANGELOG-3.7.8.txt`.
+- Both executables report FileVersion `3.7.8.0` and ProductVersion
+  `3.7.8+6b4c959b9fa475343817b95e0c8e7cbf820e2ee3`.
+- Packaged GUI launched, `Responding = True` after 14 s, then closed. Packaged CLI ran `env`:
+  Vortex, 2955 enabled plugins.
+- CI on `6b4c959`: `xunit suite (latest snapshot)`, `Analyze (csharp)` and `Analyze (actions)` all
+  succeeded.
+- No earlier candidate hash applies; this is the first 3.7.8 package.
 
 ## Not tested in Skyrim
 No gameplay session was run. Nothing below was observed, and none of it is claimed:
