@@ -1,5 +1,6 @@
 FollowerForge 3.7.9 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
 Snapshot: FollowerForge 3.7.9 (596 Release tests).
+Candidate asset: FollowerForge-3.7.9-win-x64.zip, 99415269 bytes, SHA-256 7e15f4dc809349c6ace7dd28e7c98f2cbb7db505bcdb58b067636809d70b5d88. Binaries 3.7.9+2997638. CI green on 2997638: xunit suite, Analyze (csharp), Analyze (actions).
 Fixes: the face tint is written to shader slot 6 only, so a CharGen path in another slot is never rewritten; a partial FaceGen conversion is inventoried and labelled incomplete instead of being listed nowhere; the ship gate rejects a FormID naming an undeclared master, a record running past its group, and bytes after the last group.
 Awaiting owner approval before any GitHub release or Nexus upload. No in-game testing was performed.
 Details: FollowerForge 3.7.9/VALIDATION.md and STATE.md.

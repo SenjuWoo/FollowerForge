@@ -26,6 +26,32 @@
 - Live CLI builds against this machine's Vortex order (2955 plugins) and the generated plugin bytes
   are recorded below.
 
+## Build and package (local, not published)
+- Publish from `FollowerForge 3.7.9` with `dist` cleared first: `PUBLISH SUCCEEDED`, boot check
+  "window stayed up". Zip `FollowerForge-3.7.9-win-x64.zip`, **99415269 bytes**, SHA-256
+  `7e15f4dc809349c6ace7dd28e7c98f2cbb7db505bcdb58b067636809d70b5d88`, measured after the publish process exited. Five entries: `FollowerForge.exe`,
+  `cli\FollowerForge.Cli.exe`, `README.md` (10646 bytes, 596 tests), `CHANGELOG.txt`,
+  `NEXUS-CHANGELOG-3.7.9.txt`.
+- Both executables report FileVersion `3.7.9.0` and ProductVersion
+  `3.7.9+299763852e8b882896c15720ca0751904b3b9d54`.
+- Packaged GUI launched, `Responding = True` after 14 s, then closed. Packaged CLI ran `env`:
+  Vortex, 2955 enabled plugins, 3043 staging mods.
+- CI on `2997638`: `xunit suite (latest snapshot)`, `Analyze (csharp)` and `Analyze (actions)` all
+  succeeded.
+
+## Live load-order acceptance (packaged CLI)
+- `FF_AuditMatch` and `FF_AuditVamp`: no head-part warnings, `BUILD OK (published)`,
+  `SHIP_GATE_PASS: HEDR=1.71 numRec=13 formVersion=44 (6 records) ESL=True`, `FaceGen : default`.
+- `FF_AuditMismatch` (Nord built from a KaPoTun preset): five `PRESET_HEADPART_OTHER_RACE` warnings,
+  each naming EditorID, FormID and the record's type.
+- Generated plugin parsed independently of the app: HEDR 1.71, numRecords 13, ESL flag set, four
+  masters (`Skyrim.esm`, `Update.esm`, `Dragonborn.esm`, `DWKaPoTunRace.esp`), records
+  `NPC_ 04000800`, `WRLD 0001A26F`, `CELL 0001A270`, `ACHR 04000803`, `RELA 04000802`,
+  `CLFM 04000801`, every record formVersion 44, no local ID below 0x800, zero trailing bytes.
+- FaceGen live conversion: **NOT RUN**. This machine has 0 CharGen head exports, so no real
+  RaceMenu NIF+DDS pair was converted and the suite printed `NOT RUN`. A real export remains a
+  manual acceptance test.
+
 ## Not tested in Skyrim
 
 No gameplay session. Unverified: hair, eyes, brows and face geometry; face and body tint; hire and
