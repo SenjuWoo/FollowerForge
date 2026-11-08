@@ -46,6 +46,21 @@ shortcut suppressed the symptom for one preset and is unsound in general.
   set, masters `Skyrim.esm, Update.esm, Dragonborn.esm, DWKaPoTunRace.esp`, own FormIDs at master
   index 4 (`0x4000800`…), NPC carries its head parts and two `PKID` package entries.
 
+## Build and package (local, not published)
+- Windows self-contained publish from the committed tree: `FollowerForge 3.7.7/dist`. Zip
+  `FollowerForge-3.7.7-win-x64.zip`, **99405977 bytes**, SHA-256
+  `4cb4d00bb09057e987c7bd43b3523fcd46c93d4f771e63c4287913331679e246`.
+- Zip contents listed with `unzip -l`: exactly five entries — `FollowerForge.exe`,
+  `cli\FollowerForge.Cli.exe`, `README.md` (9945 bytes, carrying the 3.7.7 notes), `CHANGELOG.txt`,
+  `NEXUS-CHANGELOG-3.7.7.txt`. No `Data` folder, no plugin, no manager metadata.
+- Version stamping: both executables report FileVersion `3.7.7.0` and ProductVersion
+  `3.7.7+7d678fed36113f02edc3732a9018e834d8b42541`.
+- Launch test: `FollowerForge.exe` from the published folder started, stayed up with
+  `Responding = True` for 12 s, then was closed.
+- CI on `7d678fe`: required check `xunit suite (latest snapshot)` succeeded. Open Dependabot,
+  code-scanning and secret-scanning alerts: 0, 0, 0.
+- **Not released.** No tag, no GitHub release, no Nexus upload; `CURRENT.txt` says so.
+
 ## What this does not claim
 - No in-game check. Nothing about hair geometry, warpaints or appearance is claimed fixed; the
   audit reports, it does not repair.
