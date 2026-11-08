@@ -25,10 +25,13 @@ What the audit does now:
   master works; an override by a later plugin is followed when a catalogue was built, and the report
   says which record it used.
 - Judges a vampire against the race it will actually carry, rather than skipping vampires entirely.
+- Reads the head part record itself from its load-order winner when the catalogue names one, because
+  an override can change which race list the part uses. An override that cannot be opened is reported
+  as unknown instead of falling back to the replaced record.
 
 ## Verification
 
-558 Release tests (546 parent + 12 net new), including five that write real plugins holding a race,
+565 Release tests (546 parent + 12 net new), including five that write real plugins holding a race,
 a race list and a head part — same plugin, a shared-lists plugin, a master, an override, and an
 override that cannot be opened — and read them back through the resolver. The two cross-plugin
 cases failed against the previous resolver and pass now.

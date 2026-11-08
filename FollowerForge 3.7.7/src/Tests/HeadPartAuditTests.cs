@@ -454,7 +454,9 @@ public sealed class HeadPartAuditTests
             lateMod.WriteToBinary(Path.Combine(directory, "FF_LateOverride.esp"));
 
             using var resolver = new RecordResolver(directory, Log);
-            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(), _ => "FF_LateOverride.esp");
+            // Only the race list is overridden here; the head part itself is not.
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(),
+                key => key == baseList.FormKey.ToString() ? "FF_LateOverride.esp" : null);
 
             Assert.NotNull(facts);
             Assert.Equal("FF_LateOverride.esp", facts!.ValidRacesOverriddenBy);
@@ -483,12 +485,224 @@ public sealed class HeadPartAuditTests
             mod.WriteToBinary(Path.Combine(directory, plugin));
 
             using var resolver = new RecordResolver(directory, Log);
-            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(), _ => "FF_NotOnDisk.esp");
+            // The list's winner is missing from disk; the head part itself is not overridden.
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(),
+                key => key == list.FormKey.ToString() ? "FF_NotOnDisk.esp" : null);
 
             Assert.NotNull(facts);
             Assert.Equal("FF_NotOnDisk.esp", facts!.ValidRacesOverriddenBy);
             Assert.Null(facts.ValidRaceFormKeys);
         }
         finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    // ---- the head part record itself can be overridden ----------------------
+
+    /// <summary>
+    /// A later plugin can override the HDPT, changing which race list it names. Reading the defining
+    /// record would then judge the follower against a list the game does not use.
+    /// </summary>
+    [Fact]
+    public void Resolver_reads_the_winning_head_part_override()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var baseMod = new SkyrimMod(ModKey.FromFileName("FF_BaseHdpt.esp"), SkyrimRelease.SkyrimSE);
+            var raceA = baseMod.Races.AddNew("RaceA");
+            var listA = baseMod.FormLists.AddNew("ListA");
+            listA.Items.Add(raceA.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            var part = baseMod.HeadParts.AddNew("OverriddenHair");
+            part.Type = HeadPart.TypeEnum.Hair;
+            part.ValidRaces.SetTo(listA.FormKey);
+            baseMod.WriteToBinary(Path.Combine(directory, "FF_BaseHdpt.esp"));
+
+            var lateMod = new SkyrimMod(ModKey.FromFileName("FF_LateHdpt.esp"), SkyrimRelease.SkyrimSE);
+            lateMod.ModHeader.MasterReferences.Add(new MasterReference
+            {
+                Master = ModKey.FromFileName("FF_BaseHdpt.esp"),
+            });
+            var raceB = lateMod.Races.AddNew("RaceB");
+            var listB = lateMod.FormLists.AddNew("ListB");
+            listB.Items.Add(raceB.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            var overridden = new HeadPart(part.FormKey, SkyrimRelease.SkyrimSE)
+            {
+                EditorID = part.EditorID,
+                Type = HeadPart.TypeEnum.Hair,
+            };
+            overridden.ValidRaces.SetTo(listB.FormKey);
+            lateMod.HeadParts.Add(overridden);
+            lateMod.WriteToBinary(Path.Combine(directory, "FF_LateHdpt.esp"));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(),
+                key => key == part.FormKey.ToString() ? "FF_LateHdpt.esp" : null);
+
+            Assert.NotNull(facts);
+            Assert.Equal("FF_LateHdpt.esp", facts!.PartOverriddenBy);
+            Assert.NotNull(facts.ValidRaceFormKeys);
+            Assert.Contains(raceB.FormKey.ToString(), facts.ValidRaceFormKeys!);
+            Assert.DoesNotContain(raceA.FormKey.ToString(), facts.ValidRaceFormKeys!);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    [Fact]
+    public void Resolver_reports_unknown_when_the_winning_head_part_cannot_be_opened()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            const string plugin = "FF_BaseOnly.esp";
+            var mod = new SkyrimMod(ModKey.FromFileName(plugin), SkyrimRelease.SkyrimSE);
+            var race = mod.Races.AddNew("OnlyRace");
+            var list = mod.FormLists.AddNew("OnlyList");
+            list.Items.Add(race.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            var part = mod.HeadParts.AddNew("BaseHair");
+            part.Type = HeadPart.TypeEnum.Hair;
+            part.ValidRaces.SetTo(list.FormKey);
+            mod.WriteToBinary(Path.Combine(directory, plugin));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(), _ => "FF_HdptOverrideGone.esp");
+
+            Assert.NotNull(facts);
+            Assert.True(facts!.RecordUnreadable);
+            Assert.Equal("FF_HdptOverrideGone.esp", facts.PartOverriddenBy);
+            Assert.Null(facts.ValidRaceFormKeys);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    [Fact]
+    public void Resolver_follows_both_when_the_head_part_and_its_list_are_overridden()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var baseMod = new SkyrimMod(ModKey.FromFileName("FF_Both.esp"), SkyrimRelease.SkyrimSE);
+            var raceA = baseMod.Races.AddNew("RaceA");
+            var listA = baseMod.FormLists.AddNew("ListA");
+            listA.Items.Add(raceA.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            var part = baseMod.HeadParts.AddNew("BothHair");
+            part.Type = HeadPart.TypeEnum.Hair;
+            part.ValidRaces.SetTo(listA.FormKey);
+            baseMod.WriteToBinary(Path.Combine(directory, "FF_Both.esp"));
+
+            var late = new SkyrimMod(ModKey.FromFileName("FF_BothLate.esp"), SkyrimRelease.SkyrimSE);
+            late.ModHeader.MasterReferences.Add(new MasterReference
+            {
+                Master = ModKey.FromFileName("FF_Both.esp"),
+            });
+            var raceB = late.Races.AddNew("RaceB");
+            var listB = new FormList(listA.FormKey, SkyrimRelease.SkyrimSE) { EditorID = listA.EditorID };
+            var raceC = late.Races.AddNew("RaceC");
+            listB.Items.Add(raceC.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            late.FormLists.Add(listB);
+            var overriddenPart = new HeadPart(part.FormKey, SkyrimRelease.SkyrimSE)
+            {
+                EditorID = part.EditorID,
+                Type = HeadPart.TypeEnum.Hair,
+            };
+            overriddenPart.ValidRaces.SetTo(listB.FormKey);
+            late.HeadParts.Add(overriddenPart);
+            late.WriteToBinary(Path.Combine(directory, "FF_BothLate.esp"));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(), _ => "FF_BothLate.esp");
+
+            Assert.NotNull(facts);
+            Assert.Equal("FF_BothLate.esp", facts!.PartOverriddenBy);
+            Assert.Equal("FF_BothLate.esp", facts.ValidRacesOverriddenBy);
+            Assert.NotNull(facts.ValidRaceFormKeys);
+            Assert.Contains(raceC.FormKey.ToString(), facts.ValidRaceFormKeys!);
+            Assert.DoesNotContain(raceA.FormKey.ToString(), facts.ValidRaceFormKeys!);
+            Assert.DoesNotContain(raceB.FormKey.ToString(), facts.ValidRaceFormKeys!);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    /// <summary>
+    /// An overriding head part may point at a race list that lives in yet another plugin; both hops
+    /// have to resolve for the audit to mean anything.
+    /// </summary>
+    [Fact]
+    public void Resolver_reads_a_winning_head_part_that_names_a_list_in_another_plugin()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var shared = new SkyrimMod(ModKey.FromFileName("FF_SharedList2.esp"), SkyrimRelease.SkyrimSE);
+            var race = shared.Races.AddNew("SharedRace2");
+            var list = shared.FormLists.AddNew("SharedList2");
+            list.Items.Add(race.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            shared.WriteToBinary(Path.Combine(directory, "FF_SharedList2.esp"));
+
+            var baseMod = new SkyrimMod(ModKey.FromFileName("FF_BaseHdpt2.esp"), SkyrimRelease.SkyrimSE);
+            var basePart = baseMod.HeadParts.AddNew("TwoHopHair");
+            basePart.Type = HeadPart.TypeEnum.Hair;
+            baseMod.WriteToBinary(Path.Combine(directory, "FF_BaseHdpt2.esp"));
+
+            var late = new SkyrimMod(ModKey.FromFileName("FF_LateHdpt2.esp"), SkyrimRelease.SkyrimSE);
+            late.ModHeader.MasterReferences.Add(new MasterReference
+            {
+                Master = ModKey.FromFileName("FF_BaseHdpt2.esp"),
+            });
+            var overriddenPart = new HeadPart(basePart.FormKey, SkyrimRelease.SkyrimSE)
+            {
+                EditorID = basePart.EditorID,
+                Type = HeadPart.TypeEnum.Hair,
+            };
+            overriddenPart.ValidRaces.SetTo(list.FormKey);
+            late.HeadParts.Add(overriddenPart);
+            late.WriteToBinary(Path.Combine(directory, "FF_LateHdpt2.esp"));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart(basePart.FormKey.ToString(),
+                key => key == basePart.FormKey.ToString() ? "FF_LateHdpt2.esp" : null);
+
+            Assert.NotNull(facts);
+            Assert.Equal("FF_LateHdpt2.esp", facts!.PartOverriddenBy);
+            Assert.NotNull(facts.ValidRaceFormKeys);
+            Assert.Contains(race.FormKey.ToString(), facts.ValidRaceFormKeys!);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    // ---- what the report says about all this --------------------------------
+
+    [Fact]
+    public void An_unreadable_head_part_override_is_reported_as_unknown()
+    {
+        var report = new ValidationReport();
+        var unreadable = new HeadPartFacts(null, null, null, null, null, null, null,
+            "FF_LateHdpt.esp", RecordUnreadable: true);
+        FollowerBuilder.ReportHeadPartRaces(Appearance(3), Her, key => unreadable, report);
+
+        Assert.Single(Messages(report, "PRESET_HEADPART_RECORD_UNKNOWN"));
+        Assert.Empty(Messages(report, "PRESET_HEADPART_OTHER_RACE"));
+    }
+
+    [Fact]
+    public void A_build_without_a_catalogue_says_it_read_defining_records()
+    {
+        var report = new ValidationReport();
+        FollowerBuilder.ReportHeadPartRaces(Appearance(3), Her, key => Hair([OtherRace]), report,
+            catalogueAvailable: false);
+
+        Assert.Single(Messages(report, "PRESET_HEADPART_BASE_RECORDS"));
+    }
+
+    [Fact]
+    public void A_build_with_a_catalogue_does_not_claim_defining_records_only()
+    {
+        var report = new ValidationReport();
+        FollowerBuilder.ReportHeadPartRaces(Appearance(3), Her, key => Hair([Her]), report);
+
+        Assert.Empty(Messages(report, "PRESET_HEADPART_BASE_RECORDS"));
     }
 }

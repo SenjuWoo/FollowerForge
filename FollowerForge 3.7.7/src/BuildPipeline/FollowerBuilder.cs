@@ -147,7 +147,7 @@ public sealed class FollowerBuilder(ILogger log)
             (vampireRace ?? FormKey.Factory(profile.Race.FormKey)).ToString(),
             key => resolver.ResolveHeadPart(key,
                 catalog is null ? null : listKey => catalog.GetRecord(listKey)?.WinningPlugin),
-            report);
+            report, catalogueAvailable: catalog is not null);
 
         var alternateSpawns = ResolveAlternateSpawns(profile, cellSources, report);
 
@@ -438,13 +438,29 @@ public sealed class FollowerBuilder(ILogger log)
     /// </summary>
     internal static void ReportHeadPartRaces(
         AppearanceSpec appearance, string npcRace,
-        Func<string, HeadPartFacts?> lookup, ValidationReport report)
+        Func<string, HeadPartFacts?> lookup, ValidationReport report,
+        bool catalogueAvailable = true)
     {
         var facts = appearance.HeadParts
             .Select(part => lookup(part.FormKey))
             .OfType<HeadPartFacts>()
             .ToList();
         if (facts.Count == 0) return;
+
+        // A head part record can be overridden too. If the winning copy cannot be opened there is no
+        // honest verdict at all — the defining record is not what the game reads.
+        var unreadablePart = facts.FirstOrDefault(f => f.RecordUnreadable);
+        if (unreadablePart is not null)
+            report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_RECORD_UNKNOWN",
+                $"A later plugin wins the head part record ({unreadablePart.PartOverriddenBy}) and could not be "
+                + "opened, so what that part allows is unknown. The record it replaces is not used for a "
+                + "verdict, because the game does not read it.");
+
+        if (!catalogueAvailable && facts.Any(f => !f.RecordUnreadable))
+            report.Add(ValidationSeverity.Info, "PRESET_HEADPART_BASE_RECORDS",
+                "No catalogue was built for this run, so head parts and their race lists were read from the "
+                + "plugins that define them. A later plugin overriding either record is not seen here — this "
+                + "report covers defining records only.");
 
         var unreadable = facts.FirstOrDefault(f =>
             f.ValidRacesFormList is not null && f.ValidRaceFormKeys is null);

@@ -27,9 +27,10 @@ restricted part was reported as incompatible. 3.7.6's `PluginOf(race) == PluginO
 shortcut suppressed the symptom for one preset and is unsound in general.
 
 ## What was checked after the fix
-- `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.7`: **558 passed, 0
-  failed, 0 skipped** (546 parent + 12 net new). The two cross-plugin fixtures failed against the
-  build before the resolver change and pass after it.
+- `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.7`: **565 passed, 0
+  failed, 0 skipped** (546 parent + 19 net new). The two cross-plugin fixtures failed against the
+  build before the resolver change and pass after it; two override fixtures failed when the head
+  part itself was not resolved to its winner, and pass after that second change.
 - New unit cases: list contains her race; list excludes her; several races with hers among them;
   two unrelated races in one plugin (the case 3.7.6 got wrong); vampire race excluded; vampire race
   included; race and list in different plugins; unreadable list → UNKNOWN and no mismatch verdict;
@@ -43,6 +44,11 @@ shortcut suppressed the symptom for one preset and is unsound in general.
 - Two cover a contested list: an override in a later plugin supplies membership when the catalogue
   names it as winner, and an override that cannot be opened yields UNKNOWN with the winner recorded
   rather than a verdict.
+- Five cover the head part record itself being overridden: base HDPT permits Race A while the
+  winning override permits Race B and only B is reported; an override that cannot be opened yields
+  `RecordUnreadable`; both the head part and its list overridden resolves through both winners; an
+  overriding head part that names a list in a third plugin resolves both hops; and the report emits
+  `PRESET_HEADPART_RECORD_UNKNOWN` rather than a race verdict for an unreadable override.
 - Live CLI builds on this machine's 2,955-plugin Vortex order, 3.7.7 binary:
   - preset on `000801:DWKaPoTunRace.esp` (mortal KaPoTun): **no warning** — she is in the list.
   - preset on `00083C:DWKaPoTunRace.esp` (vampire KaPoTun): **no warning** — 3.7.6 skipped this
@@ -75,11 +81,12 @@ shortcut suppressed the symptom for one preset and is unsound in general.
 ## What this does not claim
 - No in-game check. Nothing about hair geometry, warpaints or appearance is claimed fixed; the
   audit reports, it does not repair.
-- A race list is resolved from the plugin its own FormID names, so a list in a shared-lists plugin
-  or a master is read. An override by a later plugin is followed when a catalogue was built (the
-  catalogue already records the winning plugin, so no load-order scan is needed); without one the
-  base record is read and the report says so. A definitive verdict is never claimed when the list
-  could not be opened.
+- A race list, and the head part record itself, are resolved from the plugin their own FormIDs name,
+  so a shared-lists plugin or a master is read. An override by a later plugin is followed when a
+  catalogue was built (the catalogue already records the winning plugin, so no load-order scan is
+  needed); without one the defining records are read and the report says so explicitly
+  (`PRESET_HEADPART_BASE_RECORDS`). A definitive verdict is never claimed when a record could not be
+  opened.
 - MO2 was not exercised on this machine (no MO2 instance); the manager code paths are unchanged and
   covered by their existing unit tests.
 

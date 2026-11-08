@@ -26,6 +26,12 @@ What the audit does now:
   master is read. When a catalogue exists for the run, a later plugin's override of that list is
   opened and its members are used; without a catalogue the base record is read, and the message
   says which of the two happened.
+- Resolves the **head part record itself** to its load-order winner the same way. An override can
+  change which race list a part names, so judging the replaced record could answer the wrong
+  question. If the winning head part cannot be opened, `PRESET_HEADPART_RECORD_UNKNOWN` reports it
+  rather than falling back to the base copy.
+- With no catalogue, emits `PRESET_HEADPART_BASE_RECORDS` so the report never implies that defining
+  records account for overrides.
 - Compares against the race the NPC will actually carry, so a vampire is judged against its
   vampire race rather than exempted.
 - Keeps `PRESET_HAIR_OTHER_RACE` for the case that actually matches issue #2: the preset's own
@@ -34,9 +40,9 @@ What the audit does now:
 Nothing else changed: placement, coordinates, packaging, FaceGen tint handling, asset discovery,
 diagnostics, ESPFE generation and version stamping are 3.7.6's.
 
-558 Release tests, including five that write real plugins (RACE + FLST + HDPT, same plugin, a
-shared-lists plugin, a master, an override, and an override that cannot be opened) and read them
-back through the resolver. No in-game check.
+565 Release tests, including seven that write real plugins (RACE + FLST + HDPT: same plugin, a
+shared-lists plugin, a master, a list override, a head-part override, both overridden, and an
+override that cannot be opened) and read them back through the resolver. No in-game check.
 
 # FollowerForge 3.7.6 — a hotfix for where she stands
 

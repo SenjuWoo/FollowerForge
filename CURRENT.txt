@@ -1,5 +1,5 @@
 FollowerForge 3.7.7 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
-Snapshot: FollowerForge 3.7.7 (558 Release tests). CI green on source commit be133fb: xunit suite, Analyze (csharp), Analyze (actions).
+Snapshot: FollowerForge 3.7.7 (565 Release tests). CI green on source commit be133fb: xunit suite, Analyze (csharp), Analyze (actions).
 Candidate asset: FollowerForge-3.7.7-win-x64.zip, 99407212 bytes, SHA-256 32a78d80eac0d75b5a9560973c532b8980519d42b83e5defc1681b9b116df728. Binaries 3.7.7+be133fb. Supersedes 4cb4d00b (pre-fix build, do not use).
 Fixes: head-part ValidRaces read as a FormList, list resolved through its own plugin, membership decides, UNKNOWN when unreadable, vampires judged on their own race; repository homepage corrected.
 Awaiting owner approval before any GitHub release or Nexus upload. No in-game testing was performed.

@@ -54,12 +54,30 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
         string formKeyString, Func<string, string?>? winningPluginOf = null)
     {
         var formKey = FormKey.Factory(formKeyString);
-        var mod = Open(formKey.ModKey);
+
+        // The head part record itself can be overridden, and an override may change its race list
+        // or its mesh. Read the winning copy when the catalogue can name one, keeping the original
+        // FormKey — an override carries the record it replaces.
+        var partModKey = formKey.ModKey;
+        string? partOverriddenBy = null;
+        if (winningPluginOf?.Invoke(formKeyString) is { Length: > 0 } partWinner
+            && !string.Equals(partWinner, partModKey.FileName.String, StringComparison.OrdinalIgnoreCase))
+        {
+            partOverriddenBy = partWinner;
+            partModKey = ModKey.FromFileName(partWinner);
+        }
+
+        var mod = Open(partModKey);
         var match = mod?.HeadParts.FirstOrDefault(p => p.FormKey == formKey);
         if (match is null)
         {
-            log.Warning("Head part {Key} not found in {Plugin}", formKeyString, formKey.ModKey.FileName);
-            return null;
+            log.Warning("Head part {Key} not found in {Plugin}", formKeyString, partModKey.FileName);
+            // Falling back to the defining record here would report a race verdict from a record the
+            // game does not use, so an override that cannot be opened is UNKNOWN, not the base copy.
+            return partOverriddenBy is null
+                ? null
+                : new HeadPartFacts(null, null, null, null, null, null, null, partOverriddenBy,
+                    RecordUnreadable: true);
         }
 
         string? listFormKey = null;
@@ -73,7 +91,7 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
             // plugin or a master rather than beside the head part. Looking it up in the head part's
             // file alone reported UNKNOWN for ordinary mods; open the plugin the FormKey names.
             var listModKey = match.ValidRaces.FormKey.ModKey;
-            var listMod = listModKey == formKey.ModKey ? mod : Open(listModKey);
+            var listMod = listModKey == partModKey ? mod : Open(listModKey);
             var list = listMod?.FormLists.FirstOrDefault(f => f.FormKey == match.ValidRaces.FormKey);
 
             // A later plugin in the load order may override that list, in which case the base
@@ -106,7 +124,7 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
         }
 
         return new HeadPartFacts(match.EditorID, match.Type.ToString(),
-            match.Model?.File.GivenPath, listFormKey, listEditorId, races, overriddenBy);
+            match.Model?.File.GivenPath, listFormKey, listEditorId, races, overriddenBy, partOverriddenBy);
     }
 
     private ISkyrimModDisposableGetter? Open(ModKey modKey)
@@ -148,4 +166,15 @@ public sealed record HeadPartFacts(
     /// Null means either "nothing overrides it" or "no catalogue was available to ask" — a caller
     /// must not read null as proof that the list is uncontested.
     /// </summary>
-    string? ValidRacesOverriddenBy = null);
+    string? ValidRacesOverriddenBy = null,
+    /// <summary>
+    /// Plugin that wins the head part record itself, when it is not the plugin that defines it.
+    /// Same caveat as <paramref name="ValidRacesOverriddenBy"/>: null does not prove it is uncontested.
+    /// </summary>
+    string? PartOverriddenBy = null,
+    /// <summary>
+    /// True when the winning head part override could not be opened, so nothing about this part —
+    /// race list, type, mesh — is known. Callers must report that as unknown rather than falling
+    /// back to the defining record.
+    /// </summary>
+    bool RecordUnreadable = false);
