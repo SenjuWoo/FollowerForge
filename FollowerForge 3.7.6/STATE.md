@@ -24,6 +24,10 @@ family, and still warns across plugins, which is the case worth warning about.
 
 546 Release tests, CI green on the release SHA. No in-game check.
 
+Released as GitHub v3.7.6 (Latest) from `67a840a`. Asset `FollowerForge-3.7.6-win-x64.zip`,
+99403591 bytes, SHA-256 `77e511b026cd23d6b18d1314d188008aa2916f2d523a9c142f89402725536170`.
+Nexus upload remains the owner's step.
+
 # FollowerForge 3.7.5 — head parts that say their own name
 
 Parent: released 3.7.4 (GitHub v3.7.4, SHA 77e6b0b). The 3.7.4 snapshot was copied before these

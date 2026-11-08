@@ -1,7 +1,6 @@
-FollowerForge 3.7.6 — built, not yet released. Parent is the released v3.7.5 at 001cac8.
-Snapshot: FollowerForge 3.7.6 (546 Release tests, 543 parent + 3 new).
-Fixes: default-profile placement at the world origin; race warning firing on the correct race;
-stale README inside the zip.
-Release step outstanding: push, wait for CI on the new SHA, tag v3.7.6, attach the dist zip.
-Nexus upload is still the owner's paste. In-game appearance was not checked.
+FollowerForge 3.7.6 — GitHub Latest v3.7.6, tag on 67a840a. Parent is the released v3.7.5 at 001cac8.
+Asset: FollowerForge-3.7.6-win-x64.zip, 99403591 bytes, SHA-256 77e511b026cd23d6b18d1314d188008aa2916f2d523a9c142f89402725536170.
+CI on 67a840a: xunit 546 passed (snapshot FollowerForge 3.7.6), Analyze (csharp) and Analyze (actions) success. Both exes FileVersion 3.7.6.0, ProductVersion 3.7.6+67a840a. Boot check stayed up and Responding.
+The zip ships five files and no game content: the out-of-game tool only.
+Nexus upload of 3.7.6 is still the owner's paste. In-game placement was not checked.
 Details: FollowerForge 3.7.6/VALIDATION.md and STATE.md.

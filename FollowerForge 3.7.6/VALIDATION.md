@@ -28,6 +28,23 @@ edits; 3.7.5 is not modified.
     still print, naming `FemaleHairKapotun01` and its mesh path.
 - Package contents verified after publish (see the release record).
 
+## Release record
+- Commit `67a840aa81fb33bd3c40cfe6a447c0f01bd67b9c` pushed to `main`. Required check `xunit suite
+  (latest snapshot)` succeeded on that SHA; `Analyze (csharp)` and `Analyze (actions)` succeeded.
+- Tag `v3.7.6` on `67a840a`. GitHub release `v3.7.6` is Latest.
+- Asset `FollowerForge-3.7.6-win-x64.zip`: 99403591 bytes, SHA-256
+  `77e511b026cd23d6b18d1314d188008aa2916f2d523a9c142f89402725536170`; GitHub reports the same
+  digest for the uploaded file.
+- Zip inspected with `unzip -l`: five entries — `FollowerForge.exe`, `cli\FollowerForge.Cli.exe`,
+  `README.md`, `CHANGELOG.txt`, `NEXUS-CHANGELOG-3.7.6.txt`. No `Data` folder, no plugin, no
+  manager metadata: the application stays out of the game and out of the mod manager, as designed.
+  The README inside is 9427 bytes and carries the 3.7.6 notes.
+- Binaries rebuilt from the committed tree: both exes report ProductVersion
+  `3.7.6+67a840aa81fb33bd3c40cfe6a447c0f01bd67b9c`.
+- Boot check: `FollowerForge.exe` from the published folder started and stayed up with
+  `Responding = True` for 12 s, then was closed.
+- Open Dependabot, code-scanning and secret-scanning alerts after the push: 0, 0, 0.
+
 ## What this does not claim
 - No in-game check. The placement fix is proven at the record level, not by watching her stand on
   the plaza.

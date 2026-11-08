@@ -102,25 +102,26 @@ FollowerForge does not grant redistribution rights for third-party assets. Check
 
 Verified in this tree:
 
-- `FollowerForge 3.7.5/` is the ship snapshot (`CURRENT.txt`)
-- 541 Release tests passed on GitHub CI for `001cac8` (snapshot `FollowerForge 3.7.5`). CodeQL succeeded on that commit
+- `FollowerForge 3.7.6/` is the ship snapshot (`CURRENT.txt`)
+- 546 Release tests passed on GitHub CI for `67a840a` (snapshot `FollowerForge 3.7.6`). CodeQL succeeded on that commit
+- A named Whiterun cell with no coordinates places her on the plaza; coordinates a profile sets are used as given
 - Every build lists the head parts it writes, by slot, FormID and EditorID
-- A head part restricted to another race is named, and an unrestricted hair on a preset from another race is named with its mesh file
+- A head part restricted to another race is named, and an unrestricted hair on a preset from another race is named with its mesh file. Variants of her own race, from the same plugin, do not warn
 - A preset with two parts for one slot, or with no Hair part, is flagged
 - A short head texture list is grown to nine slots and the tint is written on slot 6. An existing specular map on slot 7 is left alone
 - Head meshes that live only under CharGen `Exported` or `Presets` are listed
-- With no location chosen, the follower is placed on the Whiterun plaza in front of the Gildergreen. A location you pick is unchanged
 
 Not claimed:
 
-- In-game confirmation of the tint, the face list, the head-part audit, or the Whiterun spot. Rebuild to pick up the audit. An already-built plugin keeps the old coordinates
+- In-game confirmation of the placement, the tint, the face list, or the head-part audit. Rebuild to pick up the placement fix; an already-built plugin keeps its old coordinates
+- That every "she runs on the spot" or "she is gone after a door" report had this cause. A follower parked at the world origin is consistent with them
 - That GitHub issue #2's reporter used a custom-race preset. The mechanism is proven on a preset that does; the audit is what makes the next report decidable
 - That FollowerForge moves or repairs a head part. It writes the preset's parts as given and says when they cannot fit
 - Black face from warpaints
 - A creature transform surviving a real fight. `SetRace()` is engine behaviour this build cannot exercise
 - That a RaceMenu body shape or overlay transfers into the plugin. They do not. The build warns when shaped `bodyMorphs` are present
 - A Fallout 4 port, or one zip that contains several followers
-- Nexus upload of 3.7.5. GitHub Latest is [v3.7.5](https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.7.5) from `001cac8`. The zip is 99402205 bytes, SHA-256 `6c176f83f63d301fbc18008ff4d932e4a69f867f70d914c45cf4987b51e6d61f`
+- Nexus upload of 3.7.6. GitHub Latest is [v3.7.6](https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.7.6) from `67a840a`. The zip is 99403591 bytes, SHA-256 `77e511b026cd23d6b18d1314d188008aa2916f2d523a9c142f89402725536170`
 
 ## Build from source
 
