@@ -1,0 +1,12 @@
+FollowerForge 3.7.7 — The race list, read correctly
+
+Correctness hotfix for the head-part audit introduced in 3.7.5. No new features. Followers you have already built are unchanged.
+
+Fixed
+- **The race audit read the wrong kind of record.** A head part names the races it may be used on through a FormList — a list record holding races — not by pointing straight at one race. The audit treated that FormList as if it were a race, so the comparison could never match, and every head part with a restriction was reported as belonging to a different race. Picking the preset's own race produced a warning anyway.
+- **The audit now checks the list's actual members.** It reports a mismatch only when the list is readable and your follower's race is genuinely not in it, and it names the list and the races inside it so you can see what to change.
+- **A list that cannot be read is reported as unknown** instead of guessed. The tool reads the plugin that defines the head part; if a later plugin overrides that list, the report says so rather than inventing a verdict.
+- **Vampires are audited against their vampire race** instead of being skipped.
+- The homepage link in the repository settings pointed at an old address. It now points at the current one.
+
+Verification: automated tests, including ones that write a real plugin with a race, a race list and a head part and read it back. Live builds against a real load order: the preset's own race produces no warning, its vampire variant produces no warning, and a different race produces a warning naming the list's contents. In-game appearance was not checked, and nothing here repairs hair geometry, warpaints or faces — the audit reports, it does not reshape a preset.

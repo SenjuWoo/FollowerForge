@@ -1,6 +1,6 @@
 # FollowerForge state
 
-Active snapshot: `FollowerForge 3.7.6` (parent `FollowerForge 3.7.5`, released as v3.7.5 on 001cac8). 3.7.6 is a hotfix: the default profile placed the follower at the world origin instead of the Whiterun plaza, and the 3.7.5 race warning fired on the correct race. 546 Release tests. Release step outstanding: push, CI, tag v3.7.6, asset. Nexus paste is still the owner's step. See that folder's STATE.md.
+Active snapshot: `FollowerForge 3.7.7` (parent `FollowerForge 3.7.6`, released as v3.7.6 on 67a840a). 3.7.7 corrects the head-part audit: `ValidRaces` is a FormList of races, not a race, so the audit compares membership now; unreadable lists report UNKNOWN, and vampires are judged against their own race. 554 Release tests. Validated locally and awaiting owner approval — not released, not uploaded. See that folder's STATE.md.
 
 # FollowerForge state
 

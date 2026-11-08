@@ -1,5 +1,11 @@
 # CHANGELOG — FollowerForge
 
+## [3.7.7] - 2026-11-08 - the race list, read as a list
+- The head-part race audit read `ValidRaces` as a race. It is a FormList, and the FormList holds the races. The audit compared a list against a race, which can never match, so every restricted part read as a mismatch — 3.7.5 warned on correct choices and 3.7.6 hid it behind a same-plugin shortcut that is wrong when one plugin defines two unrelated races.
+- The audit now resolves the list and tests membership, names the list and the races it holds, reports `PRESET_HEADPART_RACE_UNKNOWN` when the list cannot be read, and judges vampires against the race they will actually carry.
+- Tests write a real plugin with a race, a list and a head part, and read it back through the resolver.
+- The repository homepage pointed at the old account URL; it now points at the current one.
+
 ## [3.7.6] - 2026-11-08 - she stands where she was always meant to
 - A follower built from the default profile landed at the world origin. Studio's "no location picked" profile names the Whiterun persistent cell and no coordinates, and the plaza position only applied when no cell was named at all, so 0,0,0 was written to the placed reference. A named Whiterun cell without coordinates now means the plaza; coordinates you set are still used as given.
 - A head part restricted to a vampire or climate variant of her own race no longer warns. One race mod ships those variants and they share one head; 3.7.5 compared whole record IDs and called them a mismatch.

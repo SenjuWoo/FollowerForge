@@ -102,8 +102,8 @@ FollowerForge does not grant redistribution rights for third-party assets. Check
 
 Verified in this tree:
 
-- `FollowerForge 3.7.6/` is the ship snapshot (`CURRENT.txt`)
-- 546 Release tests passed on GitHub CI for `67a840a` (snapshot `FollowerForge 3.7.6`). CodeQL succeeded on that commit
+- `FollowerForge 3.7.7/` is the ship snapshot (`CURRENT.txt`)
+- 554 Release tests pass locally on the 3.7.7 tree; the last released CI run is 546 on `67a840a` (snapshot `FollowerForge 3.7.6`). CodeQL succeeded on that commit
 - A named Whiterun cell with no coordinates places her on the plaza; coordinates a profile sets are used as given
 - Every build lists the head parts it writes, by slot, FormID and EditorID
 - A head part restricted to another race is named, and an unrestricted hair on a preset from another race is named with its mesh file. Variants of her own race, from the same plugin, do not warn
@@ -125,12 +125,12 @@ Not claimed:
 
 ## Build from source
 
-Ship tree: `FollowerForge 3.7.6\`. Needs the .NET 10 SDK.
+Ship tree: `FollowerForge 3.7.7\`. Needs the .NET 10 SDK.
 
 ```powershell
-cd "FollowerForge 3.7.6"
+cd "FollowerForge 3.7.7"
 .\Build-FollowerForge.ps1
-.\Publish-FollowerForge.ps1 -Version 3.7.6
+.\Publish-FollowerForge.ps1 -Version 3.7.7
 ```
 
 ## Credits
@@ -140,6 +140,12 @@ Skyrim, Vortex, Mod Organizer 2, RaceMenu, and related names belong to their own
 ## License
 
 [MIT](LICENSE)
+
+## Notes in 3.7.7
+
+- The head-part race audit now reads the FormList a head part points at, and checks whether your follower's race is one of its members. It previously treated that list as if it were a race
+- A list that cannot be read is reported as unknown instead of guessed
+- Vampires are audited against their vampire race instead of being skipped
 
 ## Notes in 3.7.6
 

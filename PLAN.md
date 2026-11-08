@@ -1,3 +1,19 @@
+# FollowerForge 3.7.7 — race list membership
+
+Status: implemented and validated in `FollowerForge 3.7.7`. Parent `FollowerForge 3.7.6` was not
+edited. Not released.
+
+- [x] `ValidRaces` resolved as a FormList; membership in `Items` decides compatibility.
+- [x] `PRESET_HEADPART_RACE_UNKNOWN` when the list cannot be read; no invented verdict.
+- [x] `PRESET_HEADPART_OTHER_RACE` names the list and the races it holds.
+- [x] Vampires judged against the race the NPC actually carries (3.7.6 skipped them).
+- [x] Three integration tests write a real RACE + FLST + HDPT plugin and read it back.
+- [x] 554 Release tests; live builds on a real load order: own race silent, vampire race silent,
+      other race warns.
+- [x] Repository homepage corrected to the current repository URL.
+- [ ] GitHub release v3.7.7 — awaiting owner approval.
+- [ ] Nexus upload (owner step).
+
 # FollowerForge 3.7.6 — placement and warning hotfix
 
 Status: implemented in `FollowerForge 3.7.6`. Parent `FollowerForge 3.7.5` was not edited.
