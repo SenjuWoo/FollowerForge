@@ -28,8 +28,10 @@ What the audit does now:
 
 ## Verification
 
-554 Release tests (546 parent + 8 net new), including three that write a real plugin holding a race,
-a FormList naming it and a head part pointing at the list, and read it back through the resolver.
+558 Release tests (546 parent + 12 net new), including five that write real plugins holding a race,
+a race list and a head part — same plugin, a shared-lists plugin, a master, an override, and an
+override that cannot be opened — and read them back through the resolver. The two cross-plugin
+cases failed against the previous resolver and pass now.
 
 Live builds against a real load order: the preset's own race is silent, its vampire race is silent,
 and a different race warns and names both members of the list. Generated plugins parsed directly:

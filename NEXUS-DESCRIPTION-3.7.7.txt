@@ -1,0 +1,97 @@
+FollowerForge — build a full custom companion from your own load order, without the Creation Kit
+
+**This download is a Windows tool, not a Skyrim mod and not a ready-made follower.**
+Unzip it anywhere on your PC and run FollowerForge.exe. Do not install this zip into Skyrim Data,
+Vortex or MO2 as game content. When the app finishes, install the follower package it generated the
+same way you install any other mod.
+
+------------------------------------------------------------
+
+**What it is**
+
+- An out-of-game Windows application (Windows 10/11, self-contained, no separate .NET install).
+- It reads your Vortex or Mod Organizer 2 setup read-only: plugins, records, voices, gear, races.
+- It writes a new installable follower package: an ESL-flagged ESPFE plus the folder or zip you
+  install afterward.
+- It never edits your load order, your mod manager's files, Skyrim's Data folder or your saves.
+
+**What it builds**
+
+A real companion assembled from records already in your list — voice type, race, class, stats,
+AI packages, gear and spells, a spawn point, relationship and marriage honesty, optional custom
+dialogue, and a face taken from a RaceMenu head export. It also writes a share checklist and a
+permissions note for anything you might redistribute.
+
+**First run**
+
+1. Download the current file from the Files tab, or the latest GitHub release.
+2. Unzip anywhere outside Skyrim\Data (for example a tools folder).
+3. Run FollowerForge.exe.
+4. Let it detect Vortex or MO2. Use MO2 setup… only if you run more than one MO2 instance.
+5. Start in Studio, work the seven categories, press Build follower.
+6. Install the generated follower package, enable its plugin, deploy, play.
+
+RaceMenu is required for a custom face. A slider-only preset without exported head geometry may not
+reproduce the face on an NPC: in RaceMenu, open the Sculpt tab and use Export Head, saving under the
+preset's name, so the mesh lands in Data\SKSE\Plugins\CharGen.
+
+------------------------------------------------------------
+
+**Current version — 3.7.7**
+
+3.7.7 is a diagnostic correctness fix for the head-part race check. It does not change what a
+follower looks like, and it does not repair hair, faces or warpaint.
+
+- A head part records the races it may be used on through a race list, not by naming a race
+  directly. The check read that field as if it were a race, so it could never match and reported
+  almost every restricted head part as belonging to another race.
+- The check now reads the race list and tests whether your follower's race is one of its members.
+  It reports a mismatch only when the list is readable and she is genuinely not in it, and it names
+  the list and the races inside it.
+- The list is read from the plugin its own record ID names, so a list kept in a shared-lists plugin
+  or a master is found.
+- If a later plugin overrides that list, the override is used when the app has an index for the run;
+  without one the base record is read and the report says so.
+- A list that cannot be read is reported as unknown instead of being guessed either way.
+- Vampires are judged against the vampire race they actually carry.
+
+Earlier in the 3.7.x line: a follower built from the default profile could be placed at the world
+origin instead of the Whiterun plaza (fixed in 3.7.6), and the face-tint and exported-face handling
+was reworked in 3.7.3–3.7.4.
+
+**Known limitations, stated plainly**
+
+- These are diagnostics. The tool reports what it finds in your load order; it does not reshape a
+  preset, substitute a hair, or fix a mesh that does not fit.
+- Appearance is not verified in game by the author. A follower that looks wrong can still look wrong
+  after 3.7.7 — the difference is that the build report now names the head parts it wrote and says
+  when one cannot apply to her race.
+- A raceMenu body shape and overlays (warpaint, tattoos) are not stored in a plugin. The build warns
+  when a preset carries them.
+- Creature transformation cannot be exercised out of game.
+
+------------------------------------------------------------
+
+**Requirements**
+
+Hard: Skyrim Special Edition or Anniversary Edition, Vortex or Mod Organizer 2, RaceMenu for custom
+faces, Windows 10/11.
+
+Optional, only when your chosen assets need them: xVASynth, dialogue overhauls, High Poly Head,
+FSMP.
+
+**Sharing a follower you built**
+
+Check the permissions of every asset you packaged. FollowerForge does not grant redistribution
+rights for third-party meshes or textures.
+
+**Uninstalling the tool**
+
+Delete the folder you unzipped. Followers you built are separate mods — remove them in Vortex or
+MO2 like any other.
+
+**Source and issue tracker**
+
+https://github.com/SenjuWoo/FollowerForge
+
+FollowerForge is unofficial. Skyrim, Vortex, Mod Organizer 2 and RaceMenu belong to their owners.

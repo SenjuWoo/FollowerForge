@@ -1,6 +1,6 @@
 # FollowerForge state
 
-Active snapshot: `FollowerForge 3.7.7` (parent `FollowerForge 3.7.6`, released as v3.7.6 on 67a840a). 3.7.7 corrects the head-part audit: `ValidRaces` is a FormList of races, not a race, so the audit compares membership now; unreadable lists report UNKNOWN, and vampires are judged against their own race. 554 Release tests. Validated locally and awaiting owner approval — not released, not uploaded. See that folder's STATE.md.
+Active snapshot: `FollowerForge 3.7.7` (candidate; parent `FollowerForge 3.7.6` is the latest published release, tag v3.7.6 on 67a840a). 3.7.7 corrects the head-part audit: `ValidRaces` is a FormList of races, not a race, so the audit compares membership now; the list is read from the plugin its FormID names; unreadable lists report UNKNOWN, and vampires are judged against their own race. 558 Release tests; CI green on `be133fb` (xunit, Analyze csharp, Analyze actions). Not released, not uploaded — awaiting owner approval. See that folder's STATE.md.
 
 # FollowerForge state
 
