@@ -1157,7 +1157,7 @@ public sealed class FollowerBuilder(ILogger log)
         text.Length <= 48 ? text : text[..45] + "…";
 
     /// <summary>FaceGen result plus the appearance mods the face requires (from the jslot).</summary>
-    private sealed record FaceGenOutcome(FaceGenResult Result, IReadOnlyList<string> RequiredPlugins);
+    internal sealed record FaceGenOutcome(FaceGenResult Result, IReadOnlyList<string> RequiredPlugins);
 
     /// <summary>Resolves and runs the FaceGen dirty-swap when the profile names a CharGen export.</summary>
     private FaceGenOutcome? RunFaceGen(
@@ -1268,7 +1268,7 @@ public sealed class FollowerBuilder(ILogger log)
             ? new CharGenDiscovery(log).ReadJslotPlugins(jslotPath)
             : [];
 
-    private FollowerManifest BuildManifest(
+    internal static FollowerManifest BuildManifest(
         FollowerProfile profile, FollowerCompiler.CompileResult c, IReadOnlyList<string> masters,
         FaceGenResult? faceGen, DateTimeOffset buildTimeUtc) => new()
     {
@@ -1290,17 +1290,20 @@ public sealed class FollowerBuilder(ILogger log)
         GeneratedAtUtc = buildTimeUtc.UtcDateTime.ToString("O"),
     };
 
-    private static SourceAssetsManifest BuildSourceAssets(FollowerProfile profile, FaceGenOutcome? faceGen,
+    internal static SourceAssetsManifest BuildSourceAssets(FollowerProfile profile, FaceGenOutcome? faceGen,
         HubAssetPackager.Result? hub)
     {
         var assets = new List<SourceAssetEntry>();
         // Pack-local/hub modes copy no shared assets; only the generated FaceGen files are shipped.
-        if (faceGen is { Result: { Success: true } r })
+        // A partial conversion still put files in the package, so they are listed — labelled as
+        // incomplete, because source-assets.json is what a user reads to see what she carries.
+        if (faceGen is { Result: { Status: FaceGenStatus.Complete or FaceGenStatus.Partial } r })
         {
+            var suffix = r.Status == FaceGenStatus.Complete ? "" : " (incomplete: tint path left as exported)";
             if (r.FaceGeomPath is not null)
-                assets.Add(new SourceAssetEntry(r.FaceGeomPath, "generated", null, true, "FaceGen NIF"));
+                assets.Add(new SourceAssetEntry(r.FaceGeomPath, "generated", null, true, "FaceGen NIF" + suffix));
             if (r.FaceTintPath is not null)
-                assets.Add(new SourceAssetEntry(r.FaceTintPath, "generated", null, true, "FaceGen tint DDS"));
+                assets.Add(new SourceAssetEntry(r.FaceTintPath, "generated", null, true, "FaceGen tint DDS" + suffix));
             foreach (var t in r.Textures.Where(t => !t.Resolved))
                 assets.Add(new SourceAssetEntry(t.Path, "unresolved", null, false, "referenced texture (missing)"));
         }

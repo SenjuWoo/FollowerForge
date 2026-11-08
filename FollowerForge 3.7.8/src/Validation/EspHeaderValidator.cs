@@ -57,6 +57,7 @@ public static class EspHeaderValidator
         uint records = 0, grups = 0;
         var badFv = new List<string>();
         var badId = new List<string>();
+        var badMaster = new List<string>();
 
         void Walk(int start, int end)
         {
@@ -81,13 +82,24 @@ public static class EspHeaderValidator
                     var rfid = BitConverter.ToUInt32(data, r + 12);
                     var rfv = BitConverter.ToUInt16(data, r + 20);
                     records++;
+                    // A record whose declared size runs past the block it sits in is a truncated or
+                    // corrupt file; walking on from it reads whatever happens to follow.
+                    if (r + 24 + (long)rdsz > end)
+                    {
+                        report.Add(ValidationSeverity.Error, "ESP_TRUNCATED",
+                            $"Record at {r:X} declares {rdsz} bytes but only {end - r - 24} remain", path);
+                        return;
+                    }
                     if (rfv != 44)
                         badFv.Add($"{System.Text.Encoding.Latin1.GetString(data, r, 4)}:{rfid:X8}={rfv}");
-                    if (esl && rfid != 0)
+                    if (rfid != 0)
                     {
                         var masterIndex = (rfid >> 24) & 0xFF;
                         var localId = rfid & 0xFFFFFF;
-                        if (masterIndex == numMasters && !(localId is >= 0x800 and <= 0xFFF))
+                        // Indexes past the plugin's own slot name a master that is not in the file.
+                        if (masterIndex > numMasters)
+                            badMaster.Add($"{rfid:X8} (index {masterIndex}, {numMasters} masters)");
+                        else if (esl && masterIndex == numMasters && !(localId is >= 0x800 and <= 0xFFF))
                             badId.Add($"{rfid:X8}");
                     }
                     r += 24 + (int)rdsz;
@@ -110,6 +122,12 @@ public static class EspHeaderValidator
             pos += (int)gsz;
         }
 
+        // A plugin ends with its last group. Bytes after that are a truncated write or appended
+        // garbage, and the counts above do not describe them.
+        if (pos != data.Length)
+            report.Add(ValidationSeverity.Error, "ESP_TRAILING_DATA",
+                $"{data.Length - pos} byte(s) after the last group at offset {pos:X}", path);
+
         if (records == 0)
             report.Add(ValidationSeverity.Error, "ESP_NO_RECORDS", "No records found", path);
         if (badFv.Count > 0)
@@ -118,6 +136,9 @@ public static class EspHeaderValidator
         if (badId.Count > 0)
             report.Add(ValidationSeverity.Error, "ESP_LIGHT_ID",
                 $"New light FormIDs outside 0x800-0xFFF: {string.Join(", ", badId.Take(10))}", path);
+        if (badMaster.Count > 0)
+            report.Add(ValidationSeverity.Error, "ESP_MASTER_INDEX",
+                $"FormIDs name a master the plugin does not declare: {string.Join(", ", badMaster.Take(10))}", path);
         if (nrec != records + grups)
             report.Add(ValidationSeverity.Error, "ESP_HEDR_COUNT",
                 $"HEDR numRecords={nrec} != records({records})+GRUPs({grups})={records + grups}", path);

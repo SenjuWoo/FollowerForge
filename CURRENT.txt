@@ -1,6 +1,5 @@
-FollowerForge 3.7.8 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
-Snapshot: FollowerForge 3.7.8 (577 Release tests).
-Candidate asset: FollowerForge-3.7.8-win-x64.zip, 99414017 bytes, SHA-256 026b14290eb3892063b232a331268ae914a3d14ad69a792902abe8d09983a1f4. Binaries 3.7.8+6b4c959. CI green on 6b4c959: xunit suite, Analyze (csharp), Analyze (actions).
-Fixes: FaceGen reports one state (complete / partial / needs manual repair / failed) instead of a success flag that could be true together with a manual-repair flag; the Creation Kit handoff report is written inside the package and survives publishing; a head part whose plugin is missing or lacks the record is reported as PRESET_HEADPART_MISSING; manifest.json takes CombatStyleCloned from the compiler, not the request.
+FollowerForge 3.7.9 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
+Snapshot: FollowerForge 3.7.9 (596 Release tests).
+Fixes: the face tint is written to shader slot 6 only, so a CharGen path in another slot is never rewritten; a partial FaceGen conversion is inventoried and labelled incomplete instead of being listed nowhere; the ship gate rejects a FormID naming an undeclared master, a record running past its group, and bytes after the last group.
 Awaiting owner approval before any GitHub release or Nexus upload. No in-game testing was performed.
-Details: FollowerForge 3.7.8/VALIDATION.md and STATE.md.
+Details: FollowerForge 3.7.9/VALIDATION.md and STATE.md.

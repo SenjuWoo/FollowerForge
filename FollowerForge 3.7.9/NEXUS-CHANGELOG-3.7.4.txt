@@ -1,0 +1,15 @@
+FollowerForge 3.7.4 — Face tint that saves, and faces already on disk
+
+Bug-fix release. No new follower features. Existing followers are unchanged until you build them again. No FormIDs were touched.
+
+Fixed
+- **FACEGEN_TINT_NOT_SET on a head that did not name its tint.** The warning in 3.7.3 was right about which slot to use (slot 6, the 7th texture line). On some exported heads that list is shorter than slot 6, so the tint path was thrown away and the build still failed. The list is extended to the nine texture slots a Skyrim SE head uses, and the tint is written on slot 6. A specular map already on the next line is left as it is.
+- **An empty face list when the head mesh is in Exported or Presets.** Those folders were read for the preset text only. A head mesh that lives only there is now listed, once. If nothing is found, the face page says which folders were scanned and how many presets had no mesh beside them.
+- **A follower published with no face mesh** when the tint path could not be identified. The head mesh is copied anyway. The face line and the warning both say the mesh was copied and the tint path was left as exported. Open the plugin, select the actor, and press Ctrl+F4 if you need the Creation Kit to bake the tint. Ctrl+F4 does not include a RaceMenu sculpt.
+- **A follower who runs in place, or is gone after you change cells, when you did not pick a location.** The built-in Whiterun spot was outside the city. She now stands on the plaza in front of the Gildergreen. Followers you already built keep the old spot until you build them again. A location you picked yourself is unchanged.
+
+Not changed
+- Sandbox and follow packages. The four vanilla packages this builder links were read from Skyrim.esm and the EditorIDs match, so the links were left alone.
+- One download that contains several followers, and a Fallout 4 version. Those are still later.
+
+Verified with automated tests on the tint slot, on heads stored under Exported, and on the Whiterun plaza coordinates. In-game appearance of a rebuilt follower was not checked.

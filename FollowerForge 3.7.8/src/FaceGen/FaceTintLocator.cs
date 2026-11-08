@@ -5,6 +5,11 @@ namespace FollowerForge.FaceGen;
 /// BSShaderTextureSet is 0-based. Index 6 is the 7th line in NifSkope (the tint).
 /// Index 7 is the specular map. Writing the tint there leaves the real tint
 /// pointing at the old mask and replaces the specular map.
+///
+/// Only slot 6 is ever written. An earlier version scanned every slot and accepted any path
+/// containing "\CharGen\" or "\facetint\", so an exported head whose diffuse or normal map also
+/// lived under CharGen had that texture replaced by a tint path — a broken face produced by the
+/// step that exists to fix one.
 /// </summary>
 public static class FaceTintLocator
 {
@@ -15,28 +20,29 @@ public static class FaceTintLocator
 
     public readonly record struct TintHit(int ShapeIndex, uint Slot, string OldPath, bool MatchedByPath);
 
+    /// <summary>
+    /// The shapes to repoint, always at <see cref="FaceTintSlot"/>. The head shape is claimed when
+    /// its tint slot is empty or already a tint; another shape is claimed only when its own tint
+    /// slot already reads as a tint, which is the export saying it uses one.
+    /// </summary>
     public static IReadOnlyList<TintHit> Locate(IReadOnlyList<ShapeView> shapes, string? sourceDdsName)
     {
         var hits = new List<TintHit>();
+        var headIndex = FindHead(shapes);
+
         for (var i = 0; i < shapes.Count; i++)
         {
-            var slots = shapes[i].Slots;
-            for (var slot = 0; slot < slots.Count; slot++)
-            {
-                var path = slots[slot] ?? "";
-                if (IsTintReference(path, sourceDdsName))
-                    hits.Add(new TintHit(i, (uint)slot, path, true));
-            }
+            var current = SlotAt(shapes[i], FaceTintSlot);
+            var isTint = IsTintReference(current, sourceDdsName);
+
+            // Not the head, and its own slot 6 is not a tint: leave the shape untouched.
+            if (i != headIndex && !isTint) continue;
+            // A skin, hair or normal map sitting in slot 6 is not a tint either.
+            if (!string.IsNullOrWhiteSpace(current) && !isTint) continue;
+
+            hits.Add(new TintHit(i, FaceTintSlot, current, MatchedByPath: isTint));
         }
-        if (hits.Count > 0) return hits;
 
-        var headIndex = FindHead(shapes);
-        if (headIndex < 0) return hits;
-
-        var slot6 = SlotAt(shapes[headIndex], FaceTintSlot);
-        if (!SafeToClaim(slot6, sourceDdsName)) return hits;
-
-        hits.Add(new TintHit(headIndex, FaceTintSlot, slot6, false));
         return hits;
     }
 

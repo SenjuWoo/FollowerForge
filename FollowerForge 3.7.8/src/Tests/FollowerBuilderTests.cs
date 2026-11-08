@@ -42,6 +42,80 @@ public sealed class FollowerBuilderTests : IDisposable
         Placement = new PlacementSpec { Cell = new RecordRef(VanillaForms.WhiterunWorldPersistentCell.ToString()) },
     };
 
+    // ---- the manifest, the asset inventory and the console must agree --------------
+
+    private static FollowerBuilder.FaceGenOutcome Face(FaceGenStatus status) =>
+        new(new FaceGenResult
+        {
+            Status = status,
+            FaceGeomPath = Path.Combine("meshes", "actors", "character", "facegendata", "facegeom", "FF_X.esp", "00000800.nif"),
+            FaceTintPath = Path.Combine("textures", "actors", "character", "facegendata", "facetint", "FF_X.esp", "00000800.dds"),
+            CkHandoffPath = status is FaceGenStatus.Partial or FaceGenStatus.NeedsManualRepair
+                ? "ck-handoff-report.json" : null,
+        }, []);
+
+    [Fact]
+    public void A_partial_face_lists_its_files_and_calls_them_incomplete()
+    {
+        var assets = FollowerBuilder.BuildSourceAssets(Profile(), Face(FaceGenStatus.Partial), hub: null);
+
+        var roles = assets.Assets.Select(a => a.Role).ToList();
+        Assert.Contains(roles, r => r.Contains("FaceGen NIF") && r.Contains("incomplete"));
+        Assert.Contains(roles, r => r.Contains("FaceGen tint DDS") && r.Contains("incomplete"));
+    }
+
+    [Fact]
+    public void A_complete_face_is_not_labelled_incomplete()
+    {
+        var assets = FollowerBuilder.BuildSourceAssets(Profile(), Face(FaceGenStatus.Complete), hub: null);
+
+        Assert.DoesNotContain(assets.Assets, a => a.Role.Contains("incomplete"));
+        Assert.Contains(assets.Assets, a => a.Role == "FaceGen NIF");
+    }
+
+    [Theory]
+    [InlineData(FaceGenStatus.Complete, true, "complete")]
+    [InlineData(FaceGenStatus.Partial, true, "partial")]
+    [InlineData(FaceGenStatus.NeedsManualRepair, false, "needs manual repair")]
+    [InlineData(FaceGenStatus.Failed, false, "failed")]
+    public void Manifest_inventory_and_console_agree(
+        FaceGenStatus status, bool hasFaceGen, string word)
+    {
+        var profile = Profile();
+        var compiled = new FollowerCompiler(Log).Compile(profile, location: null);
+        var face = Face(status);
+
+        var manifest = FollowerBuilder.BuildManifest(profile, compiled, ["Skyrim.esm"],
+            face.Result, DateTimeOffset.UnixEpoch);
+        var assets = FollowerBuilder.BuildSourceAssets(profile, face, hub: null);
+
+        Assert.Equal(hasFaceGen, manifest.HasFaceGen);
+        Assert.Equal(word, manifest.FaceGenStatus);
+        // The console and the HTML report both print this string.
+        Assert.Equal(
+            FaceGenPlayerText.Summary(status),
+            FaceGenPlayerText.Summary(manifest.FaceGenStatus));
+        // A face in the manifest is a face in the inventory, or neither.
+        Assert.Equal(
+            hasFaceGen,
+            assets.Assets.Any(a => a.Role.StartsWith("FaceGen", StringComparison.Ordinal)));
+    }
+
+    [Fact]
+    public void A_build_with_no_export_has_no_face_in_manifest_or_inventory()
+    {
+        var profile = Profile();
+        var compiled = new FollowerCompiler(Log).Compile(profile, location: null);
+
+        var manifest = FollowerBuilder.BuildManifest(profile, compiled, ["Skyrim.esm"],
+            faceGen: null, DateTimeOffset.UnixEpoch);
+        var assets = FollowerBuilder.BuildSourceAssets(profile, faceGen: null, hub: null);
+
+        Assert.False(manifest.HasFaceGen);
+        Assert.Equal("not attempted", manifest.FaceGenStatus);
+        Assert.DoesNotContain(assets.Assets, a => a.Role.StartsWith("FaceGen", StringComparison.Ordinal));
+    }
+
     [Fact]
     public void Build_Manifest_reports_a_clone_only_when_the_plugin_holds_one()
     {
