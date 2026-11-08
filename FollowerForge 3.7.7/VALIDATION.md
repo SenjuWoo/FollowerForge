@@ -63,22 +63,52 @@ shortcut suppressed the symptom for one preset and is unsound in general.
   index 4 (`0x4000800`…), NPC carries its head parts and two `PKID` package entries.
 
 ## Build and package (local, not published)
-- Windows self-contained publish from committed tree `be133fb`→`1bfbe95`, `dist` cleared first so
-  no stale artifact could be measured. Zip `FollowerForge-3.7.7-win-x64.zip`, **99408491 bytes**,
-  SHA-256 `fe917650b311f9165395be160b0f4b75ea3ea5a2ec00dfbcfd7260e62644a6e8`, taken after the
-  publish process exited.
+- Windows self-contained publish from committed tree `aecd807`, `dist` cleared first so no stale
+  artifact could be measured. Zip `FollowerForge-3.7.7-win-x64.zip`, **99409920 bytes**, SHA-256
+  `32eb44940c1c5d35d19510053f8ed13504ce6d61b652ce2c5d27d26edfd830c6`, taken after the publish
+  process reported PUBLISH SUCCEEDED and exited.
 - **Superseded candidate hashes, none of which may be quoted as current:** `4cb4d00b…` (pre-FLST
-  fix) and `32a78d80…` (pre-HDPT-override fix).
+  fix), `32a78d80…` (pre-HDPT-override fix) and `fe917650…` (pre per-part-diagnostics build).
 - Zip contents listed with `unzip -l`: exactly five entries — `FollowerForge.exe`,
-  `cli\FollowerForge.Cli.exe`, `README.md` (10007 bytes, 3.7.7 notes and the 565 test count),
+  `cli\FollowerForge.Cli.exe`, `README.md` (10007 bytes, 3.7.7 notes and the 570 test count),
   `CHANGELOG.txt`, `NEXUS-CHANGELOG-3.7.7.txt`. No `Data` folder, no plugin, no manager metadata.
 - Version stamping: both executables report FileVersion `3.7.7.0` and ProductVersion
-  `3.7.7+1bfbe95f68600b9979beb387d808066807276de6`.
+  `3.7.7+aecd807cb34b1d7d2749648f2afeb4e18c284f52`.
 - Launch test: `FollowerForge.exe` from the packaged folder started, stayed up with
   `Responding = True` for 12 s, then was closed. The packaged `cli\FollowerForge.Cli.exe` ran `env`
   against this machine: Vortex, 2955 enabled plugins, 0 CharGen exports.
-- CI on `1bfbe95`: required check `xunit suite (latest snapshot)` succeeded.
+- CI on `aecd807`: `xunit suite (latest snapshot)`, `Analyze (csharp)` and `Analyze (actions)` all
+  succeeded.
 - **Not released.** No tag, no GitHub release, no Nexus upload; `CURRENT.txt` says so.
+
+## Generated plugin, read back from bytes
+Three profiles built through `cli\FollowerForge.Cli.exe build` against this machine's Vortex order
+(2955 enabled plugins), then parsed independently of the application:
+- `FF_AuditMatch` (preset race, mortal), `FF_AuditVamp` (vampire variant), `FF_AuditMismatch`
+  (Nord built from a KaPoTun preset).
+- TES4 header: `HEDR` version **1.71**, `numRecords` **13**, flags **0x0200** → ESL-flagged ESPFE.
+- Masters, in order: `Skyrim.esm`, `Update.esm`, `Dragonborn.esm`, `DWKaPoTunRace.esp`.
+- Six top-level records: `NPC_` `04000800`, `WRLD`, `CELL` `0001A270` (Whiterun world persistent
+  cell), `ACHR`, `RELA`, `CLFM`; two carry the persistent flag.
+- Per-record header form version **44** (uint16 at header offset 20 of the `NPC_`).
+- Every local FormID is ≥ 0x800, as an ESL-flagged plugin requires; none below.
+- Placement logged as "Placed … on the Whiterun plaza (cell named, no coordinates given)" in all
+  three, so the 3.7.6 default still applies.
+- Head-part audit: silent for the matching race and its vampire variant; five
+  `PRESET_HEADPART_OTHER_RACE` warnings plus one `PRESET_HAIR_OTHER_RACE` for the cross-race build,
+  each naming EditorID, FormID and the record's own type.
+- `SHIP_GATE_PASS: HEDR=1.71 numRec=13 formVersion=44 (6 records) ESL=True` in all three.
+- FaceGen: these builds used the default FaceGen path (`FaceGen : default`) because this machine has
+  **0 CharGen head exports**. A custom-face build's NIF/DDS paths were not exercised here.
+
+## Not tested in Skyrim
+No gameplay session was run. Nothing below was observed, and none of it is claimed:
+- Hair, eyes, brows and face geometry on the placed follower.
+- Face and body tint matching against the chosen skin.
+- Recruitment and dismissal.
+- Following across a cell transition.
+- Save/reload persistence of the NPC and its appearance.
+- Combat behaviour and the combat transformation.
 
 ## What this does not claim
 - No in-game check. Nothing about hair geometry, warpaints or appearance is claimed fixed; the
