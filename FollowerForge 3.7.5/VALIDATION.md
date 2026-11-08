@@ -4,14 +4,16 @@ Parent: released FollowerForge 3.7.4 (GitHub v3.7.4, SHA 77e6b0b). This snapshot
 3.7.4 before the edits; 3.7.4 was not modified.
 
 ## What was checked
-- `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.5`: 541 passed, 0 failed,
-  0 skipped. Parent baseline on this machine: 532, re-run before any edit.
-- The 9 new cases cover: each head part reported by slot and FormID; two parts for one slot
+- `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.5`: 543 passed, 0 failed,
+  0 skipped (532 parent + 11 new). The count written here at release time said 541 — that was a
+  stale intermediate run taken before the last two cases existed; the CI log for `001cac8` reports
+  543, and the tree re-run on 2026-11-08 reports 543. Parent baseline on this machine: 532, re-run before any edit.
+- The 11 new cases cover: each head part reported by slot and FormID; two parts for one slot
   flagged; parts without a Hair part flagged; a Hair part present not flagged; an appearance with
   no parts saying nothing; a part restricted to another race named; a part with no restriction not
   flagged; a part restricted to her own race not flagged; an unrestricted hair called out when the
-  preset belongs to another race; the slot list and body-shape count arriving from one read of the
-  preset file.
+  preset belongs to another race; an unrestricted hair on its own not flagged; the slot list and
+  body-shape count arriving from one read of the preset file.
 - Live run, `FollowerForge.Cli build --profile` with `Appearance.JslotPath` set to
   `Priscilla_Big_Kitty.jslot` and the sample profile's race left at `013746:Skyrim.esm` (Nord).
   The build printed, from the real preset:

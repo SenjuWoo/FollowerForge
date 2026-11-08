@@ -35,8 +35,8 @@ slot; the engine keeps one) and `PRESET_NO_HAIR_PART` (parts, but no Hair, so sh
 The preset is also read once per build now. The body-shape count used to open and parse the same
 file a second time.
 
-541 Release tests passed locally. Released as GitHub v3.7.5 (Latest) from `001cac8`, CI green on
-that SHA (xunit 541, Analyze csharp and actions). Asset `FollowerForge-3.7.5-win-x64.zip`,
+543 Release tests passed locally. Released as GitHub v3.7.5 (Latest) from `001cac8`, CI green on
+that SHA (xunit 543, Analyze csharp and actions). Asset `FollowerForge-3.7.5-win-x64.zip`,
 99402205 bytes, SHA-256 `6c176f83f63d301fbc18008ff4d932e4a69f867f70d914c45cf4987b51e6d61f`.
 Nexus upload remains the owner's step.
 

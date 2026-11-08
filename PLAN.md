@@ -20,7 +20,7 @@ Status: implemented in `FollowerForge 3.7.5`. Parent `FollowerForge 3.7.4` was n
 - [x] `PRESET_HAIR_OTHER_RACE` names an unrestricted hair when the preset belongs to another race, with its mesh path — the mechanism behind GitHub #2.
 - [x] `PRESET_HEADPART_DUPLICATE` and `PRESET_NO_HAIR_PART` for the other two silent arrangements.
 - [x] The preset is parsed once per build; the body-shape count comes from the same read.
-- [x] 541 Release tests (532 parent + 9 new). No in-game check.
+- [x] 543 Release tests (532 parent + 11 new). No in-game check.
 - [ ] GitHub release v3.7.5 from the green SHA.
 - [ ] Nexus upload (owner step).
 

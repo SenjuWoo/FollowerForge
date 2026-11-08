@@ -35,5 +35,5 @@ file on every build; it now comes out of the same read as the appearance.
 
 ## Verification
 
-541 Release tests (532 parent + 9 new). A live build against a real load order prints the audit and
+543 Release tests (532 parent + 11 new). A live build against a real load order prints the audit and
 both race warnings for a preset that belongs to a custom race, including the hair's mesh path.
