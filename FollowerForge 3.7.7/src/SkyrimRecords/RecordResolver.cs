@@ -51,9 +51,13 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
     /// unknown). Callers report UNKNOWN rather than guessing.
     /// </summary>
     public HeadPartFacts? ResolveHeadPart(
-        string formKeyString, Func<string, string?>? winningPluginOf = null)
+        string formKeyString, Func<string, string?>? winningPluginOf = null,
+        Func<string, bool>? catalogueKnows = null)
     {
         var formKey = FormKey.Factory(formKeyString);
+        // A catalogue that exists but holds no entry for this record is not evidence that nothing
+        // overrides it — it is absent evidence. Track that separately from "no catalogue at all".
+        var overrideUnchecked = catalogueKnows is not null && !catalogueKnows(formKeyString);
 
         // The head part record itself can be overridden, and an override may change its race list
         // or its mesh. Read the winning copy when the catalogue can name one, keeping the original
@@ -99,7 +103,7 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
             // so the winner can be opened directly instead of scanning the order.
             if (winningPluginOf?.Invoke(listFormKey) is { Length: > 0 } winner
                 && !string.Equals(winner, listModKey.FileName.String, StringComparison.OrdinalIgnoreCase))
-            {
+            { 
                 overriddenBy = winner;
                 var winnerKey = ModKey.FromFileName(winner);
                 var winnerMod = winnerKey == listModKey ? listMod : Open(winnerKey);
@@ -121,10 +125,15 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
                 // is a FormKey comparison, so every entry is usable and nothing is assumed.
                 races = list.Items.Select(item => item.FormKey.ToString()).ToList();
             }
+
+            // The list is only override-checked if the catalogue actually holds it. A missing entry
+            // is absent evidence, not proof that the defining record wins.
+            if (catalogueKnows is not null && !catalogueKnows(listFormKey)) overrideUnchecked = true;
         }
 
         return new HeadPartFacts(match.EditorID, match.Type.ToString(),
-            match.Model?.File.GivenPath, listFormKey, listEditorId, races, overriddenBy, partOverriddenBy);
+            match.Model?.File.GivenPath, listFormKey, listEditorId, races, overriddenBy, partOverriddenBy,
+            OverrideUnchecked: overrideUnchecked);
     }
 
     private ISkyrimModDisposableGetter? Open(ModKey modKey)
@@ -177,4 +186,9 @@ public sealed record HeadPartFacts(
     /// race list, type, mesh — is known. Callers must report that as unknown rather than falling
     /// back to the defining record.
     /// </summary>
-    bool RecordUnreadable = false);
+    bool RecordUnreadable = false,
+    /// <summary>
+    /// True when a catalogue existed but held no entry for this head part or its race list, so
+    /// overrides were never checked. Missing evidence is not evidence of absence.
+    /// </summary>
+    bool OverrideUnchecked = false);

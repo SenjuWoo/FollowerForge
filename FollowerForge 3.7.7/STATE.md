@@ -31,7 +31,12 @@ What the audit does now:
   question. If the winning head part cannot be opened, `PRESET_HEADPART_RECORD_UNKNOWN` reports it
   rather than falling back to the base copy.
 - With no catalogue, emits `PRESET_HEADPART_BASE_RECORDS` so the report never implies that defining
-  records account for overrides.
+  records account for overrides. When a catalogue exists but has no entry for a part or its list, it
+  emits `PRESET_HEADPART_OVERRIDES_UNCHECKED` and names the records instead of treating the gap as
+  proof that nothing overrides them.
+- Reports every affected head part separately, by EditorID, FormID and the record's own type, with the
+  reason it could not be judged. The preset's own `type` field is not printed beside it: the two use
+  different vocabularies and reading them together produced contradictions like "Misc is a Face part".
 - Compares against the race the NPC will actually carry, so a vampire is judged against its
   vampire race rather than exempted.
 - Keeps `PRESET_HAIR_OTHER_RACE` for the case that actually matches issue #2: the preset's own
@@ -40,7 +45,7 @@ What the audit does now:
 Nothing else changed: placement, coordinates, packaging, FaceGen tint handling, asset discovery,
 diagnostics, ESPFE generation and version stamping are 3.7.6's.
 
-565 Release tests, including seven that write real plugins (RACE + FLST + HDPT: same plugin, a
+570 Release tests, including seven that write real plugins (RACE + FLST + HDPT: same plugin, a
 shared-lists plugin, a master, a list override, a head-part override, both overridden, and an
 override that cannot be opened) and read them back through the resolver. No in-game check.
 

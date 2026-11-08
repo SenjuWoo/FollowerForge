@@ -27,8 +27,8 @@ restricted part was reported as incompatible. 3.7.6's `PluginOf(race) == PluginO
 shortcut suppressed the symptom for one preset and is unsound in general.
 
 ## What was checked after the fix
-- `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.7`: **565 passed, 0
-  failed, 0 skipped** (546 parent + 19 net new). The two cross-plugin fixtures failed against the
+- `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.7`: **570 passed, 0
+  failed, 0 skipped** (546 parent + 24 net new). The two cross-plugin fixtures failed against the
   build before the resolver change and pass after it; two override fixtures failed when the head
   part itself was not resolved to its winner, and pass after that second change.
 - New unit cases: list contains her race; list excludes her; several races with hers among them;
@@ -41,6 +41,9 @@ shortcut suppressed the symptom for one preset and is unsound in general.
 - Two more do the same across plugins: a list defined in a shared-lists plugin and a list defined in
   a master `.esm`. Both failed against the previous resolver, which only looked inside the head
   part's own file.
+- Five cover per-part reporting: separate warnings for two incompatible parts, one warning when a
+  record occupies two slots, an unreadable record not swallowing another part's mismatch, the
+  catalogue-missing-entry flag, and the `PRESET_HEADPART_OVERRIDES_UNCHECKED` notice.
 - Two cover a contested list: an override in a later plugin supplies membership when the catalogue
   names it as winner, and an override that cannot be opened yields UNKNOWN with the winner recorded
   rather than a verdict.

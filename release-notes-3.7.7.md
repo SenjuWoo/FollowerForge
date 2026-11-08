@@ -28,10 +28,14 @@ What the audit does now:
 - Reads the head part record itself from its load-order winner when the catalogue names one, because
   an override can change which race list the part uses. An override that cannot be opened is reported
   as unknown instead of falling back to the replaced record.
+- Names every affected part on its own line - EditorID, FormID, and the record's own type - instead of
+  reducing several bad parts to one sentence. One record used in two slots is reported once.
+- Says so when the catalogue has no entry for a record, because a missing index entry is not proof
+  that nothing overrides it.
 
 ## Verification
 
-565 Release tests (546 parent + 12 net new), including five that write real plugins holding a race,
+570 Release tests (546 parent + 12 net new), including five that write real plugins holding a race,
 a race list and a head part — same plugin, a shared-lists plugin, a master, an override, and an
 override that cannot be opened — and read them back through the resolver. The two cross-plugin
 cases failed against the previous resolver and pass now.

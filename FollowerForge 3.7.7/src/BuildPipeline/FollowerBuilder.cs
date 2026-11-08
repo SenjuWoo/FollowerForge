@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using FollowerForge.AssetIndex;
 using FollowerForge.Domain;
@@ -146,7 +146,8 @@ public sealed class FollowerBuilder(ILogger log)
         ReportHeadPartRaces(profile.Appearance,
             (vampireRace ?? FormKey.Factory(profile.Race.FormKey)).ToString(),
             key => resolver.ResolveHeadPart(key,
-                catalog is null ? null : listKey => catalog.GetRecord(listKey)?.WinningPlugin),
+                catalog is null ? null : listKey => catalog.GetRecord(listKey)?.WinningPlugin,
+                catalog is null ? null : lookupKey => catalog.GetRecord(lookupKey) is not null),
             report, catalogueAvailable: catalog is not null);
 
         var alternateSpawns = ResolveAlternateSpawns(profile, cellSources, report);
@@ -441,64 +442,86 @@ public sealed class FollowerBuilder(ILogger log)
         Func<string, HeadPartFacts?> lookup, ValidationReport report,
         bool catalogueAvailable = true)
     {
-        var facts = appearance.HeadParts
-            .Select(part => lookup(part.FormKey))
-            .OfType<HeadPartFacts>()
-            .ToList();
-        if (facts.Count == 0) return;
+        // Pair every preset part with its resolved record so a warning can name the exact part
+        // instead of collapsing several bad parts into one sentence about "a head part". The slot
+        // label comes from the record's own type: the preset's `type` field and the HDPT TypeEnum
+        // are different vocabularies, and printing both produced contradictions like "Misc is a
+        // Face head part". The record is what the engine acts on.
+        var parts = new List<(string Key, HeadPartFacts Facts)>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var part in appearance.HeadParts)
+        {
+            var key = part.FormKey;
+            if (lookup(key) is not { } facts) continue;
+            // Two slots can name one record; that is one part with one problem.
+            if (!seen.Add(key)) continue;
+            parts.Add((key, facts));
+        }
+        if (parts.Count == 0) return;
 
-        // A head part record can be overridden too. If the winning copy cannot be opened there is no
-        // honest verdict at all — the defining record is not what the game reads.
-        var unreadablePart = facts.FirstOrDefault(f => f.RecordUnreadable);
-        if (unreadablePart is not null)
-            report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_RECORD_UNKNOWN",
-                $"A later plugin wins the head part record ({unreadablePart.PartOverriddenBy}) and could not be "
-                + "opened, so what that part allows is unknown. The record it replaces is not used for a "
-                + "verdict, because the game does not read it.");
+        static string Name(string key, HeadPartFacts facts) =>
+            $"'{facts.EditorId ?? "unnamed"}' ({key}, {facts.Type ?? "unknown slot"})";
 
-        if (!catalogueAvailable && facts.Any(f => !f.RecordUnreadable))
+        if (!catalogueAvailable)
             report.Add(ValidationSeverity.Info, "PRESET_HEADPART_BASE_RECORDS",
                 "No catalogue was built for this run, so head parts and their race lists were read from the "
                 + "plugins that define them. A later plugin overriding either record is not seen here — this "
                 + "report covers defining records only.");
+        else if (parts.Any(p => p.Facts.OverrideUnchecked))
+            report.Add(ValidationSeverity.Info, "PRESET_HEADPART_OVERRIDES_UNCHECKED",
+                "The catalogue has no entry for "
+                + string.Join(", ", parts.Where(p => p.Facts.OverrideUnchecked).Select(p => p.Key))
+                + ", so whether a later plugin overrides those records was never checked. They were read from "
+                + "the plugins that define them. A missing index entry is not proof that nothing overrides them.");
 
-        var unreadable = facts.FirstOrDefault(f =>
-            f.ValidRacesFormList is not null && f.ValidRaceFormKeys is null);
-        if (unreadable is not null)
-            report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_RACE_UNKNOWN",
-                $"'{unreadable.EditorId ?? "a head part"}' names race list "
-                + $"{unreadable.ValidRacesFormListEditorId ?? unreadable.ValidRacesFormList}, which could not be "
-                + "read, so whether it applies to her is unknown. "
-                + (unreadable.ValidRacesOverriddenBy is { } winner
-                    ? $"That list is overridden by {winner}, and the override could not be opened."
-                    : "The build reads the plugin that list's FormID names; a load-order override is only "
-                      + "followed when a catalogue was built for this run, so check the list in xEdit before "
-                      + "trusting either answer."));
+        // One warning per affected part, each naming the reason it could not be judged.
+        foreach (var (key, facts) in parts)
+        {
+            if (facts.RecordUnreadable)
+            {
+                report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_RECORD_UNKNOWN",
+                    $"{Name(key, facts)} is overridden by {facts.PartOverriddenBy}, which could not be "
+                    + "opened, so what that part allows is unknown. The record it replaces is not used for a "
+                    + "verdict, because the game does not read it.");
+                continue;
+            }
 
-        var excluded = facts.FirstOrDefault(f =>
-            f.ValidRaceFormKeys is { } races
-            && !races.Any(race => string.Equals(race, npcRace, StringComparison.OrdinalIgnoreCase)));
-        if (excluded is not null)
+            if (facts.ValidRacesFormList is not null && facts.ValidRaceFormKeys is null)
+                report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_RACE_UNKNOWN",
+                    $"{Name(key, facts)} names race list "
+                    + $"{facts.ValidRacesFormListEditorId ?? facts.ValidRacesFormList}, which could not be read, "
+                    + "so whether it applies to her is unknown. "
+                    + (facts.ValidRacesOverriddenBy is { } winner
+                        ? $"That list is overridden by {winner}, and the override could not be opened."
+                        : "Check the list in xEdit before trusting either answer."));
+        }
+
+        var excluded = parts.Where(p =>
+            p.Facts.ValidRaceFormKeys is { } races
+            && !races.Any(race => string.Equals(race, npcRace, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        foreach (var (key, facts) in excluded)
             report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_OTHER_RACE",
-                $"'{excluded.EditorId ?? "a head part"}' is a {excluded.Type ?? "head"} head part whose race "
-                + $"list ({excluded.ValidRacesFormListEditorId ?? excluded.ValidRacesFormList}) does not contain "
-                + $"{npcRace}, so the game will leave it off her. The list holds: "
-                + $"{string.Join(", ", excluded.ValidRaceFormKeys!)}. Head parts come with the preset: re-save "
-                + "the preset on her race, or build her as the race the preset was made on.");
+                $"{Name(key, facts)} is a {facts.Type ?? "head"} head part whose race list "
+                + $"({facts.ValidRacesFormListEditorId ?? facts.ValidRacesFormList}) does not contain {npcRace}, "
+                + $"so the game will leave it off her. The list holds: {string.Join(", ", facts.ValidRaceFormKeys!)}. "
+                + "Head parts come with the preset: re-save the preset on her race, or build her as the race "
+                + "the preset was made on.");
 
         // A part with no restriction is applied to every race, so a preset made on another race still
         // ships that race's hair. The mesh is modelled around a skull she does not have, which is
         // what leaves hair sitting low and oversized around a follower's jaw.
-        var unrestrictedHair = facts.FirstOrDefault(f =>
-            f.ValidRacesFormList is null
-            && string.Equals(f.Type, "Hair", StringComparison.OrdinalIgnoreCase));
-        if (excluded is not null && unrestrictedHair is not null)
+        var unrestrictedHair = parts.FirstOrDefault(p =>
+            p.Facts.ValidRacesFormList is null
+            && string.Equals(p.Facts.Type, "Hair", StringComparison.OrdinalIgnoreCase));
+        if (excluded.Count > 0 && unrestrictedHair.Facts is not null)
             report.Add(ValidationSeverity.Warning, "PRESET_HAIR_OTHER_RACE",
-                $"The preset's hair ('{unrestrictedHair.EditorId ?? "unresolved"}', {unrestrictedHair.ModelPath ?? "mesh path unknown"}) "
-                + "carries no race restriction at all, so the game puts it on every race — including hers. "
-                + "It was modelled for the preset's head, not the one she will have, which is what makes a "
-                + "custom follower's hair sit wrong on her skull. Build her as the preset's race, or use a "
-                + "preset made for hers.");
+                $"The preset's hair ({Name(unrestrictedHair.Key, unrestrictedHair.Facts)}, "
+                + $"mesh {unrestrictedHair.Facts.ModelPath ?? "path unknown"}) carries no race restriction at all, "
+                + "so the game puts it on every race — including hers. It was modelled for the preset's head, not "
+                + "the one she will have, which is what makes a custom follower's hair sit wrong on her skull. "
+                + "Build her as the preset's race, or use a preset made for hers.");
     }
 
     /// <summary>

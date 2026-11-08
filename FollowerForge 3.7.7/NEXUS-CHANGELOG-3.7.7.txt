@@ -7,6 +7,9 @@ Fixed
 - **The audit now checks the list's actual members.** It reports a mismatch only when the list is readable and your follower's race is genuinely not in it, and it names the list and the races inside it so you can see what to change.
 - **A race list kept in a shared-lists plugin or a master is now read.** The list is looked up by the plugin its own FormID names, not only inside the hair mod.
 - **A head part record that a later plugin overrides is read from the winner.** An override can change which race list a part names, so judging the replaced record could give the wrong answer; if the winner cannot be opened the part is reported as unknown instead.
+- **Each affected head part gets its own line**, with EditorID, FormID and the part type, so you can
+  see which slots to fix. One record named by two slots is reported once.
+- **A record the index has no entry for is called out** rather than treated as uncontested.
 - **A list or head part that cannot be read is reported as unknown** instead of guessed, naming the plugin that won it. Without an index for the run, the report says plainly that it read the defining records and that an override is not accounted for.
 - **Vampires are audited against their vampire race** instead of being skipped.
 - The homepage link in the repository settings pointed at an old address. It now points at the current one.

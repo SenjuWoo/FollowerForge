@@ -103,7 +103,7 @@ FollowerForge does not grant redistribution rights for third-party assets. Check
 Verified in this tree:
 
 - `FollowerForge 3.7.7/` is the ship snapshot (`CURRENT.txt`)
-- 565 Release tests pass locally on the 3.7.7 tree; the last released CI run is 546 on `67a840a` (snapshot `FollowerForge 3.7.6`). CodeQL succeeded on that commit
+- 570 Release tests pass locally on the 3.7.7 tree; the last released CI run is 546 on `67a840a` (snapshot `FollowerForge 3.7.6`). CodeQL succeeded on that commit
 - A named Whiterun cell with no coordinates places her on the plaza; coordinates a profile sets are used as given
 - Every build lists the head parts it writes, by slot, FormID and EditorID
 - A head part restricted to another race is named, and an unrestricted hair on a preset from another race is named with its mesh file. Variants of her own race, from the same plugin, do not warn

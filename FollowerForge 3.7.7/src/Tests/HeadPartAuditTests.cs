@@ -705,4 +705,111 @@ public sealed class HeadPartAuditTests
 
         Assert.Empty(Messages(report, "PRESET_HEADPART_BASE_RECORDS"));
     }
+
+    // ---- several bad parts, and a catalogue that is missing records --------------
+
+    private static HeadPartFacts Restricted(string editorId, IReadOnlyList<string> races) =>
+        new(editorId, "Hair", "hair.nif", "00083D:Hair.esp", "HeadPartsList", races);
+
+    /// <summary>
+    /// One warning per part. Collapsing several bad parts into a single "a head part" sentence
+    /// leaves the user unable to tell which slots to fix.
+    /// </summary>
+    [Fact]
+    public void Every_incompatible_head_part_gets_its_own_warning()
+    {
+        var report = new ValidationReport();
+        FollowerBuilder.ReportHeadPartRaces(Appearance(0, 3), Her, key => key switch
+        {
+            "000800:Hair.esp" => Restricted("Brows01", [OtherRace]) with { Type = "Eyebrows" },
+            "000801:Hair.esp" => Restricted("Eyes01", [OtherRace]) with { Type = "Eyes" },
+            _ => null,
+        }, report);
+
+        var warnings = Messages(report, "PRESET_HEADPART_OTHER_RACE");
+        Assert.Equal(2, warnings.Length);
+        Assert.Contains(warnings, w => w.Contains("Brows01") && w.Contains("Eyebrows"));
+        Assert.Contains(warnings, w => w.Contains("Eyes01") && w.Contains("Eyes"));
+    }
+
+    [Fact]
+    public void One_record_named_by_two_slots_is_reported_once()
+    {
+        var report = new ValidationReport();
+        var twice = new AppearanceSpec
+        {
+            HeadParts = [new RecordRef("000800:Hair.esp"), new RecordRef("000800:Hair.esp")],
+            HeadPartTypes = [0, 6],
+        };
+        FollowerBuilder.ReportHeadPartRaces(twice, Her,
+            key => Restricted("Shared01", [OtherRace]), report);
+
+        Assert.Single(Messages(report, "PRESET_HEADPART_OTHER_RACE"));
+    }
+
+    [Fact]
+    public void An_unreadable_record_does_not_swallow_another_part_s_mismatch()
+    {
+        var report = new ValidationReport();
+        var unreadable = new HeadPartFacts(null, null, null, null, null, null, null,
+            "FF_Gone.esp", RecordUnreadable: true);
+        FollowerBuilder.ReportHeadPartRaces(Appearance(0, 3), Her, key => key switch
+        {
+            "000800:Hair.esp" => unreadable,
+            "000801:Hair.esp" => Restricted("Eyes01", [OtherRace]),
+            _ => null,
+        }, report);
+
+        Assert.Single(Messages(report, "PRESET_HEADPART_RECORD_UNKNOWN"));
+        Assert.Single(Messages(report, "PRESET_HEADPART_OTHER_RACE"));
+    }
+
+    /// <summary>
+    /// A catalogue that exists but holds no entry for a record is absent evidence. Reading the
+    /// defining record then is defensible; implying overrides were checked is not.
+    /// </summary>
+    [Fact]
+    public void A_missing_catalogue_entry_is_marked_as_unchecked_not_as_no_override()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            const string plugin = "FF_Unindexed.esp";
+            var mod = new SkyrimMod(ModKey.FromFileName(plugin), SkyrimRelease.SkyrimSE);
+            var race = mod.Races.AddNew("UnindexedRace");
+            var list = mod.FormLists.AddNew("UnindexedList");
+            list.Items.Add(race.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            var part = mod.HeadParts.AddNew("UnindexedHair");
+            part.Type = HeadPart.TypeEnum.Hair;
+            part.ValidRaces.SetTo(list.FormKey);
+            mod.WriteToBinary(Path.Combine(directory, plugin));
+
+            using var resolver = new RecordResolver(directory, Log);
+
+            var unknown = resolver.ResolveHeadPart(part.FormKey.ToString(),
+                _ => null, catalogueKnows: _ => false);
+            Assert.NotNull(unknown);
+            Assert.True(unknown!.OverrideUnchecked);
+            Assert.NotNull(unknown.ValidRaceFormKeys);
+
+            var checkedRecords = resolver.ResolveHeadPart(part.FormKey.ToString(),
+                _ => null, catalogueKnows: _ => true);
+            Assert.NotNull(checkedRecords);
+            Assert.False(checkedRecords!.OverrideUnchecked);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    [Fact]
+    public void A_build_says_when_the_catalogue_could_not_check_overrides()
+    {
+        var report = new ValidationReport();
+        var uncheckedFacts = new HeadPartFacts("Hair01", "Hair", "hair.nif", "00083D:Hair.esp",
+            "HeadPartsList", [Her], null, null, false, OverrideUnchecked: true);
+        FollowerBuilder.ReportHeadPartRaces(Appearance(3), Her, key => uncheckedFacts, report);
+
+        var notice = Assert.Single(Messages(report, "PRESET_HEADPART_OVERRIDES_UNCHECKED"));
+        Assert.Contains("000800:Hair.esp", notice, StringComparison.Ordinal);
+    }
 }
