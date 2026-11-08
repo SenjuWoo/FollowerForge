@@ -51,7 +51,10 @@ public static class EspHeaderValidator
                 $"HEDR must be 1.71, got {hedrVer}", path);
 
         var tes4Size = BitConverter.ToUInt32(data, 4);
-        var numMasters = CountMasters(data, (int)tes4Size);
+        if (24L + tes4Size > data.Length)
+            report.Add(ValidationSeverity.Error, "ESP_TES4_SIZE",
+                $"TES4 declares {tes4Size} bytes of header but only {data.Length - 24} remain", path);
+        var numMasters = CountMasters(data, (int)Math.Min(tes4Size, (uint)Math.Max(0, data.Length - 24)));
         var esl = (flags & 0x200) != 0;
 
         uint records = 0, grups = 0;
@@ -105,6 +108,11 @@ public static class EspHeaderValidator
                     r += 24 + (int)rdsz;
                 }
             }
+            // A group must end exactly where its declared size says. One to 23 stray bytes used to
+            // fall through the loop condition and the plugin still passed the gate.
+            if (r != end)
+                report.Add(ValidationSeverity.Error, "ESP_GRUP_LEFTOVER",
+                    $"{end - r} unconsumed byte(s) at the end of a group ending {end:X}", path);
         }
 
         var pos = 24 + (int)tes4Size;
@@ -152,7 +160,9 @@ public static class EspHeaderValidator
     {
         var count = 0;
         var tp = 24;
-        var end = 24 + tes4Size;
+        // Clamped: a malformed header can claim more bytes than the file holds, and reading past the
+        // buffer threw instead of reporting.
+        var end = (int)Math.Min(24L + tes4Size, data.Length);
         while (tp + 6 <= end)
         {
             var sig = data.AsSpan(tp, 4);

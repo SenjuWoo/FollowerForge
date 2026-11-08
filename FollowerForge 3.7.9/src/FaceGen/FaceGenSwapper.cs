@@ -125,15 +125,20 @@ public sealed class FaceGenSwapper(ILogger log)
                     findings.Add(new ValidationFinding(ValidationSeverity.Error, "FACEGEN_TINT_NOT_SET",
                         "Tint path was not persisted into the saved NIF"));
 
-                // Resolve every referenced texture path. Only the slots the eye actually notices
-                // are worth warning about: a missing diffuse or normal map means pink or broken
-                // hair/skin, while the optional slots (_sk subsurface, _s specular, _e cubemap…)
-                // are routinely referenced by head meshes and absent from the game — the engine
-                // simply skips them, so reporting those as problems is pure noise.
-                var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                // Resolve each distinct path once, but decide its severity from every slot that uses
+                // it: a path first seen in an optional slot and later in a diffuse slot is a required
+                // miss. Deduplicating before that decision reported it as harmless.
+                var uses = new Dictionary<string, (bool Required, int Slot)>(StringComparer.OrdinalIgnoreCase);
                 foreach (var (_, slot, tex) in check.AllSlots())
                 {
-                    if (!seen.Add(tex)) continue;
+                    if (uses.TryGetValue(tex, out var known))
+                        uses[tex] = (known.Required || IsRequiredSlot(slot), known.Slot);
+                    else
+                        uses[tex] = (IsRequiredSlot(slot), (int)slot);
+                }
+
+                foreach (var (tex, use) in uses)
+                {
                     if (tex.Equals(faceTintNifPath, StringComparison.OrdinalIgnoreCase))
                     {
                         textures.Add(new TextureResolution(tex, true, "generated (this package)"));
@@ -143,12 +148,12 @@ public sealed class FaceGenSwapper(ILogger log)
                     textures.Add(new TextureResolution(tex, resolved, container));
                     if (resolved) continue;
 
-                    if (IsRequiredSlot(slot))
+                    if (use.Required)
                         findings.Add(new ValidationFinding(ValidationSeverity.Warning, "FACEGEN_TEX_MISSING",
-                            $"Missing {SlotName(slot)} texture — this part of her will look wrong: {tex}", tex));
+                            $"Missing {SlotName((uint)use.Slot)} texture — this part of her will look wrong: {tex}", tex));
                     else
                         findings.Add(new ValidationFinding(ValidationSeverity.Info, "FACEGEN_TEX_OPTIONAL",
-                            $"Optional {SlotName(slot)} texture not present (harmless): {tex}", tex));
+                            $"Optional {SlotName((uint)use.Slot)} texture not present (harmless): {tex}", tex));
                 }
             }
 

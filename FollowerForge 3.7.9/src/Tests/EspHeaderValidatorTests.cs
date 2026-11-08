@@ -29,12 +29,16 @@ public sealed class EspHeaderValidatorTests : IDisposable
         uint? groupSizeOverride = null,
         uint? hedrCountOverride = null,
         byte[]? trailing = null,
-        ushort recordFormVersion = 44)
+        ushort recordFormVersion = 44,
+        byte[]? junkInsideGroup = null,
+        bool nested = false)
     {
+        // One record; one group, or two when nested. HEDR counts records plus GRUPs.
+        var groups = nested ? 2u : 1u;
         byte[] hedrPayload =
         [
             .. BitConverter.GetBytes(1.71f),
-            .. BitConverter.GetBytes(hedrCountOverride ?? 2u),     // one record + one group
+            .. BitConverter.GetBytes(hedrCountOverride ?? (1u + groups)),
             .. BitConverter.GetBytes(0x800u),
         ];
         var hedr = Subrecord("HEDR", hedrPayload);
@@ -45,21 +49,39 @@ public sealed class EspHeaderValidatorTests : IDisposable
 
         var body = new byte[8];                                    // record payload, contents irrelevant
         var child = MainRecord("NPC_", 0, recordFormId, body, recordFormVersion);
-        var groupSize = groupSizeOverride ?? (uint)(GroupHeader + child.Length);
+        var junk = junkInsideGroup ?? [];
 
-        var group = new List<byte>();
-        group.AddRange("GRUP"u8.ToArray());
-        group.AddRange(BitConverter.GetBytes(groupSize));
-        group.AddRange("NPC_"u8.ToArray());
-        group.AddRange(BitConverter.GetBytes(0));                  // group type
-        group.AddRange(new byte[2]);                               // stamp
-        group.AddRange(new byte[2]);                               // version control
-        group.AddRange(BitConverter.GetBytes(0));                  // unknown
-        group.AddRange(child);
+        byte[] content;
+        if (nested)
+        {
+            // Inner group holds the record plus any junk; the outer group holds the inner one.
+            var innerSize = (uint)(GroupHeader + child.Length + junk.Length);
+            content = [.. Group(innerSize, "NPC_"), .. child, .. junk];
+        }
+        else
+        {
+            content = [.. child, .. junk];
+        }
+
+        var groupSize = groupSizeOverride ?? (uint)(GroupHeader + content.Length);
+        var group = Group(groupSize, "NPC_").Concat(content).ToArray();
 
         var bytes = tes4.Concat(group).ToList();
         if (trailing is not null) bytes.AddRange(trailing);
         return bytes.ToArray();
+    }
+
+    private static byte[] Group(uint size, string label)
+    {
+        var head = new List<byte>();
+        head.AddRange("GRUP"u8.ToArray());
+        head.AddRange(BitConverter.GetBytes(size));
+        head.AddRange(System.Text.Encoding.ASCII.GetBytes(label.PadRight(4).Substring(0, 4)));
+        head.AddRange(BitConverter.GetBytes(0));                   // group type
+        head.AddRange(new byte[2]);                                // stamp
+        head.AddRange(new byte[2]);                                // version control
+        head.AddRange(BitConverter.GetBytes(0));                   // unknown
+        return head.ToArray();
     }
 
     private static byte[] Subrecord(string sig, byte[] payload)
@@ -179,4 +201,58 @@ public sealed class EspHeaderValidatorTests : IDisposable
 
     /// <summary>The TES4 data length is the dword at offset 4; the group starts right after it.</summary>
     private static int Tes4DataLength(byte[] bytes) => (int)BitConverter.ToUInt32(bytes, 4);
+
+    // ---- a group must consume exactly the bytes it declares ------------------------
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(7)]
+    [InlineData(23)]
+    public void Junk_inside_a_group_is_rejected(int junkBytes)
+    {
+        var report = Run(Build(junkInsideGroup: new byte[junkBytes]));
+
+        Assert.Contains("ESP_GRUP_LEFTOVER", Codes(report));
+        Assert.DoesNotContain("SHIP_GATE_PASS", Codes(report));
+    }
+
+    [Fact]
+    public void Junk_inside_a_nested_group_is_rejected()
+    {
+        var report = Run(Build(junkInsideGroup: new byte[9], nested: true));
+
+        Assert.Contains("ESP_GRUP_LEFTOVER", Codes(report));
+        Assert.DoesNotContain("SHIP_GATE_PASS", Codes(report));
+    }
+
+    [Fact]
+    public void A_clean_nested_group_still_passes()
+    {
+        var report = Run(Build(nested: true));
+
+        Assert.DoesNotContain("ESP_GRUP_LEFTOVER", Codes(report));
+        Assert.Contains("SHIP_GATE_PASS", Codes(report));
+    }
+
+    [Fact]
+    public void A_clean_group_without_junk_passes()
+    {
+        var report = Run(Build());
+
+        Assert.DoesNotContain("ESP_GRUP_LEFTOVER", Codes(report));
+        Assert.Contains("SHIP_GATE_PASS", Codes(report));
+    }
+
+    /// <summary>A truncated TES4 or a short HEDR must be a finding, never an exception.</summary>
+    [Fact]
+    public void Truncated_headers_produce_findings_rather_than_throwing()
+    {
+        var tooShort = Run([0x54, 0x45, 0x53, 0x34]);          // "TES4" and nothing else
+        Assert.Contains("ESP_NOT_TES4", Codes(tooShort));
+
+        var noHedr = Build();
+        BitConverter.GetBytes(600u).CopyTo(noHedr, 4);         // TES4 claims more than it holds
+        var report = Run(noHedr);
+        Assert.NotEmpty(report.Findings);
+    }
 }

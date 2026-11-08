@@ -1,0 +1,27 @@
+FollowerForge 3.7.10
+
+Three fixes to checking, not to how a follower is generated.
+
+WHAT CHANGED
+
+- A plugin whose group holds stray bytes is now rejected. The check used to walk each group while a
+  full record header still fit, so up to 23 leftovers bytes at the end of a group - or of a nested
+  group - went unnoticed and the plugin passed. Every group now has to end exactly where its
+  declared size says.
+- A malformed header no longer crashes the check. A TES4 header claiming more bytes than the file
+  holds made the master count read past the end of the file; that is now reported as a finding and
+  the remaining checks still run.
+- A missing texture is no longer called harmless by mistake. The same texture used in an optional
+  slot and in a diffuse or normal slot was reported once, as harmless, because its severity was
+  decided before every use was known. It is now a warning, and still only one line per file.
+
+WHAT DID NOT CHANGE
+
+Follower generation, ESPFE output, FormIDs, profiles, Vortex and MO2 indexing, the face-tint slot
+rule and the FaceGen states are the same as 3.7.9. Nothing in this release was checked in game: no
+follower was recruited, walked across a cell boundary or reloaded from a save, and no face was
+inspected in Skyrim. If you have a RaceMenu Export Head, converting one and looking at her face is
+still the only real check.
+
+GitHub issue #2 ("hair below the head") is still open. These changes make the checker stricter and
+the texture report accurate; they do not move a mesh or resize hair.
