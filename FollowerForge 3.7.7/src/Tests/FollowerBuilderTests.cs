@@ -12,18 +12,24 @@ public sealed class FollowerBuilderTests : IDisposable
     private readonly string _workspace = Path.Combine(Path.GetTempPath(), "ff_bld_" + Guid.NewGuid().ToString("N"));
 
     // Environment whose protected roots are elsewhere, so the temp workspace stays writable.
-    private EnvironmentSnapshot FakeEnv() => new()
+    // Derived from this instance's workspace: a fixed temp path let two test classes write the same
+    // fake game folder in parallel, which failed a Hub test once and passed on re-run.
+    private EnvironmentSnapshot FakeEnv()
     {
-        Manager = ModManagerKind.Vortex,
-        ManagerLabel = "Vortex",
-        GameRootPath = Path.Combine(Path.GetTempPath(), "ff_fake_game"),
-        GameDataPath = Path.Combine(Path.GetTempPath(), "ff_fake_game", "Data"),
-        PluginDataPath = Path.Combine(Path.GetTempPath(), "ff_fake_game", "Data"),
-        InstancePath = Path.Combine(Path.GetTempPath(), "ff_fake_vortex"),
-        StagingPath = Path.Combine(Path.GetTempPath(), "ff_fake_vortex", "mods"),
-        ProfilesPath = Path.Combine(Path.GetTempPath(), "ff_fake_vortex", "profiles"),
-        RuntimePluginsTxtPath = Path.Combine(Path.GetTempPath(), "ff_fake_runtime.txt"),
-    };
+        var game = Path.Combine(_workspace, "game");
+        return new()
+        {
+            Manager = ModManagerKind.Vortex,
+            ManagerLabel = "Vortex",
+            GameRootPath = game,
+            GameDataPath = Path.Combine(game, "Data"),
+            PluginDataPath = Path.Combine(game, "Data"),
+            InstancePath = Path.Combine(_workspace, "vortex"),
+            StagingPath = Path.Combine(_workspace, "vortex", "mods"),
+            ProfilesPath = Path.Combine(_workspace, "vortex", "profiles"),
+            RuntimePluginsTxtPath = Path.Combine(_workspace, "runtime.txt"),
+        };
+    }
 
     private static FollowerProfile Profile() => new()
     {
@@ -35,6 +41,34 @@ public sealed class FollowerBuilderTests : IDisposable
         Outfit = new RecordRef(VanillaForms.FarmClothesOutfit.ToString()),
         Placement = new PlacementSpec { Cell = new RecordRef(VanillaForms.WhiterunWorldPersistentCell.ToString()) },
     };
+
+    [Fact]
+    public void Build_Manifest_reports_a_clone_only_when_the_plugin_holds_one()
+    {
+        var profile = Profile();
+        // Cloning asked for, and no plugin on disk here to resolve the source from, so the compiler
+        // references the style instead. The manifest describes the plugin, not the request.
+        var asked = new FollowerProfile
+        {
+            Name = profile.Name,
+            PluginName = profile.PluginName,
+            Race = profile.Race,
+            VoiceType = profile.VoiceType,
+            Class = profile.Class,
+            Outfit = profile.Outfit,
+            Placement = profile.Placement,
+            CombatStyle = new CombatStyleChoice
+            {
+                Style = new RecordRef("00003D:Skyrim.esm"),
+                CloneIntoPlugin = true,
+            },
+        };
+
+        var result = new FollowerBuilder(Log).Build(asked, FakeEnv(), _workspace, location: null);
+
+        Assert.False(result.Manifest.CombatStyleCloned);
+        Assert.Contains(result.Validation.Findings, f => f.Code == "CSTY_CLONE_UNRESOLVED");
+    }
 
     [Fact]
     public void Build_PublishesAllRequiredOutputs()

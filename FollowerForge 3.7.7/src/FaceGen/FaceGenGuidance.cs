@@ -12,14 +12,14 @@ public static class FaceGenGuidance
             return "The head mesh was copied into the follower. None of its textures point at a face tint, so the tint path was left as exported. "
                 + $"The plugin {plugin} was still built. If the face is grey or missing eyes and hair, open {plugin} in the Creation Kit, select {editorId}, and press Ctrl+F4 to bake the tint layers stored on the actor. "
                 + "Ctrl+F4 does not include a RaceMenu sculpt. "
-                + $"The same steps are saved at {reportPath}.";
+                + $"The same steps are saved at the root of this follower package ({reportPath}).";
         }
 
         return Classify(reason)
             + $" The plugin {plugin} was still built. To bake a face from the sliders and colors already stored on {editorId}, open that plugin in the Creation Kit, select {editorId}, and press Ctrl+F4."
             + $" That creates {faceGeom} and {faceTint}."
             + " Ctrl+F4 uses the actor record, not a RaceMenu sculpt, so a sculpted head only appears when the exported mesh itself can be installed."
-            + $" The same steps are saved at {reportPath}.";
+            + $" The same steps are saved at the root of this follower package ({reportPath}).";
     }
 
     public static string TintFallback(string shapeName) =>

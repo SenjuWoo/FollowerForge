@@ -36,11 +36,66 @@ public sealed class FaceGenSwapperTests : IDisposable
     [Fact]
     public void Swap_RealExport_ProducesReopenableFaceGeomWithTintPath()
     {
-        // One convertible export proves the pipeline. Not every head on a real machine is one:
-        // a half-finished export is the user's data, not a code fault, so it must not fail here.
-        foreach (var export in RealExports())
+        // Live coverage is a separate claim from the synthetic tests beside it. With no export on
+        // this machine the run is NOT RUN, and it says so instead of passing quietly; with exports
+        // present, none converting is a failure rather than a silent pass.
+        var exports = RealExports().ToList();
+        if (exports.Count == 0)
         {
-            if (TrySwap(export)) return;
+            Console.WriteLine("FaceGen live export: NOT RUN (no CharGen NIF+DDS pair found). "
+                + "A real RaceMenu head export is still a manual acceptance test.");
+            return;
+        }
+        Console.WriteLine($"FaceGen live export: RUN against {exports.Count} export(s).");
+
+        foreach (var export in exports)
+        {
+            if (TrySwap(export))
+            {
+                Console.WriteLine($"FaceGen live export: converted {Path.GetFileName(export.Nif)}.");
+                return;
+            }
+        }
+
+        Assert.Fail($"FaceGen live export: {exports.Count} export(s) present but none converted.");
+    }
+
+    /// <summary>
+    /// The handoff report has to reach the user. It used to be written one directory above the
+    /// staging root, which the publisher never copies, so the warning named a file that no longer
+    /// existed once the follower folder was moved into place.
+    /// </summary>
+    [Fact]
+    public void Ck_handoff_report_is_published_inside_the_follower_folder()
+    {
+        var staging = Path.Combine(Path.GetTempPath(), "ff_fg_stage_" + Guid.NewGuid().ToString("N"));
+        var finalRoot = Path.Combine(Path.GetTempPath(), "ff_fg_final_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(staging);
+        try
+        {
+            var req = new FaceGenSwapper.Request(
+                SourceNifPath: Path.Combine(staging, "missing.nif"),
+                SourceDdsPath: null,
+                PluginName: "FF_Publish.esp",
+                NpcFormId: 0x800,
+                DataRoot: staging,
+                ActorEditorId: "FF_Publish_NPC",
+                NpcFormKey: "000800:FF_Publish.esp");
+
+            var result = new FaceGenSwapper(Log).Swap(req);
+            Assert.Equal("ck-handoff-report.json", result.CkHandoffPath);
+            Assert.True(File.Exists(Path.Combine(staging, "ck-handoff-report.json")),
+                "the report must be written inside the package root");
+
+            var final = Path.Combine(finalRoot, "FF Publish");
+            BuildPipeline.DirectoryPublisher.Publish(staging, final, Log);
+            Assert.True(File.Exists(Path.Combine(final, "ck-handoff-report.json")),
+                "the report must survive publishing");
+        }
+        finally
+        {
+            foreach (var dir in new[] { staging, finalRoot })
+                try { if (Directory.Exists(dir)) Directory.Delete(dir, true); } catch (IOException) { }
         }
     }
 
@@ -90,7 +145,9 @@ public sealed class FaceGenSwapperTests : IDisposable
         Assert.True(result.NeedsCreationKit);
         Assert.False(result.Success);
         Assert.NotNull(result.CkHandoffPath);
-        Assert.True(File.Exists(result.CkHandoffPath!));
+        // Package-relative: the published folder is where the user finds it.
+        Assert.Equal("ck-handoff-report.json", result.CkHandoffPath);
+        Assert.True(File.Exists(Path.Combine(Path.Combine(_dataRoot, "Data"), result.CkHandoffPath!)));
         var message = Assert.Single(result.Findings).Message;
         Assert.Contains("Ctrl+F4", message);
         Assert.Contains(result.CkHandoffPath!, message);
@@ -153,7 +210,8 @@ public sealed class FaceGenSwapperTests : IDisposable
             diffuse: @"actors\character\rocks.dds", slot6: @"actors\character\malebody.dds");
         var result = Swap(nif, dds: null);
 
-        Assert.True(result.Success);
+        Assert.False(result.Success);
+        Assert.Equal(FaceGenStatus.Partial, result.Status);
         Assert.True(result.NeedsCreationKit);
         Assert.DoesNotContain(result.Findings, f => f.Code == "FACEGEN_TINT_NOT_SET");
         Assert.True(File.Exists(Path.Combine(_dataRoot, result.FaceGeomPath!)));
@@ -162,7 +220,7 @@ public sealed class FaceGenSwapperTests : IDisposable
         Assert.DoesNotContain("was not copied", handoff.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(
             "copied. The head mesh is in the follower; the tint path was left as exported. See the warning.",
-            FaceGenPlayerText.Summary(result.Success, result.Findings));
+            FaceGenPlayerText.Summary(result.Status));
     }
 
     private FaceGenResult Swap(string nif, string? dds)

@@ -78,10 +78,13 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
             log.Warning("Head part {Key} not found in {Plugin}", formKeyString, partModKey.FileName);
             // Falling back to the defining record here would report a race verdict from a record the
             // game does not use, so an override that cannot be opened is UNKNOWN, not the base copy.
-            return partOverriddenBy is null
-                ? null
-                : new HeadPartFacts(null, null, null, null, null, null, null, partOverriddenBy,
+            if (partOverriddenBy is not null)
+                return new HeadPartFacts(null, null, null, null, null, null, null, partOverriddenBy,
                     RecordUnreadable: true);
+            // Nothing was found: say which plugin was searched, and whether that plugin even exists.
+            // A missing record is a preset fault the user can fix; silence let it pass unreported.
+            return new HeadPartFacts(null, null, null, null, null, null, null, null,
+                Missing: true, MissingIn: partModKey.FileName.String, MissingPlugin: mod is null);
         }
 
         string? listFormKey = null;
@@ -191,4 +194,13 @@ public sealed record HeadPartFacts(
     /// True when a catalogue existed but held no entry for this head part or its race list, so
     /// overrides were never checked. Missing evidence is not evidence of absence.
     /// </summary>
-    bool OverrideUnchecked = false);
+    bool OverrideUnchecked = false,
+    /// <summary>
+    /// True when the record could not be found at all: either its plugin is missing or the plugin
+    /// does not contain it. Distinct from a record that exists but could not be read.
+    /// </summary>
+    bool Missing = false,
+    /// <summary>The plugin that was searched, for the message.</summary>
+    string? MissingIn = null,
+    /// <summary>True when that plugin file itself is absent, not merely short of the record.</summary>
+    bool MissingPlugin = false);

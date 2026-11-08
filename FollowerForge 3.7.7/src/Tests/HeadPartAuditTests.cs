@@ -812,4 +812,90 @@ public sealed class HeadPartAuditTests
         var notice = Assert.Single(Messages(report, "PRESET_HEADPART_OVERRIDES_UNCHECKED"));
         Assert.Contains("000800:Hair.esp", notice, StringComparison.Ordinal);
     }
+
+    // ---- a part that is not there at all ---------------------------------------
+
+    /// <summary>
+    /// A missing record used to be dropped on the floor, so an unusable preset produced a clean
+    /// report. It is now named, with the plugin that was searched and whether that plugin exists.
+    /// </summary>
+    [Fact]
+    public void A_head_part_whose_plugin_is_not_installed_is_reported()
+    {
+        var report = new ValidationReport();
+        var missing = new HeadPartFacts(null, null, null, null, null, null, null, null,
+            Missing: true, MissingIn: "Gone.esp", MissingPlugin: true);
+        FollowerBuilder.ReportHeadPartRaces(Appearance(3), Her, key => missing, report);
+
+        var warning = Assert.Single(Messages(report, "PRESET_HEADPART_MISSING"));
+        Assert.Contains("000800:Hair.esp", warning, StringComparison.Ordinal);
+        Assert.Contains("Gone.esp", warning, StringComparison.Ordinal);
+        Assert.Contains("not installed", warning, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void A_head_part_its_plugin_does_not_contain_is_reported_differently()
+    {
+        var report = new ValidationReport();
+        var missing = new HeadPartFacts(null, null, null, null, null, null, null, null,
+            Missing: true, MissingIn: "Present.esp", MissingPlugin: false);
+        FollowerBuilder.ReportHeadPartRaces(Appearance(3), Her, key => missing, report);
+
+        var warning = Assert.Single(Messages(report, "PRESET_HEADPART_MISSING"));
+        Assert.Contains("Present.esp", warning, StringComparison.Ordinal);
+        Assert.Contains("does not contain", warning, StringComparison.Ordinal);
+        Assert.DoesNotContain("not installed", warning, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void A_part_that_could_not_be_looked_up_at_all_is_still_named()
+    {
+        var report = new ValidationReport();
+        FollowerBuilder.ReportHeadPartRaces(Appearance(3), Her, _ => null, report);
+
+        var warning = Assert.Single(Messages(report, "PRESET_HEADPART_MISSING"));
+        Assert.Contains("000800:Hair.esp", warning, StringComparison.Ordinal);
+        Assert.Contains("could not be looked up", warning, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Resolver_reports_a_record_missing_from_an_installed_plugin()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            const string plugin = "FF_Short.esp";
+            var mod = new SkyrimMod(ModKey.FromFileName(plugin), SkyrimRelease.SkyrimSE);
+            mod.HeadParts.AddNew("SomeOtherHair").Type = HeadPart.TypeEnum.Hair;
+            mod.WriteToBinary(Path.Combine(directory, plugin));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart($"000899:{plugin}");
+
+            Assert.NotNull(facts);
+            Assert.True(facts!.Missing);
+            Assert.False(facts.MissingPlugin);
+            Assert.Equal(plugin, facts.MissingIn);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    [Fact]
+    public void Resolver_distinguishes_a_missing_plugin_from_a_missing_record()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart("000899:FF_Absent.esp");
+
+            Assert.NotNull(facts);
+            Assert.True(facts!.Missing);
+            Assert.True(facts.MissingPlugin);
+            Assert.Equal("FF_Absent.esp", facts.MissingIn);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
 }

@@ -107,7 +107,7 @@ public static class Program
             Console.WriteLine($"Plugin   : {result.Manifest.PluginName}  NPC {result.Manifest.NpcFormKey}");
             Console.WriteLine($"Output   : {result.OutputDirectory}");
             Console.WriteLine($"Masters  : {string.Join(", ", result.Manifest.Masters)}");
-            Console.WriteLine($"FaceGen  : {FaceGenPlayerText.Summary(result.Manifest.HasFaceGen, result.Validation.Findings)}");
+            Console.WriteLine($"FaceGen  : {FaceGenPlayerText.Summary(result.Manifest.FaceGenStatus)}");
             foreach (var f in result.Validation.Findings)
                 Console.WriteLine($"  [{f.Severity}] {f.Code}: {f.Message}");
             if (result.Success && opts.ContainsKey("zip"))

@@ -153,12 +153,19 @@ public sealed class FaceGenSwapper(ILogger log)
             }
 
             var hasError = findings.Any(f => f.Severity == ValidationSeverity.Error);
+            // A finished face is a mesh that reopened clean *and* carries the tint path we wrote.
+            // Everything else is reported as partial, never as success.
+            var tintPersisted = findings.All(f => f.Code != "FACEGEN_TINT_NOT_SET");
+            var tintPresent = findings.All(f => f.Code != "FACEGEN_NO_TINT");
+            var status = hasError || !tintPersisted
+                ? FaceGenStatus.Failed
+                : tintPresent ? FaceGenStatus.Complete : FaceGenStatus.Partial;
             log.Information("FaceGen dirty-swap for {Plugin} {FormId}: {Status}",
-                req.PluginName, formIdHex, hasError ? "completed with errors" : "OK");
+                req.PluginName, formIdHex, FaceGenResult.Describe(status));
 
             return new FaceGenResult
             {
-                Success = !hasError,
+                Status = status,
                 FaceGeomPath = faceGeomRel,
                 FaceTintPath = faceTintRel,
                 ShapeNames = shapeNames,
@@ -203,7 +210,10 @@ public sealed class FaceGenSwapper(ILogger log)
     private FaceGenResult Handoff(Request req, string reason, string faceGeomRel, string faceTintRel,
         List<ValidationFinding> findings, bool meshWritten = false, bool tintWritten = false)
     {
-        var handoffPath = Path.Combine(req.DataRoot, "..", "ck-handoff-report.json");
+        // Inside the package, not beside it: DataRoot is the staging dir and only files under it are
+        // published, so a report written to ".." reached the user as a path that no longer existed.
+        var handoffRel = "ck-handoff-report.json";
+        var handoffPath = Path.Combine(req.DataRoot, handoffRel);
         var reportPath = Path.GetFullPath(handoffPath);
         var handoff = new CkHandoff(
             req.PluginName, req.ActorEditorId, req.NpcFormKey, faceGeomRel, faceTintRel, reason,
@@ -224,16 +234,19 @@ public sealed class FaceGenSwapper(ILogger log)
         }
         findings.Add(new ValidationFinding(
             ValidationSeverity.Warning, "FACEGEN_CK_HANDOFF",
-            FaceGenGuidance.Handoff(req.PluginName, req.ActorEditorId, reason, faceGeomRel, faceTintRel, reportPath)));
+            FaceGenGuidance.Handoff(req.PluginName, req.ActorEditorId, reason, faceGeomRel, faceTintRel,
+                handoffRel)));
         log.Warning("FaceGen unsafe for {Plugin}; wrote CK handoff. Reason: {Reason}", req.PluginName, reason);
         var hasError = findings.Any(f => f.Severity == ValidationSeverity.Error);
+        // A mesh on disk is a partial face: it renders, and the tint path is still the export's.
+        // No mesh at all is a manual repair — the user has to supply or fix the export.
+        var status = meshWritten ? FaceGenStatus.Partial : FaceGenStatus.NeedsManualRepair;
         return new FaceGenResult
         {
-            Success = meshWritten && !hasError,
-            NeedsCreationKit = true,
+            Status = status,
             FaceGeomPath = faceGeomRel,
             FaceTintPath = tintWritten || !meshWritten ? faceTintRel : null,
-            CkHandoffPath = reportPath,
+            CkHandoffPath = handoffRel,
             Findings = findings,
         };
     }

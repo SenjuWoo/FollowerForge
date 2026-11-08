@@ -449,12 +449,34 @@ public sealed class FollowerBuilder(ILogger log)
         // Face head part". The record is what the engine acts on.
         var parts = new List<(string Key, HeadPartFacts Facts)>();
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var part in appearance.HeadParts)
+        for (var i = 0; i < appearance.HeadParts.Count; i++)
         {
-            var key = part.FormKey;
-            if (lookup(key) is not { } facts) continue;
+            var key = appearance.HeadParts[i].FormKey;
             // Two slots can name one record; that is one part with one problem.
             if (!seen.Add(key)) continue;
+            var presetSlot = i < appearance.HeadPartTypes.Count && appearance.HeadPartTypes[i] >= 0
+                ? HeadPartSlotName(appearance.HeadPartTypes[i])
+                : "unknown slot";
+            if (lookup(key) is not { } facts)
+            {
+                // No answer at all. Silence here let an unusable preset part pass unreported.
+                report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_MISSING",
+                    $"'{key}' ({presetSlot}) could not be looked up, so whether it is installed for her is "
+                    + "unknown. Nothing about that part is claimed either way.");
+                continue;
+            }
+            if (facts.Missing)
+            {
+                report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_MISSING",
+                    facts.MissingPlugin
+                        ? $"'{key}' ({presetSlot}) is not installed: {facts.MissingIn} does not exist in this "
+                          + "load order, so the game will drop that part. Reinstall that mod, or re-save the "
+                          + "preset without it."
+                        : $"'{key}' ({presetSlot}) is named by the preset, but {facts.MissingIn} does not contain "
+                          + "it, so the game will drop that part. The preset and the installed plugins disagree — "
+                          + "re-save the preset in game, or install the plugin that defines it.");
+                continue;
+            }
             parts.Add((key, facts));
         }
         if (parts.Count == 0) return;
@@ -1165,8 +1187,12 @@ public sealed class FollowerBuilder(ILogger log)
             NpcFormKey: compiled.NpcFormKey.ToString());
 
         var result = new FaceGen.FaceGenSwapper(log).Swap(req, resolver);
-        // NeedsCreationKit is already a warning on result.Findings, with the steps in the text.
         report.AddRange(result.Findings);
+        // One line every surface can agree on: the console, the HTML report and the manifest all
+        // read this status instead of inferring "done" from a copied file.
+        report.Add(ValidationSeverity.Info, "FACEGEN_STATUS",
+            $"FaceGen: {FaceGenResult.Describe(result.Status)}."
+            + (result.CkHandoffPath is { } handoff ? $" Handoff report: {handoff}" : ""));
         return new FaceGenOutcome(result, requiredPlugins);
     }
 
@@ -1256,8 +1282,11 @@ public sealed class FollowerBuilder(ILogger log)
         RaceFormKey = profile.Race.FormKey,
         VoiceFormKey = profile.VoiceType.FormKey,
         CombatStyleFormKey = profile.CombatStyle?.Style.FormKey,
-        CombatStyleCloned = profile.CombatStyle?.CloneIntoPlugin ?? false,
-        HasFaceGen = faceGen is { Success: true },
+        // The plugin is the source of truth: a clone that fallback-referenced an existing style did
+        // not clone, whatever the profile asked for.
+        CombatStyleCloned = c.CombatStyleCloned,
+        HasFaceGen = faceGen?.Status is FaceGenStatus.Complete or FaceGenStatus.Partial,
+        FaceGenStatus = faceGen is { } fg ? FaceGenResult.Describe(fg.Status) : "not attempted",
         GeneratedAtUtc = buildTimeUtc.UtcDateTime.ToString("O"),
     };
 
@@ -1363,7 +1392,7 @@ public sealed class FollowerBuilder(ILogger log)
               <tr><td>Placed ACHR</td><td>{{manifest.PlacedFormKey}}</td></tr>
               <tr><td>Strategy</td><td>{{manifest.Strategy}}</td></tr>
               <tr><td>Masters</td><td>{{masters}}</td></tr>
-              <tr><td>FaceGen</td><td>{{FaceGenPlayerText.Summary(manifest.HasFaceGen, report.Findings)}}</td></tr>
+              <tr><td>FaceGen</td><td>{{FaceGenPlayerText.Summary(manifest.FaceGenStatus)}}</td></tr>
             </table>
             <h2>Validation</h2>
             <table><tr><th>Severity</th><th>Code</th><th>Message</th></tr>

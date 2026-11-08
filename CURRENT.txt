@@ -1,6 +1,5 @@
-FollowerForge 3.7.7 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
-Snapshot: FollowerForge 3.7.7 (570 Release tests). CI green on source commit aecd807: xunit suite, Analyze (csharp), Analyze (actions).
-Candidate asset: FollowerForge-3.7.7-win-x64.zip, 99409920 bytes, SHA-256 32eb44940c1c5d35d19510053f8ed13504ce6d61b652ce2c5d27d26edfd830c6. Binaries 3.7.7+aecd807. Supersedes fe917650, 32a78d80 and 4cb4d00b (earlier candidates, do not use).
-Fixes: head-part ValidRaces read as a FormList; the list and the head part record both resolved through their own plugin and their load-order winner; membership decides; UNKNOWN for an unreadable list or an unopenable winning record; vampires judged on their own race; repository homepage corrected.
+FollowerForge 3.7.8 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
+Snapshot: FollowerForge 3.7.8 (577 Release tests).
+Fixes: FaceGen reports one state (complete / partial / needs manual repair / failed) instead of a success flag that could be true together with a manual-repair flag; the Creation Kit handoff report is written inside the package and survives publishing; a head part whose plugin is missing or lacks the record is reported as PRESET_HEADPART_MISSING; manifest.json takes CombatStyleCloned from the compiler, not the request.
 Awaiting owner approval before any GitHub release or Nexus upload. No in-game testing was performed.
-Details: FollowerForge 3.7.7/VALIDATION.md and STATE.md.
+Details: FollowerForge 3.7.8/VALIDATION.md and STATE.md.

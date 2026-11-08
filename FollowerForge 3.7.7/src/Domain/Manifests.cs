@@ -14,7 +14,10 @@ public sealed record FollowerManifest
     public string? VoiceFormKey { get; init; }
     public string? CombatStyleFormKey { get; init; }
     public bool CombatStyleCloned { get; init; }
+    /// <summary>True only when a head mesh and a usable tint are both in the package.</summary>
     public bool HasFaceGen { get; init; }
+    /// <summary>complete | partial | needs manual repair | failed | not attempted.</summary>
+    public string FaceGenStatus { get; init; } = "not attempted";
     public string GeneratedBy { get; init; } = "FollowerForge";
     /// <summary>Deterministic: derived from the profile's fixed build timestamp, not wall-clock.</summary>
     public required string GeneratedAtUtc { get; init; }
