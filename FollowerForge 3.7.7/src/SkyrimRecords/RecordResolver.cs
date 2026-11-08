@@ -50,7 +50,8 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
     /// a list this method could not read (<paramref name="ValidRacesFormList"/> set, membership
     /// unknown). Callers report UNKNOWN rather than guessing.
     /// </summary>
-    public HeadPartFacts? ResolveHeadPart(string formKeyString)
+    public HeadPartFacts? ResolveHeadPart(
+        string formKeyString, Func<string, string?>? winningPluginOf = null)
     {
         var formKey = FormKey.Factory(formKeyString);
         var mod = Open(formKey.ModKey);
@@ -64,14 +65,36 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
         string? listFormKey = null;
         string? listEditorId = null;
         IReadOnlyList<string>? races = null;
+        string? overriddenBy = null;
         if (!match.ValidRaces.IsNull)
         {
             listFormKey = match.ValidRaces.FormKey.ToString();
-            var list = mod!.FormLists.FirstOrDefault(f => f.FormKey == match.ValidRaces.FormKey);
+            // A FormKey names its own plugin, and a race list very often lives in a shared lists
+            // plugin or a master rather than beside the head part. Looking it up in the head part's
+            // file alone reported UNKNOWN for ordinary mods; open the plugin the FormKey names.
+            var listModKey = match.ValidRaces.FormKey.ModKey;
+            var listMod = listModKey == formKey.ModKey ? mod : Open(listModKey);
+            var list = listMod?.FormLists.FirstOrDefault(f => f.FormKey == match.ValidRaces.FormKey);
+
+            // A later plugin in the load order may override that list, in which case the base
+            // record is not what the game reads. The catalogue already records which plugin wins,
+            // so the winner can be opened directly instead of scanning the order.
+            if (winningPluginOf?.Invoke(listFormKey) is { Length: > 0 } winner
+                && !string.Equals(winner, listModKey.FileName.String, StringComparison.OrdinalIgnoreCase))
+            {
+                overriddenBy = winner;
+                var winnerKey = ModKey.FromFileName(winner);
+                var winnerMod = winnerKey == listModKey ? listMod : Open(winnerKey);
+                list = winnerMod?.FormLists.FirstOrDefault(f => f.FormKey == match.ValidRaces.FormKey);
+                if (list is null)
+                    log.Warning("Race list {List} is overridden by {Winner}, which could not be read",
+                        listFormKey, winner);
+            }
+
             if (list is null)
             {
                 log.Warning("Head part {Key} names race list {List}, which {Plugin} does not define",
-                    formKeyString, listFormKey, formKey.ModKey.FileName);
+                    formKeyString, listFormKey, overriddenBy ?? listModKey.FileName.String);
             }
             else
             {
@@ -83,7 +106,7 @@ public sealed class RecordResolver(string gameDataPath, ILogger log) : IDisposab
         }
 
         return new HeadPartFacts(match.EditorID, match.Type.ToString(),
-            match.Model?.File.GivenPath, listFormKey, listEditorId, races);
+            match.Model?.File.GivenPath, listFormKey, listEditorId, races, overriddenBy);
     }
 
     private ISkyrimModDisposableGetter? Open(ModKey modKey)
@@ -119,4 +142,10 @@ public sealed record HeadPartFacts(
     string? ModelPath,
     string? ValidRacesFormList,
     string? ValidRacesFormListEditorId,
-    IReadOnlyList<string>? ValidRaceFormKeys);
+    IReadOnlyList<string>? ValidRaceFormKeys,
+    /// <summary>
+    /// Plugin that wins the race list in the load order, when it is not the plugin that defines it.
+    /// Null means either "nothing overrides it" or "no catalogue was available to ask" — a caller
+    /// must not read null as proof that the list is uncontested.
+    /// </summary>
+    string? ValidRacesOverriddenBy = null);

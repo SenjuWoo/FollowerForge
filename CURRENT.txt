@@ -1,5 +1,5 @@
 FollowerForge 3.7.7 — built and validated locally, NOT released. Parent is the released v3.7.6 at 67a840a.
-Snapshot: FollowerForge 3.7.7 (554 Release tests).
+Snapshot: FollowerForge 3.7.7 (558 Release tests).
 Fixes: head-part ValidRaces read as a FormList and judged by membership; UNKNOWN when the list cannot
 be read; vampires judged against their own race; repository homepage corrected.
 Awaiting owner approval before any GitHub release or Nexus upload.

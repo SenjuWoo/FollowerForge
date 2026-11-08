@@ -344,4 +344,151 @@ public sealed class HeadPartAuditTests
         }
         finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
     }
+
+    /// <summary>
+    /// A FormKey names its plugin, so the race list can live somewhere other than the head part's
+    /// own file — a shared list plugin, or a master. Looking it up only in the defining plugin of
+    /// the head part reports UNKNOWN for perfectly ordinary mods.
+    /// </summary>
+    [Fact]
+    public void Resolver_reads_a_form_list_defined_in_another_plugin()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var shared = new SkyrimMod(ModKey.FromFileName("FF_SharedLists.esp"), SkyrimRelease.SkyrimSE);
+            var race = shared.Races.AddNew("SharedRace");
+            var list = shared.FormLists.AddNew("SharedValidRaces");
+            list.Items.Add(race.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            shared.WriteToBinary(Path.Combine(directory, "FF_SharedLists.esp"));
+
+            var hair = new SkyrimMod(ModKey.FromFileName("FF_CrossPluginHair.esp"), SkyrimRelease.SkyrimSE);
+            hair.ModHeader.MasterReferences.Add(new MasterReference
+            {
+                Master = ModKey.FromFileName("FF_SharedLists.esp"),
+            });
+            var part = hair.HeadParts.AddNew("CrossPluginHair");
+            part.Type = HeadPart.TypeEnum.Hair;
+            part.ValidRaces.SetTo(list.FormKey);
+            hair.WriteToBinary(Path.Combine(directory, "FF_CrossPluginHair.esp"));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString());
+
+            Assert.NotNull(facts);
+            Assert.NotNull(facts!.ValidRaceFormKeys);
+            Assert.Contains(race.FormKey.ToString(), facts.ValidRaceFormKeys!);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    [Fact]
+    public void Resolver_reads_a_form_list_defined_in_a_master_plugin()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var master = new SkyrimMod(ModKey.FromFileName("FF_FixtureMaster.esm"), SkyrimRelease.SkyrimSE);
+            var race = master.Races.AddNew("MasterRace");
+            var list = master.FormLists.AddNew("MasterValidRaces");
+            list.Items.Add(race.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            master.WriteToBinary(Path.Combine(directory, "FF_FixtureMaster.esm"));
+
+            var user = new SkyrimMod(ModKey.FromFileName("FF_MasterUser.esp"), SkyrimRelease.SkyrimSE);
+            user.ModHeader.MasterReferences.Add(new MasterReference
+            {
+                Master = ModKey.FromFileName("FF_FixtureMaster.esm"),
+            });
+            var part = user.HeadParts.AddNew("MasterListHair");
+            part.Type = HeadPart.TypeEnum.Hair;
+            part.ValidRaces.SetTo(list.FormKey);
+            user.WriteToBinary(Path.Combine(directory, "FF_MasterUser.esp"));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString());
+
+            Assert.NotNull(facts);
+            Assert.NotNull(facts!.ValidRaceFormKeys);
+            Assert.Contains(race.FormKey.ToString(), facts.ValidRaceFormKeys!);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    /// <summary>
+    /// The catalogue records which plugin wins a FormList, so an override can be opened directly
+    /// instead of scanning the load order. When it is opened, membership must come from the
+    /// override — the base record is not what the game reads.
+    /// </summary>
+    [Fact]
+    public void Resolver_follows_a_winning_override_of_the_race_list()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            var baseMod = new SkyrimMod(ModKey.FromFileName("FF_BaseLists.esp"), SkyrimRelease.SkyrimSE);
+            var baseRace = baseMod.Races.AddNew("BaseRace");
+            var baseList = baseMod.FormLists.AddNew("ContestedRaces");
+            baseList.Items.Add(baseRace.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            var part = baseMod.HeadParts.AddNew("ContestedHair");
+            part.Type = HeadPart.TypeEnum.Hair;
+            part.ValidRaces.SetTo(baseList.FormKey);
+            baseMod.WriteToBinary(Path.Combine(directory, "FF_BaseLists.esp"));
+
+            var lateMod = new SkyrimMod(ModKey.FromFileName("FF_LateOverride.esp"), SkyrimRelease.SkyrimSE);
+            lateMod.ModHeader.MasterReferences.Add(new MasterReference
+            {
+                Master = ModKey.FromFileName("FF_BaseLists.esp"),
+            });
+            var lateRace = lateMod.Races.AddNew("LateRace");
+            // An override carries the master's FormKey; that is what makes it an override rather
+            // than a second list.
+            var overridden = new FormList(baseList.FormKey, SkyrimRelease.SkyrimSE)
+            {
+                EditorID = baseList.EditorID,
+            };
+            overridden.Items.Add(lateRace.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            lateMod.FormLists.Add(overridden);
+            lateMod.WriteToBinary(Path.Combine(directory, "FF_LateOverride.esp"));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(), _ => "FF_LateOverride.esp");
+
+            Assert.NotNull(facts);
+            Assert.Equal("FF_LateOverride.esp", facts!.ValidRacesOverriddenBy);
+            Assert.NotNull(facts.ValidRaceFormKeys);
+            Assert.Contains(lateRace.FormKey.ToString(), facts.ValidRaceFormKeys!);
+            Assert.DoesNotContain(baseRace.FormKey.ToString(), facts.ValidRaceFormKeys!);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
+
+    [Fact]
+    public void Resolver_reports_unknown_when_the_winning_override_cannot_be_opened()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "ff_hdpt_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            const string plugin = "FF_OverrideGone.esp";
+            var mod = new SkyrimMod(ModKey.FromFileName(plugin), SkyrimRelease.SkyrimSE);
+            var race = mod.Races.AddNew("SoloRace");
+            var list = mod.FormLists.AddNew("SoloRaces");
+            list.Items.Add(race.FormKey.ToLink<ISkyrimMajorRecordGetter>());
+            var part = mod.HeadParts.AddNew("SoloHair");
+            part.Type = HeadPart.TypeEnum.Hair;
+            part.ValidRaces.SetTo(list.FormKey);
+            mod.WriteToBinary(Path.Combine(directory, plugin));
+
+            using var resolver = new RecordResolver(directory, Log);
+            var facts = resolver.ResolveHeadPart(part.FormKey.ToString(), _ => "FF_NotOnDisk.esp");
+
+            Assert.NotNull(facts);
+            Assert.Equal("FF_NotOnDisk.esp", facts!.ValidRacesOverriddenBy);
+            Assert.Null(facts.ValidRaceFormKeys);
+        }
+        finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
+    }
 }

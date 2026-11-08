@@ -21,8 +21,9 @@ What the audit does now:
 - Reports a mismatch only when the list is readable and she is not in it, naming the list and the
   races it holds.
 - Reports `PRESET_HEADPART_RACE_UNKNOWN` when the list cannot be read, instead of inventing either
-  verdict. A FormList overridden by a plugin above the head part's own plugin is outside what the
-  build reads, and the message says so.
+  verdict. A race list is read from the plugin its own FormID names, so a shared-lists plugin or a
+  master works; an override by a later plugin is followed when a catalogue was built, and the report
+  says which record it used.
 - Judges a vampire against the race it will actually carry, rather than skipping vampires entirely.
 
 ## Verification

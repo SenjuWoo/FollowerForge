@@ -145,7 +145,9 @@ public sealed class FollowerBuilder(ILogger log)
         // will actually carry, so a vampire is judged against the vampire race rather than exempted.
         ReportHeadPartRaces(profile.Appearance,
             (vampireRace ?? FormKey.Factory(profile.Race.FormKey)).ToString(),
-            resolver.ResolveHeadPart, report);
+            key => resolver.ResolveHeadPart(key,
+                catalog is null ? null : listKey => catalog.GetRecord(listKey)?.WinningPlugin),
+            report);
 
         var alternateSpawns = ResolveAlternateSpawns(profile, cellSources, report);
 
@@ -450,9 +452,12 @@ public sealed class FollowerBuilder(ILogger log)
             report.Add(ValidationSeverity.Warning, "PRESET_HEADPART_RACE_UNKNOWN",
                 $"'{unreadable.EditorId ?? "a head part"}' names race list "
                 + $"{unreadable.ValidRacesFormListEditorId ?? unreadable.ValidRacesFormList}, which could not be "
-                + "read from the load order, so whether that part applies to her is unknown. Check the part in "
-                + "xEdit: if the list exists in a later plugin it wins, and this build only reads the plugin "
-                + "that defines the head part.");
+                + "read, so whether it applies to her is unknown. "
+                + (unreadable.ValidRacesOverriddenBy is { } winner
+                    ? $"That list is overridden by {winner}, and the override could not be opened."
+                    : "The build reads the plugin that list's FormID names; a load-order override is only "
+                      + "followed when a catalogue was built for this run, so check the list in xEdit before "
+                      + "trusting either answer."));
 
         var excluded = facts.FirstOrDefault(f =>
             f.ValidRaceFormKeys is { } races

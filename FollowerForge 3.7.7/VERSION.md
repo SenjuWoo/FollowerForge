@@ -10,7 +10,8 @@ a same-plugin shortcut that guessed.
 
 This build resolves the FormList and compares the follower's race against its members, reports
 UNKNOWN when the list cannot be read, and judges vampires against the race they will actually
-carry instead of skipping them.
+carry. The list is read from the plugin its FormID names, so one kept in a shared-lists plugin or a
+master is found; a later plugin's override is followed when a catalogue was built for the run.
 
 # FollowerForge 3.7.6
 

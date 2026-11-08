@@ -27,8 +27,9 @@ restricted part was reported as incompatible. 3.7.6's `PluginOf(race) == PluginO
 shortcut suppressed the symptom for one preset and is unsound in general.
 
 ## What was checked after the fix
-- `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.7`: **554 passed, 0
-  failed, 0 skipped** (546 parent + 8 net new).
+- `dotnet test src/FollowerForge.slnx -c Release` from `FollowerForge 3.7.7`: **558 passed, 0
+  failed, 0 skipped** (546 parent + 12 net new). The two cross-plugin fixtures failed against the
+  build before the resolver change and pass after it.
 - New unit cases: list contains her race; list excludes her; several races with hers among them;
   two unrelated races in one plugin (the case 3.7.6 got wrong); vampire race excluded; vampire race
   included; race and list in different plugins; unreadable list → UNKNOWN and no mismatch verdict;
@@ -36,6 +37,12 @@ shortcut suppressed the symptom for one preset and is unsound in general.
 - Three integration cases write a real plugin with Mutagen (`RACE`, `FLST` naming it, `HDPT`
   pointing at the list) and read it back through `RecordResolver`: membership resolves; a list the
   plugin does not define yields UNKNOWN; a null `ValidRaces` yields "no restriction".
+- Two more do the same across plugins: a list defined in a shared-lists plugin and a list defined in
+  a master `.esm`. Both failed against the previous resolver, which only looked inside the head
+  part's own file.
+- Two cover a contested list: an override in a later plugin supplies membership when the catalogue
+  names it as winner, and an override that cannot be opened yields UNKNOWN with the winner recorded
+  rather than a verdict.
 - Live CLI builds on this machine's 2,955-plugin Vortex order, 3.7.7 binary:
   - preset on `000801:DWKaPoTunRace.esp` (mortal KaPoTun): **no warning** — she is in the list.
   - preset on `00083C:DWKaPoTunRace.esp` (vampire KaPoTun): **no warning** — 3.7.6 skipped this
@@ -64,8 +71,11 @@ shortcut suppressed the symptom for one preset and is unsound in general.
 ## What this does not claim
 - No in-game check. Nothing about hair geometry, warpaints or appearance is claimed fixed; the
   audit reports, it does not repair.
-- A FormList overridden by a plugin above the head part's defining plugin is not read. The build
-  says UNKNOWN in that situation rather than guessing.
+- A race list is resolved from the plugin its own FormID names, so a list in a shared-lists plugin
+  or a master is read. An override by a later plugin is followed when a catalogue was built (the
+  catalogue already records the winning plugin, so no load-order scan is needed); without one the
+  base record is read and the report says so. A definitive verdict is never claimed when the list
+  could not be opened.
 - MO2 was not exercised on this machine (no MO2 instance); the manager code paths are unchanged and
   covered by their existing unit tests.
 
