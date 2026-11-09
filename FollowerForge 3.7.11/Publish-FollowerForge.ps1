@@ -130,6 +130,7 @@ try {
 
 $hash = (Get-FileHash -Path $zip -Algorithm SHA256).Hash.ToLowerInvariant()
 $size = (Get-Item $zip).Length
+$mb = [math]::Round($size / 1MB, 1)
 
 Write-Host ''
 Write-Host 'PUBLISH SUCCEEDED' -ForegroundColor Green
