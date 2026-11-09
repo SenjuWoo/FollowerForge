@@ -1,6 +1,5 @@
-FollowerForge 3.7.10 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
-Snapshot: FollowerForge 3.7.10 (609 Release tests).
-Candidate asset: FollowerForge-3.7.10-win-x64.zip, 99416514 bytes, SHA-256 dfbc2c075caf36e41f79d1864e3ad8184ed3493bd51738366d8c4094a700e7b3. Binaries 3.7.10+55e53f16518893ca401bd4cdc744528435709930. CI green on 55e53f1: xunit suite, Analyze (csharp), Analyze (actions).
-Fixes: every GRUP must consume exactly its declared bytes (ESP_GRUP_LEFTOVER) including nested groups; a TES4 header larger than the file reports ESP_TES4_SIZE instead of throwing; a texture path used in an optional slot and a diffuse/normal slot is now a required warning.
-Awaiting owner approval before any GitHub release or Nexus upload. No in-game testing was performed.
-Details: FollowerForge 3.7.10/VALIDATION.md and STATE.md.
+FollowerForge 3.7.11 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
+Snapshot: FollowerForge 3.7.11 (615 Release tests).
+Fixes: the publish script closes stray app processes and verifies the archive it wrote (entries, size, SHA-256) instead of reporting success over a failed zip; cli verify --plugin gates any plugin on its own bytes; the unrestricted-hair warning names the race whose mesh folder the hair came from.
+Awaiting owner approval before any GitHub release or Nexus upload. Real RaceMenu export and in-game testing: NOT RUN (this machine has presets but no exported head NIF/DDS).
+Details: FollowerForge 3.7.11/VALIDATION.md and STATE.md.

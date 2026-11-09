@@ -898,4 +898,41 @@ public sealed class HeadPartAuditTests
         }
         finally { try { Directory.Delete(directory, recursive: true); } catch (IOException) { } }
     }
+
+    // ---- naming the race a hair mesh was built for --------------------------------
+
+    /// <summary>
+    /// Issue #2's mechanism, stated so the user can act on it: a custom-race hair keeps its mesh
+    /// under DWRaces\&lt;Race&gt;, and the warning should say which head that mesh was built for.
+    /// </summary>
+    [Fact]
+    public void The_hair_warning_names_the_race_the_mesh_was_built_for()
+    {
+        var report = new ValidationReport();
+        var excludedPart = Restricted("FemaleHeadKapotun", [OtherRace]);
+        var hair = new HeadPartFacts("FemaleHairKapotun01", "Hair",
+            @"actors\character\DWRaces\TigerKhajiit\Hair\FemaleHairKapotun01.nif",
+            null, null, null);
+        FollowerBuilder.ReportHeadPartRaces(Appearance(0, 3), Her, key => key switch
+        {
+            "000800:Hair.esp" => excludedPart,
+            "000801:Hair.esp" => hair,
+            _ => null,
+        }, report);
+
+        var warning = Assert.Single(Messages(report, "PRESET_HAIR_OTHER_RACE"));
+        Assert.Contains("TigerKhajiit", warning, StringComparison.Ordinal);
+        Assert.Contains("built for a TigerKhajiit head", warning, StringComparison.Ordinal);
+    }
+
+    [Theory]
+    [InlineData(@"actors\character\DWRaces\TigerKhajiit\Hair\a.nif", "TigerKhajiit")]
+    [InlineData(@"actors\character\Races\SnowElf\head.nif", "SnowElf")]
+    [InlineData(@"actors\character\malehead.nif", null)]
+    [InlineData(@"actors\character\hair\hair01.nif", null)]
+    [InlineData(null, null)]
+    public void RaceFromMeshPath_reads_only_explicit_race_folders(string? path, string? expected)
+    {
+        Assert.Equal(expected, FollowerBuilder.RaceFromMeshPath(path));
+    }
 }

@@ -23,7 +23,16 @@ $zip = Join-Path $dist "FollowerForge-$Version-win-x64.zip"
 
 Write-Host "== FollowerForge $Version - publish ==" -ForegroundColor Cyan
 
-# Do not terminate other FollowerForge sessions; a locked output should fail visibly.
+# A running instance holds FollowerForge.exe open and Compress-Archive then fails with
+# PermissionDenied *after* the build work is done. Close them first and prove none remain.
+$running = Get-Process -Name 'FollowerForge*' -ErrorAction SilentlyContinue
+if ($running) {
+    Write-Host "-- closing $($running.Count) running FollowerForge process(es)" -ForegroundColor DarkGray
+    $running | Stop-Process -Force -ErrorAction SilentlyContinue
+    Start-Sleep -Milliseconds 800
+    $still = Get-Process -Name 'FollowerForge*' -ErrorAction SilentlyContinue
+    if ($still) { throw "FollowerForge is still running (PID $($still.Id -join ', ')); close it and retry." }
+}
 
 # Regenerate the app icon so the shipped exe always matches the source art.
 & (Join-Path $root 'tools\New-AppIcon.ps1') -OutPath (Join-Path $src 'Ui\Assets\appicon.ico')
@@ -87,9 +96,30 @@ if (Test-Path $zip) { Remove-Item $zip -Force }
 Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip
 $mb = [math]::Round((Get-Item $zip).Length / 1MB, 1)
 
+# Reopen the archive and prove it carries what the release notes claim. A Compress-Archive that
+# half-writes, or a stage missing a file, must fail here rather than in the changelog.
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$expected = @('FollowerForge.exe', 'cli\FollowerForge.Cli.exe', 'README.md', 'CHANGELOG.txt')
+$archive = [System.IO.Compression.ZipFile]::OpenRead($zip)
+try {
+    $entries = $archive.Entries | ForEach-Object { $_.FullName.Replace('/', '\') }
+    foreach ($want in $expected) {
+        $match = $archive.Entries | Where-Object { $_.FullName.Replace('/', '\') -eq $want }
+        if (-not $match) { throw "zip is missing $want" }
+        if ($match.Length -le 0) { throw "zip entry $want is empty" }
+    }
+    $count = $archive.Entries.Count
+} finally { $archive.Dispose() }
+
+$hash = (Get-FileHash -Path $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+$size = (Get-Item $zip).Length
+
 Write-Host ''
 Write-Host 'PUBLISH SUCCEEDED' -ForegroundColor Green
 Write-Host "  folder : $stage"
 Write-Host "  zip    : $zip  ($mb MB)"
+Write-Host "  entries: $count  (verified: $($expected -join ', '))"
+Write-Host "  size   : $size bytes"
+Write-Host "  sha256 : $hash"
 Write-Host "  exe    : FollowerForge.exe  (self-contained - no .NET needed)"
 exit 0

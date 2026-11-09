@@ -538,12 +538,35 @@ public sealed class FollowerBuilder(ILogger log)
             p.Facts.ValidRacesFormList is null
             && string.Equals(p.Facts.Type, "Hair", StringComparison.OrdinalIgnoreCase));
         if (excluded.Count > 0 && unrestrictedHair.Facts is not null)
+        {
+            // A custom-race mod keeps its meshes under DWRaces\<Race>\; naming that race turns
+            // "your hair sits wrong" into "this hair was built for a TigerKhajiit skull".
+            var hairRace = RaceFromMeshPath(unrestrictedHair.Facts.ModelPath);
             report.Add(ValidationSeverity.Warning, "PRESET_HAIR_OTHER_RACE",
                 $"The preset's hair ({Name(unrestrictedHair.Key, unrestrictedHair.Facts)}, "
                 + $"mesh {unrestrictedHair.Facts.ModelPath ?? "path unknown"}) carries no race restriction at all, "
                 + "so the game puts it on every race — including hers. It was modelled for the preset's head, not "
-                + "the one she will have, which is what makes a custom follower's hair sit wrong on her skull. "
-                + "Build her as the preset's race, or use a preset made for hers.");
+                + "the one she will have, which is what makes a custom follower's hair sit wrong on her skull."
+                + (hairRace is null
+                    ? ""
+                    : $" The mesh lives in the {hairRace} race folder, so it was built for a {hairRace} head.")
+                + " Build her as the preset's race, or use a preset made for hers.");
+        }
+    }
+
+    /// <summary>
+    /// The race a head-part mesh was built for, when the path names one. Custom-race mods keep their
+    /// parts under `DWRaces/&lt;Race&gt;/...`; vanilla parts carry no race in the path at all.
+    /// </summary>
+    internal static string? RaceFromMeshPath(string? meshPath)
+    {
+        if (string.IsNullOrWhiteSpace(meshPath)) return null;
+        var parts = meshPath.Replace('/', '\\').Split('\\', StringSplitOptions.RemoveEmptyEntries);
+        for (var i = 0; i < parts.Length - 1; i++)
+            if (parts[i].Equals("DWRaces", StringComparison.OrdinalIgnoreCase)
+                || parts[i].Equals("Races", StringComparison.OrdinalIgnoreCase))
+                return parts[i + 1];
+        return null;
     }
 
     /// <summary>

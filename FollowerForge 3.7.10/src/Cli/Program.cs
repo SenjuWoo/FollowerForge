@@ -70,11 +70,34 @@ public static class Program
             "races" => CmdRaces(options),
             "hubs" => CmdHubs(options),
             "faces" => CmdFaces(options),
+            "verify" => CmdVerify(options),
             "voices" => CmdVoices(options),
             "voice-coverage" => CmdVoiceCoverage(options),
             "sample-profile" => CmdSampleProfile(options),
             _ => Unknown(args[0]),
         };
+    }
+
+    /// <summary>
+    /// Gates one plugin file on its own bytes. Exists so a release archive can be checked as it will
+    /// ship — the copy inside the zip — instead of trusting the working tree it was built from.
+    /// </summary>
+    private static int CmdVerify(Dictionary<string, string> opts)
+    {
+        if (!opts.TryGetValue("plugin", out var path) || !File.Exists(path))
+        {
+            Console.Error.WriteLine("--plugin <file.esp> is required.");
+            return 2;
+        }
+
+        var report = new Domain.ValidationReport();
+        Validation.EspHeaderValidator.Validate(path, report);
+        Console.WriteLine($"Plugin : {Path.GetFileName(path)}");
+        foreach (var f in report.Findings)
+            Console.WriteLine($"  [{f.Severity}] {f.Code}: {f.Message}");
+        var ok = !report.HasErrors;
+        Console.WriteLine(ok ? "PLUGIN OK" : "PLUGIN FAILED");
+        return ok ? 0 : 6;
     }
 
     private static int CmdBuild(Dictionary<string, string> opts)

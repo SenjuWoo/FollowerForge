@@ -1,0 +1,37 @@
+3.7.0
+
+- Combat transformation can now turn her into a creature. Dragons, wolves, trolls, spriggans,
+  whatever your mods provide. Every creature race was being hidden from that picker, so it only
+  ever offered the same people-races she could already be.
+
+- Picking an outfit AND armour no longer breaks the build. That combination used to stop with
+  "Must be fixed" and one error per piece. The outfit decides what she starts in, the armour
+  sits in her inventory so you can trade it to her, and the build now just says so.
+
+- New warning when a RaceMenu preset carries a body shape. A plugin can store a face, not a
+  body, so that shape has always been dropped. Use a BodySlide or OBody preset for it instead.
+  Overlays - tattoos, warpaint, scars - do not transfer either, and it now tells you.
+
+- Creature races show their FormID and EditorID, so you can tell apart the several mods that
+  all ship a race called "BabyDragonRace".
+
+Also included, if you are coming from 3.6.0 (3.6.1 never went up on Nexus)
+
+- You can unselect things. Every optional picker has a Clear button and the Expert Deck has
+  Clear selection. Before this, nothing could be removed once picked.
+
+- Copy diagnostics on the Review page (or Ctrl+K). One click copies what I need to help with a
+  bug report. Your Windows username is stripped out, so it is safe to paste publicly.
+
+- The window no longer clips its right edge on smaller screens, and the build buttons wrap
+  instead of hiding off the edge.
+
+Worth knowing
+
+- Transformation is EXPERIMENTAL and adds a script. Scripts stay in save files.
+- A beast form cannot wear or wield her gear. That is Skyrim's behaviour; reverting brings it
+  back.
+- Creature races have no face to customise, and their dialogue depends on the mod that added
+  them.
+- FollowerForge is a Windows program, not a Skyrim mod. Do not install it into Data, Vortex or
+  MO2 as game content. Extract it anywhere else and run FollowerForge.exe.
