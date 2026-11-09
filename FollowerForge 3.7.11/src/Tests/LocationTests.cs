@@ -9,6 +9,7 @@ using Serilog;
 
 namespace FollowerForge.Tests;
 
+[Collection("builds")]
 public sealed class LocationTests : IDisposable
 {
     private static readonly ILogger Log = new LoggerConfiguration().CreateLogger();

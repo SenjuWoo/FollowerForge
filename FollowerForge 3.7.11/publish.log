@@ -3,7 +3,7 @@ Icon written: Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForg
 -- tests
 Test run for Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Tests\bin\Release\net10.0\FollowerForge.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
-[xUnit.net 00:00:01.65]     FollowerForge.Tests.Phase6Tests.NormalFollower_HasNoDuplicateEditorIds [FAIL]
+[xUnit.net 00:00:01.28]     FollowerForge.Tests.Phase4Tests.SharedHubFollower_MastersTheHub [FAIL]
 
 Failed!  - Failed:     1, Passed:   614, Skipped:     0, Total:   615, Duration: 1 s - FollowerForge.Tests.dll (net10.0)
 tests failed (1)

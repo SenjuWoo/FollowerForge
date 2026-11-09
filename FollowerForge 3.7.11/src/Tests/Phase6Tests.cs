@@ -5,6 +5,7 @@ using Serilog;
 
 namespace FollowerForge.Tests;
 
+[Collection("builds")]
 public sealed class Phase6Tests : IDisposable
 {
     private static readonly ILogger Log = new LoggerConfiguration().CreateLogger();
