@@ -1,6 +1,5 @@
-FollowerForge 3.7.11 — the release candidate, NOT published. Latest published release is still v3.7.6 (tag on 67a840a).
+FollowerForge 3.7.11 — BETA candidate. Latest published release is v3.7.6; 3.7.7 through 3.7.11 were never released.
 Snapshot: FollowerForge 3.7.11 (615 Release tests).
-Candidate asset: FollowerForge-3.7.11-win-x64.zip, 99417448 bytes, SHA-256 579b4466b3001e7d16fbf4890af5130c6b715f1b7d511d538c1fa3789da454fa. Binaries 3.7.11+986b625. CI green on the docs commit; source commits 986b625 and c1d5964 green.
-Fixes: the publish script closes stray app processes and verifies the archive it wrote (entries, size, SHA-256) instead of reporting success over a failed zip; cli verify --plugin gates any plugin on its own bytes; the unrestricted-hair warning names the race whose mesh folder the hair came from.
-Awaiting owner approval before any GitHub release or Nexus upload. Real RaceMenu export and in-game testing: NOT RUN (this machine has presets but no exported head NIF/DDS).
+Fixes: publish script closes stray app processes and verifies the archive it wrote; cli verify --plugin gates any plugin on its own bytes; unrestricted-hair warning names the race whose mesh folder the hair came from; build tests serialised so the gate is deterministic.
+Not verified: real RaceMenu export conversion, hair placement, tint, recruitment, cell transitions, save/reload. This machine has presets but no exported head NIF/DDS.
 Details: FollowerForge 3.7.11/VALIDATION.md and STATE.md.

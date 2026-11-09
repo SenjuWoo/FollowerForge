@@ -7,26 +7,26 @@ A total of 1 test files matched the specified pattern.
 Passed!  - Failed:     0, Passed:   615, Skipped:     0, Total:   615, Duration: 1 s - FollowerForge.Tests.dll (net10.0)
 -- app
   Determining projects to restore...
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\FaceGen\FollowerForge.FaceGen.csproj (in 329 ms).
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Domain\FollowerForge.Domain.csproj (in 329 ms).
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\ModManagers\FollowerForge.ModManagers.csproj (in 329 ms).
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\SkyrimRecords\FollowerForge.SkyrimRecords.csproj (in 332 ms).
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\AssetIndex\FollowerForge.AssetIndex.csproj (in 333 ms).
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\BuildPipeline\FollowerForge.BuildPipeline.csproj (in 333 ms).
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Validation\FollowerForge.Validation.csproj (in 333 ms).
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Ui\FollowerForge.Ui.csproj (in 337 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Ui\FollowerForge.Ui.csproj (in 247 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\ModManagers\FollowerForge.ModManagers.csproj (in 239 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Domain\FollowerForge.Domain.csproj (in 239 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\FaceGen\FollowerForge.FaceGen.csproj (in 239 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\SkyrimRecords\FollowerForge.SkyrimRecords.csproj (in 242 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\AssetIndex\FollowerForge.AssetIndex.csproj (in 242 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Validation\FollowerForge.Validation.csproj (in 242 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\BuildPipeline\FollowerForge.BuildPipeline.csproj (in 242 ms).
   FollowerForge.Domain -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Domain\bin\Release\net10.0\FollowerForge.Domain.dll
   FollowerForge.ModManagers -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\ModManagers\bin\Release\net10.0\FollowerForge.ModManagers.dll
   FollowerForge.FaceGen -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\FaceGen\bin\Release\net10.0\FollowerForge.FaceGen.dll
   FollowerForge.AssetIndex -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\AssetIndex\bin\Release\net10.0\FollowerForge.AssetIndex.dll
-  FollowerForge.SkyrimRecords -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\SkyrimRecords\bin\Release\net10.0\FollowerForge.SkyrimRecords.dll
   FollowerForge.Validation -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Validation\bin\Release\net10.0\FollowerForge.Validation.dll
+  FollowerForge.SkyrimRecords -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\SkyrimRecords\bin\Release\net10.0\FollowerForge.SkyrimRecords.dll
   FollowerForge.BuildPipeline -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\BuildPipeline\bin\Release\net10.0\FollowerForge.BuildPipeline.dll
   FollowerForge.Ui -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Ui\bin\Release\net10.0\win-x64\FollowerForge.dll
   FollowerForge.Ui -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\dist\FollowerForge 3.7.11\
 -- cli
   Determining projects to restore...
-  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Cli\FollowerForge.Cli.csproj (in 329 ms).
+  Restored Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Cli\FollowerForge.Cli.csproj (in 284 ms).
   7 of 8 projects are up-to-date for restore.
   FollowerForge.Domain -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Domain\bin\Release\net10.0\FollowerForge.Domain.dll
   FollowerForge.ModManagers -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\ModManagers\bin\Release\net10.0\FollowerForge.ModManagers.dll
@@ -39,12 +39,13 @@ Passed!  - Failed:     0, Passed:   615, Skipped:     0, Total:   615, Duration:
   FollowerForge.Cli -> Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\dist\FollowerForge 3.7.11\cli\
 -- boot check
    window stayed up
+-- zip attempt 1 failed, retrying
 
 PUBLISH SUCCEEDED
   folder : Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\dist\FollowerForge 3.7.11
-  zip    : Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\dist\FollowerForge-3.7.11-win-x64.zip  ( MB)
+  zip    : Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\dist\FollowerForge-3.7.11-win-x64.zip  (94.8 MB)
   entries: 5  (verified: FollowerForge.exe, cli\FollowerForge.Cli.exe, README.md, CHANGELOG.txt)
-  size   : 99417448 bytes
-  sha256 : 579b4466b3001e7d16fbf4890af5130c6b715f1b7d511d538c1fa3789da454fa
+  size   : 99417515 bytes
+  sha256 : 69ecd36c115fe51269554af0ec86c73e6551971808da13f1969e304e2d50c127
   exe    : FollowerForge.exe  (self-contained - no .NET needed)
 PUBLISH_EXIT=0

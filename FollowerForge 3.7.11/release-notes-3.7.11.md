@@ -1,4 +1,4 @@
-# FollowerForge 3.7.11
+# FollowerForge 3.7.11 (beta)
 
 Release engineering and one diagnostic, not generation changes.
 

@@ -100,7 +100,7 @@ FollowerForge does not grant redistribution rights for third-party assets. Check
 
 ## Honest status
 
-Verified in this tree:
+This is a beta build. Verified in this tree:
 
 - `FollowerForge 3.7.11/` is the ship snapshot (`CURRENT.txt`)
 - 615 Release tests pass locally on the 3.7.11 tree; the last released CI run is 546 on `67a840a` (snapshot `FollowerForge 3.7.6`). CodeQL succeeded on that commit
@@ -111,6 +111,7 @@ Verified in this tree:
 - A head part whose plugin is missing, or which that plugin no longer holds, is named instead of being skipped
 - The face tint is written to shader slot 6 and nowhere else; a CharGen path in another slot is never rewritten
 - The ship gate rejects a FormID naming an undeclared master, a record that runs past its group, bytes after the last group, and a group that does not end exactly at its declared size
+- A beta has no in-game acceptance behind it: nobody has recruited a follower built by this tree
 - A FaceGen result says complete, partial, needs manual repair or failed. A copied mesh with an unrewritten tint path is partial, not success, and every surface reads the same state
 - A short head texture list is grown to nine slots and the tint is written on slot 6. An existing specular map on slot 7 is left alone
 - Head meshes that live only under CharGen `Exported` or `Presets` are listed
