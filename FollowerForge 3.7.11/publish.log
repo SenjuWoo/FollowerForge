@@ -1,0 +1,17 @@
+== FollowerForge 3.7.11 - publish ==
+Icon written: Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Ui\Assets\appicon.ico (9286 bytes, sizes: 256, 128, 64, 48, 32, 16)
+-- tests
+Test run for Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 3.7.11\src\Tests\bin\Release\net10.0\FollowerForge.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.65]     FollowerForge.Tests.Phase6Tests.NormalFollower_HasNoDuplicateEditorIds [FAIL]
+
+Failed!  - Failed:     1, Passed:   614, Skipped:     0, Total:   615, Duration: 1 s - FollowerForge.Tests.dll (net10.0)
+tests failed (1)
+At Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main\FollowerForge 
+3.7.11\Publish-FollowerForge.ps1:43 char:32
++     if ($LASTEXITCODE -ne 0) { throw "tests failed ($LASTEXITCODE)" }
++                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (tests failed (1):String) [], RuntimeException
+    + FullyQualifiedErrorId : tests failed (1)
+ 
+PUBLISH_EXIT=1

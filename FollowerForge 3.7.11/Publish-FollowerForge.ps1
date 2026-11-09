@@ -90,11 +90,28 @@ Start-Sleep -Seconds 12
 $alive = Get-Process -Id $p.Id -ErrorAction SilentlyContinue
 if (-not $alive) { throw 'published exe exited immediately' }
 $alive | Stop-Process -Force
+# Stop-Process returns before the OS drops the file handle, and Compress-Archive then fails with
+# PermissionDenied on the exe. Wait for the process to actually disappear.
+Wait-Process -Id $p.Id -Timeout 20 -ErrorAction SilentlyContinue
+Start-Sleep -Seconds 1
 Write-Host '   window stayed up' -ForegroundColor Green
 
 if (Test-Path $zip) { Remove-Item $zip -Force }
-Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip
-$mb = [math]::Round((Get-Item $zip).Length / 1MB, 1)
+# Retry the archive: antivirus and the shell's own handle release can still hold the exe briefly.
+$attempt = 0
+while ($true) {
+    $attempt++
+    try {
+        Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip -ErrorAction Stop
+        break
+    }
+    catch {
+        if ($attempt -ge 4) { throw "could not write $zip after $attempt attempts: $($_.Exception.Message)" }
+        Write-Host "-- zip attempt $attempt failed, retrying" -ForegroundColor DarkYellow
+        if (Test-Path $zip) { Remove-Item $zip -Force -ErrorAction SilentlyContinue }
+        Start-Sleep -Seconds 2
+    }
+}
 
 # Reopen the archive and prove it carries what the release notes claim. A Compress-Archive that
 # half-writes, or a stage missing a file, must fail here rather than in the changelog.

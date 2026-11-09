@@ -14,17 +14,19 @@ public sealed class LocationTests : IDisposable
     private static readonly ILogger Log = new LoggerConfiguration().CreateLogger();
     private readonly string _ws = Path.Combine(Path.GetTempPath(), "ff_loc_" + Guid.NewGuid().ToString("N"));
 
-    private static EnvironmentSnapshot FakeEnv() => new()
+    // Per-instance fake roots. A shared temp path let parallel test classes write the same fake game
+    // folder, which failed one test at random and made the publish gate unreliable.
+    private EnvironmentSnapshot FakeEnv() => new()
     {
         Manager = ModManagerKind.Vortex,
         ManagerLabel = "Vortex",
-        GameRootPath = Path.Combine(Path.GetTempPath(), "ff_fake_game"),
-        GameDataPath = Path.Combine(Path.GetTempPath(), "ff_fake_game", "Data"),
-        PluginDataPath = Path.Combine(Path.GetTempPath(), "ff_fake_game", "Data"),
-        InstancePath = Path.Combine(Path.GetTempPath(), "ff_fake_vortex"),
-        StagingPath = Path.Combine(Path.GetTempPath(), "ff_fake_vortex", "mods"),
-        ProfilesPath = Path.Combine(Path.GetTempPath(), "ff_fake_vortex", "profiles"),
-        RuntimePluginsTxtPath = Path.Combine(Path.GetTempPath(), "ff_fake_runtime.txt"),
+        GameRootPath = Path.Combine(_ws, "game"),
+        GameDataPath = Path.Combine(_ws, "game", "Data"),
+        PluginDataPath = Path.Combine(_ws, "game", "Data"),
+        InstancePath = Path.Combine(_ws, "vortex"),
+        StagingPath = Path.Combine(_ws, "vortex", "mods"),
+        ProfilesPath = Path.Combine(_ws, "vortex", "profiles"),
+        RuntimePluginsTxtPath = Path.Combine(_ws, "runtime.txt"),
     };
 
     private static SpawnLocation BanneredMare() => new()
