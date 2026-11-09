@@ -61,3 +61,9 @@ ChatGPT Image*.png
 NEXUS-UPLOAD/*.zip
 FollowerForge 3.2.3/
 .cbmignore
+# --- build output and local release artifacts (regenerable) ---
+dist/
+publish.log
+artifacts/
+*.zip
+!docs/**/*.zip
