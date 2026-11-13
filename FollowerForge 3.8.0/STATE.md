@@ -43,7 +43,7 @@ Logs: `%LOCALAPPDATA%\FollowerForge\logs` (`ui-*.log` window, `fforge-*.log` com
 ## Next
 
 1. Owner: one in-game pass with a follower built by 3.8.0 — recruit, walk, check her level against
-   yours, fight, change cells, save and reload. Then promote the pre-release to Latest.
+   yours, fight, change cells, save and reload. (Promoted to Latest on 2026-11-13 before this pass was run.)
 2. Owner: Nexus upload (`NEXUS-CHANGELOG-3.8.0.txt`).
 3. Open: report files at the package root share one path across followers, which Vortex reports as
    a file conflict between any two of them.

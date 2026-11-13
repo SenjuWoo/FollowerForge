@@ -1,6 +1,6 @@
-# FollowerForge 3.8.0 (beta) — Nexus upload
+# FollowerForge 3.8.0 — Nexus upload
 
-1. File: `artifacts\FollowerForge-3.8.0-win-x64.zip` (also attached to the GitHub pre-release)
+1. File: `artifacts\FollowerForge-3.8.0-win-x64.zip` (also attached to the GitHub release)
 2. Size: 99455604
 3. SHA-256: `1C52BDA2AE7F7B7F0B487E1961D2A4F46A168853100A8218F093E3A6BB458690`
 4. Version: 3.8.0 | Category: Utilities

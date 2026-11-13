@@ -1,4 +1,4 @@
-FollowerForge 3.8.0 — BETA candidate. GitHub Latest is v3.7.6; v3.7.11-beta and v3.8.0-beta are pre-releases.
+FollowerForge 3.8.0 — released 2026-11-13 as GitHub Latest (tag v3.8.0-beta, commit 9e20344). Promoted by the owner without an in-game pass.
 Snapshot: FollowerForge 3.8.0 (654 Release tests).
 Fixes: every follower was written with speed multiplier 0, height 0 and a 16.96x level multiplier; an outdoor follower blanked her worldspace record; Enemy-to-Ally hostile form never attacked and had no face; evolution stacked its bonuses; one damaged plugin stopped the whole index; MO2 voice scan missed every mod; the window wrote no log. New: Open follower reloads a built follower.
 Not verified: anything in game. Real RaceMenu export conversion, hair placement, tint, recruitment, movement, cell transitions, save/reload. This machine has presets but no exported head NIF/DDS.
