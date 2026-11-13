@@ -1,19 +1,12 @@
-# FollowerForge 3.7.0 — Nexus upload
+# FollowerForge 3.8.0 (beta) — Nexus upload
 
-1. File: `NEXUS-UPLOAD\FollowerForge-3.7.0-win-x64.zip`
-2. Size: 99252778
-3. SHA-256: `5B8FF57D365057C304FA1FFBE99F40C0A8332039DA8646EA4574FD4AFB1D0FA1`
-4. Version: 3.7.0 | Category: Utilities
-5. Changelog: `NEXUS-UPLOAD\NEXUS-CHANGELOG-3.7.0.txt` (plain text, paste as-is)
-6. GitHub release (for reference): https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.7.0
+1. File: `artifacts\FollowerForge-3.8.0-win-x64.zip` (also attached to the GitHub pre-release)
+2. Size: 99455604
+3. SHA-256: `1C52BDA2AE7F7B7F0B487E1961D2A4F46A168853100A8218F093E3A6BB458690`
+4. Version: 3.8.0 | Category: Utilities
+5. Changelog: `FollowerForge 3.8.0\NEXUS-CHANGELOG-3.8.0.txt` (plain text, paste as-is)
+6. GitHub: https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.8.0-beta
 
-The Nexus page is still on 3.6.0 (updated 2026-08-19). **3.6.1 was never uploaded there**, so
-3.7.0 is the first Nexus release carrying the "you can unselect things" fixes as well as the
-3.7.0 work. The changelog text covers both. The page description does not need changing.
-
-Same-hash check before uploading, so the file that ships is the file that was tested:
-
-```powershell
-(Get-FileHash 'NEXUS-UPLOAD\FollowerForge-3.7.0-win-x64.zip' -Algorithm SHA256).Hash
-# expect 5B8FF57D365057C304FA1FFBE99F40C0A8332039DA8646EA4574FD4AFB1D0FA1
-```
+The Nexus page shows 3.7.4. This upload carries everything from 3.7.5 through 3.8.0; the changelog
+text covers 3.8.0, and `FollowerForge 3.8.0\NEXUS-CHANGELOG-3.7.11-BETA.txt` covers 3.7.5 to 3.7.11.
+Details and the hash check: `NEXUS-RELEASE.md`.

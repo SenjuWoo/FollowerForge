@@ -42,7 +42,17 @@
 
 ## Package
 
-@PACKAGE@
+- `Publish-FollowerForge.ps1 -Version 3.8.0`, run from the committed tree with a clean working copy:
+  exit 0, tests passed, window stayed up for the boot check, archive reopened and its 5 entries
+  verified.
+- `FollowerForge-3.8.0-win-x64.zip`, **99455604 bytes**, SHA-256
+  `1c52bda2ae7f7b7f0b487e1961d2a4f46a168853100a8218f093e3a6bb458690`.
+- `FollowerForge.exe` reports FileVersion `3.8.0.0`, ProductVersion
+  `3.8.0+9e203441dff837f84a86a7fce597f385356f1bca`.
+- The packaged `cli\FollowerForge.Cli.exe` built the sample follower against the real load order
+  and `verify --plugin` passed it; its bytes read `SPEEDMULT=100`, `level=1000`, `NAM6 = 1.0`,
+  `EDID WhiterunWorld`. (Checked on the first packaging run of the same source; the final archive
+  differs only in the commit stamped into the binaries.)
 
 ## NOT RUN
 
