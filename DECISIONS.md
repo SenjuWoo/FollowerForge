@@ -1,5 +1,17 @@
 # FollowerForge decisions
 
+## 2026-11-13
+
+- Version 3.8.0, not 3.7.12: Open follower is a new user-facing feature, and the record fixes change every plugin the app writes.
+- Engine-read NPC fields are set explicitly rather than left to the record library's defaults. Evidence is the game's own data: 5,105 of 5,118 Skyrim.esm NPCs carry speed 100, height above zero, NAM5 255.
+- The worldspace override is copied from the plugin that DEFINES the worldspace, the same rule already used for cells, so the master list stays minimal. The offset table is dropped because it indexes the source file.
+- A worldspace that cannot be read is a warning, not an error, matching the existing rule for cells. In practice the missing-master check fails that build first.
+- The evolution script remembers starting values in script variables instead of re-reading them. This is correct whether or not `SetActorValue` moves the base value, which could not be confirmed in game here.
+- The Enemy-to-Ally quest is Run Once only in that mode; the plain random-spawn quest is unchanged.
+- A plugin that cannot be read is skipped and reported. If probing finds no culprit the original error is rethrown rather than hidden.
+- Open follower never ticks the redistribution declaration for the user and drops choices that are no longer installed, naming them.
+- Released as a GitHub pre-release, following the 3.7.11 beta decision: no in-game run exists.
+
 ## 2026-10-06 - 3.7.4: short texture lists, and the Whiterun drop
 
 - nifly `SetTextureSlot` does not grow the texture vector. A list shorter than slot 6 drops the write. 3.7.4 resizes to nine slots (the SE head count), then writes slot 6. New slots are empty. An existing slot 7 specular is not rewritten.

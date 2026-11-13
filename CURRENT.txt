@@ -1,5 +1,5 @@
-FollowerForge 3.7.11 — BETA candidate. Latest published release is v3.7.6; 3.7.7 through 3.7.11 were never released.
-Snapshot: FollowerForge 3.7.11 (615 Release tests).
-Fixes: publish script closes stray app processes and verifies the archive it wrote; cli verify --plugin gates any plugin on its own bytes; unrestricted-hair warning names the race whose mesh folder the hair came from; build tests serialised so the gate is deterministic.
-Not verified: real RaceMenu export conversion, hair placement, tint, recruitment, cell transitions, save/reload. This machine has presets but no exported head NIF/DDS.
-Details: FollowerForge 3.7.11/VALIDATION.md and STATE.md.
+FollowerForge 3.8.0 — BETA candidate. GitHub Latest is v3.7.6; v3.7.11-beta and v3.8.0-beta are pre-releases.
+Snapshot: FollowerForge 3.8.0 (654 Release tests).
+Fixes: every follower was written with speed multiplier 0, height 0 and a 16.96x level multiplier; an outdoor follower blanked her worldspace record; Enemy-to-Ally hostile form never attacked and had no face; evolution stacked its bonuses; one damaged plugin stopped the whole index; MO2 voice scan missed every mod; the window wrote no log. New: Open follower reloads a built follower.
+Not verified: anything in game. Real RaceMenu export conversion, hair placement, tint, recruitment, movement, cell transitions, save/reload. This machine has presets but no exported head NIF/DDS.
+Details: FollowerForge 3.8.0/VALIDATION.md and STATE.md.

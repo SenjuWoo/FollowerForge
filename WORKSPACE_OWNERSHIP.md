@@ -3,8 +3,8 @@
 - Authoritative project root: `Z:\Backup\!Skyrim\!Ai modding workspace\FollowerForge\FollowerForge-main`
 - Owner: user
 - Git remote: `https://github.com/SenjuWoo/FollowerForge` (this folder is the working tree)
-- Active snapshot: `FollowerForge 3.7.11` — beta candidate, named by `CURRENT.txt`
-- Last published snapshot: `FollowerForge 3.7.6`; 3.7.7 through 3.7.11 were never released
+- Active snapshot: `FollowerForge 3.8.0` — beta candidate, named by `CURRENT.txt`
+- Last full release: `FollowerForge 3.7.6` (GitHub Latest). 3.7.11 and 3.8.0 are GitHub pre-releases; 3.7.7 through 3.7.10 were never released
 - Policy: edit only the snapshot named by `CURRENT.txt`; keep every older snapshot immutable.
 
 The `Follower Forge 3.x.y` / `FollowerForge 3.x.y` folders at this root are the project's

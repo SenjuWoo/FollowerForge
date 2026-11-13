@@ -1,3 +1,23 @@
+# FollowerForge 3.8.0 — what the plugin bytes said
+
+Status: implemented and validated in `FollowerForge 3.8.0`. Parent `FollowerForge 3.7.11` was not
+edited.
+
+- [x] NPC speed multiplier 100, height 1.0, sound level, disposition and NAM5 at vanilla values.
+- [x] Level multiplier written once (1.0 -> 1000), not twice (16960).
+- [x] Outdoor placement carries the worldspace's own record instead of an empty one.
+- [x] Validator errors for the three NPC values; a warning for an unreadable worldspace.
+- [x] Enemy to Ally: aggressive hostile form, FaceGen under her own FormID, Run Once quest.
+- [x] Evolution script reads starting values once; `.pex` recompiled; all four headers scrubbed.
+- [x] Index survives a damaged plugin and names it; MO2 voice scan reads the plugin view.
+- [x] The window writes a log; errors show the real message.
+- [x] Open follower… reloads a built follower into the window.
+- [ ] One in-game acceptance pass (owner): recruit, walk, fight, level check, cell change, reload.
+- [ ] Nexus upload (owner).
+
+Open, not started: report files at the package root (`manifest.json`, `credits.md`, …) share one
+path across every follower, which Vortex reports as a file conflict between any two of them.
+
 # FollowerForge 3.7.7 — race list membership
 
 Status: implemented and validated in `FollowerForge 3.7.7`. Parent `FollowerForge 3.7.6` was not

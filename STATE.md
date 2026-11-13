@@ -1,6 +1,12 @@
 # FollowerForge state
 
-Active snapshot: `FollowerForge 3.7.7` (candidate; parent `FollowerForge 3.7.6` is the latest published release, tag v3.7.6 on 67a840a). 3.7.7 corrects the head-part audit: `ValidRaces` is a FormList of races, not a race, so the audit compares membership now; the list is read from the plugin its FormID names; unreadable lists report UNKNOWN, and vampires are judged against their own race. 558 Release tests; CI green on `be133fb` (xunit, Analyze csharp, Analyze actions). Not released, not uploaded — awaiting owner approval. See that folder's STATE.md.
+Active snapshot: `FollowerForge 3.8.0` (beta candidate; parent `FollowerForge 3.7.11`). GitHub Latest is
+v3.7.6; v3.7.11-beta and v3.8.0-beta are pre-releases. 3.8.0 fixes what an audit of the written plugin
+bytes found — speed multiplier 0, height 0, a 16.96x level multiplier and an empty worldspace override in
+every follower — plus Enemy to Ally, the evolution script, a catalogue index that one damaged plugin could
+stop, the MO2 voice scan and the window's missing log, and adds Open follower. 654 Release tests. Nothing
+was checked in game. Current detail lives in that folder's STATE.md and VALIDATION.md; everything below
+this line is history.
 
 # FollowerForge state
 

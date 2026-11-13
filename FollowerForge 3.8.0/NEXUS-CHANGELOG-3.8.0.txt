@@ -1,0 +1,44 @@
+FollowerForge 3.8.0 (beta)
+
+Rebuild your followers with this version. A plugin that is already built keeps its old values.
+
+FIXED IN EVERY FOLLOWER
+
+- Speed multiplier was 0. This is the Creation Kit's "Speed multiplier is zero" message, and in
+  game a follower who runs on the spot unless a follower framework resets the value. It is now 100.
+- Height was 0. It is now 1.0.
+- "Scale with the player" wrote a level multiplier of 16.96 instead of 1.0, so she was about
+  seventeen times your level. It is now exactly what you choose.
+- A follower placed outdoors overwrote her worldspace (Whiterun, Tamriel, a mod's worldspace) with
+  an empty record. Her plugin now carries the real one.
+- The build refuses to finish if any of the first three is wrong again.
+
+FIXED IN OPTIONAL FEATURES
+
+- Enemy to Ally: her hostile form never attacked, had a default face instead of hers, and could be
+  placed twice. All three fixed.
+- Evolution: each phase was added on top of the last, so she gained more than the numbers you set.
+
+FIXED IN THE APP
+
+- "Could not read your setup ... Exception has been thrown by the target of invocation" with every
+  list empty. One damaged plugin no longer stops everything: it is skipped, and the status line
+  names it.
+- Mod Organizer 2: the voice and marriage scan only looked in the game's own Data folder and
+  missed every mod. It now reads your mods.
+- The app now writes a log: %LOCALAPPDATA%\FollowerForge\logs\ui-*.log
+- The scripts shipped inside follower packages no longer carry the name of the PC they were
+  compiled on.
+
+NEW
+
+- Open follower... (left sidebar, or Ctrl+K). Choose the rebuild-profile.json inside a follower
+  you built before and every page is filled in again, so you can change one thing and rebuild
+  instead of starting over. Anything from a mod you no longer have is left out and listed.
+
+NOT CHECKED IN GAME
+
+Every fix above was verified by reading the plugin the app writes, against the base game's own
+records. Nobody has recruited a follower built by this version yet, and there is still no exported
+RaceMenu head on the build machine, so face conversion, hair placement and tint are unverified as
+before. GitHub issue #2 (hair below the head) is still open.

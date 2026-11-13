@@ -7,7 +7,7 @@
 | **Account** | SenjuWoo (the old ShugokiFable URL redirects here) |
 | **Default branch** | `main` |
 | **Owner work root** | workspace `FollowerForge` (versioned snapshots under this folder) |
-| **Current ship tree** | `FollowerForge 3.7.4/` (see `CURRENT.txt`) |
+| **Current ship tree** | the snapshot named in `CURRENT.txt` (now `FollowerForge 3.8.0/`) |
 | **This folder** | canonical publish home for this app |
 
 ## What to push
@@ -27,7 +27,7 @@ Publish FollowerForge **CURRENT** snapshot: `src/`, `docs/`, build/publish scrip
 ```powershell
 # from a clean staging copy of CURRENT (or this folder if it is the ship root)
 git remote -v   # https://github.com/SenjuWoo/FollowerForge.git
-git add -- "FollowerForge 3.7.4" CURRENT.txt STATE.md
+git add -- "FollowerForge 3.8.0" CURRENT.txt STATE.md CHANGELOG.txt README.md
 git commit -m "Describe the change"
 git push origin main
 ```
