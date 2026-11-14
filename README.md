@@ -31,7 +31,7 @@
   <img src="docs/images/app-hero.png" alt="FollowerForge Studio: seven categories, next recommended action, and follower dossier" width="100%">
 </p>
 
-<p align="center"><sub>Studio workspace, Obsidian Gold. Screenshot from the 3.7.0 tree (Studio shipped in 3.6.0).</sub></p>
+<p align="center"><sub>Studio workspace, Obsidian Gold, with the Your followers card. Rendered from the 3.9.0 tree.</sub></p>
 
 ## Quick start
 
@@ -43,10 +43,22 @@ Download the Windows x64 zip from the [latest GitHub release](https://github.com
 4. Press **Build follower**.
 5. Install the **generated** follower package with Vortex or MO2, enable its plugin, and deploy.
 
-To change a follower you already built, click **Open follower…** in the sidebar and choose the
-`rebuild-profile.json` in her folder. Every page is filled in again; change what you want and build.
-A follower built with 3.7.11 or earlier should be rebuilt once: those plugins carry a speed
-multiplier of 0, a height of 0 and a level multiplier of 16.96.
+### Your followers
+
+The Studio page's **Your followers** card works on everything you have already built:
+
+- **Open a follower…** lists every follower you built and every saved draft. Pick one, change what
+  you want, build again. **Save draft…** in the sidebar saves without building.
+- **Rebuild followers…** rebuilds them with the current version, each into the folder it is in
+  now. Followers built before 3.8.0 carry a speed multiplier of 0, a height of 0 and a 16.96x level
+  multiplier; the window tells you how many of yours do when it starts.
+- **Make a follower pack…** puts several followers into one zip that installs as a single mod.
+- **Repair a plugin…** fixes a follower plugin an older FollowerForge built when her profile is
+  gone, for example one someone else shared. It writes a fixed copy and leaves the original alone.
+
+A follower package installs its plugin and FaceGen files where the game reads them, and its notes
+(build report, credits, test commands, rebuild profile) under `Data\FollowerForge\<plugin>\`, so
+two followers never conflict.
 
 RaceMenu **Export Head** NIF/DDS files are required for a custom face. A slider-only preset without usable exported head geometry may not reproduce the face on an NPC.
 
@@ -62,7 +74,7 @@ Empty path boxes keep automatic detection. Game `Data` and the Skyrim saves fold
 
 Do not point FollowerForge at a houseCARL Vortex shim unless you intentionally override the safety gate.
 
-Detailed MO2 notes: [`FollowerForge 3.8.0/docs/MO2.md`](FollowerForge%203.8.0/docs/MO2.md).
+Detailed MO2 notes: [`FollowerForge 3.9.0/docs/MO2.md`](FollowerForge%203.9.0/docs/MO2.md).
 
 If something goes wrong, the window writes `%LOCALAPPDATA%\FollowerForge\logs\ui-*.log` and the command line writes `fforge-*.log` beside it. A plugin the index could not read is skipped and named in the status line.
 
@@ -92,6 +104,10 @@ If something goes wrong, the window writes `%LOCALAPPDATA%\FollowerForge\logs\ui
 | `cli\FollowerForge.Cli.exe races` | Races she can be built as |
 | `cli\FollowerForge.Cli.exe races --creatures` | Races the transform picker offers |
 | `cli\FollowerForge.Cli.exe build --profile FILE` | Build from a profile, including a built follower's `rebuild-profile.json` |
+| `cli\FollowerForge.Cli.exe list` | Followers you have built, and which need a rebuild |
+| `cli\FollowerForge.Cli.exe rebuild [--only-needed] [--zip]` | Rebuild them in place with this version |
+| `cli\FollowerForge.Cli.exe pack --out FILE.zip --builds DIR` | One installable zip from several followers |
+| `cli\FollowerForge.Cli.exe repair --plugin FILE` | Fix a plugin an older version built, without its profile |
 | `cli\FollowerForge.Cli.exe verify --plugin FILE` | Run the ship gate on any plugin |
 | `cli\FollowerForge.Cli.exe` | List every command |
 
@@ -110,10 +126,13 @@ FollowerForge does not grant redistribution rights for third-party assets. Check
 
 ## Honest status
 
-This is a beta build. Verified in this tree:
+Verified in this tree:
 
-- `FollowerForge 3.8.0/` is the ship snapshot (`CURRENT.txt`)
-- 654 Release tests pass locally on the 3.8.0 tree
+- `FollowerForge 3.9.0/` is the ship snapshot (`CURRENT.txt`)
+- 674 Release tests pass locally on the 3.9.0 tree, with 0 build warnings
+- Two followers share no file path; only the plugin sits at a package's root
+- A follower built by 3.7.11 was found, marked as needing a rebuild, rebuilt in place and repaired from its plugin alone, against a real load order; the repaired plugin passes the ship gate and its original was left untouched
+- Two followers were packed into one zip with no shared path
 - A built NPC carries speed multiplier 100, height 1.0 and the level multiplier that was asked for, read back from the written bytes. The build fails if it does not
 - An outdoor follower's plugin carries her worldspace's own record, read from the plugin that defines it, not an empty one
 - A damaged plugin is skipped and named; the rest of the load order is still indexed
@@ -125,7 +144,6 @@ This is a beta build. Verified in this tree:
 - A head part whose plugin is missing, or which that plugin no longer holds, is named instead of being skipped
 - The face tint is written to shader slot 6 and nowhere else; a CharGen path in another slot is never rewritten
 - The ship gate rejects a FormID naming an undeclared master, a record that runs past its group, bytes after the last group, and a group that does not end exactly at its declared size
-- A beta has no in-game acceptance behind it: nobody has recruited a follower built by this tree
 - A FaceGen result says complete, partial, needs manual repair or failed. A copied mesh with an unrewritten tint path is partial, not success, and every surface reads the same state
 - A short head texture list is grown to nine slots and the tint is written on slot 6. An existing specular map on slot 7 is left alone
 - Head meshes that live only under CharGen `Exported` or `Presets` are listed
@@ -138,6 +156,8 @@ Not claimed:
 - That FollowerForge moves or repairs a head part. It writes the preset's parts as given and says when they cannot fit
 - That a speed multiplier of 0 explains every "she runs on the spot" report. It is what the plugins held, and it is fixed; the reports were not reproduced in game
 - The Enemy to Ally, evolution and transformation scripts in a real session
+- Nobody has recruited a follower built by this tree in game
+- The window's choosers, file pickers and new buttons were rendered headlessly but not clicked by hand
 - A FaceGen conversion that finishes on its own. Nothing here was checked in game, and this machine has no head export to convert
 - A creature transform surviving a real fight. `SetRace()` is engine behaviour this build cannot exercise
 - That a RaceMenu body shape or overlay transfers into the plugin. They do not. The build warns when shaped `bodyMorphs` are present
@@ -146,12 +166,12 @@ Not claimed:
 
 ## Build from source
 
-Ship tree: `FollowerForge 3.8.0\`. Needs the .NET 10 SDK.
+Ship tree: `FollowerForge 3.9.0\`. Needs the .NET 10 SDK.
 
 ```powershell
-cd "FollowerForge 3.8.0"
+cd "FollowerForge 3.9.0"
 .\Build-FollowerForge.ps1
-.\Publish-FollowerForge.ps1 -Version 3.8.0
+.\Publish-FollowerForge.ps1 -Version 3.9.0
 ```
 
 ## Credits
@@ -161,6 +181,14 @@ Skyrim, Vortex, Mod Organizer 2, RaceMenu, and related names belong to their own
 ## License
 
 [MIT](LICENSE)
+
+## Notes in 3.9.0
+
+- **Your followers** on the Studio page: open, rebuild, pack and repair the followers you already built
+- Packages keep their notes in `Data\FollowerForge\<plugin>\`; two followers no longer conflict in Vortex or MO2
+- **Save draft…** saves a follower without building her
+- The window shows its real version
+- Dependencies updated; NuGet updates now actually run
 
 ## Notes in 3.8.0
 

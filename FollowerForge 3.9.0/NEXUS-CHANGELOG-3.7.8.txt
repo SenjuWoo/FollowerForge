@@ -1,0 +1,31 @@
+FollowerForge 3.7.8
+
+A correctness release for what the build reports. The follower it generates is the same as 3.7.7.
+
+WHAT CHANGED
+
+- The face result now says which of four things happened: complete, partial, needs manual repair, or
+  failed. Before, a head mesh copied without a rewritten tint path counted as a success and as a
+  request to open the Creation Kit at the same time, so the build report, the manifest and the
+  warning could each tell you something different. A copied mesh whose tint path was left as
+  exported is now "partial", and only a complete conversion is a success.
+- The Creation Kit handoff report (ck-handoff-report.json) is now inside the follower folder. It
+  used to be written one directory above it and never reached you, while the warning quoted a path
+  that did not exist. Open the follower folder and the report is there.
+- A head part whose plugin is not installed, or which that plugin no longer holds, is now reported.
+  It used to be skipped silently, so a preset pointing at a removed mod produced a clean-looking
+  build. The warning gives the record ID and the slot, and says which of the two situations it is.
+- manifest.json reported a combat style as cloned whenever you asked for a clone, even when the
+  build fell back to referencing an existing style. It now records what the plugin actually holds.
+- The live face test reports NOT RUN when there is no RaceMenu head export to test with, instead of
+  passing without testing anything.
+
+WHAT DID NOT CHANGE
+
+Follower generation, ESPFE output, FormIDs, profiles, Vortex and MO2 indexing, and the FaceGen tint
+writing are unchanged from 3.7.7. Nothing in this release was checked in game: no follower was
+recruited, walked across a cell boundary, or reloaded from a save, and no face was inspected in
+Skyrim. A real RaceMenu Export Head remains the way to check a custom face.
+
+GitHub issue #2 ("hair below the head") is still open. These reports make the next report from a
+reporter decidable; they do not move a mesh or resize hair.

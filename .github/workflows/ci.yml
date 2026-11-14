@@ -36,5 +36,18 @@ jobs:
           Write-Host "Using snapshot: $($dir.Name)"
           "path=$($dir.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
+      - name: Dependabot and CURRENT.txt name this snapshot
+        shell: pwsh
+        run: |
+          $snap = '${{ steps.snap.outputs.path }}'
+          $dependabot = Get-Content .github/dependabot.yml -Raw
+          if ($dependabot -notmatch [regex]::Escape("/$snap/src/")) {
+            throw "dependabot.yml does not point at '$snap'. Update its nuget directories."
+          }
+          $current = Get-Content CURRENT.txt -TotalCount 2 | Out-String
+          if ($current -notmatch [regex]::Escape($snap)) {
+            throw "CURRENT.txt does not name '$snap'."
+          }
+
       - name: dotnet test (restore + build + xunit)
         run: dotnet test "${{ steps.snap.outputs.path }}/src/Tests/FollowerForge.Tests.csproj" -c Release --nologo

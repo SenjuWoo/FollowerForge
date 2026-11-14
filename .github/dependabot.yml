@@ -1,11 +1,23 @@
 version: 2
 
 updates:
+  # The projects live in the active version folder, not at the repository root. A root-only
+  # "directory: /" found no project, so NuGet updates never ran until 3.9.0. CI fails when this
+  # path does not name the newest snapshot, so a version bump cannot leave it behind again.
   - package-ecosystem: nuget
-    directory: /
+    directories:
+      - "/FollowerForge 3.9.0/src/*"
+      - "/FollowerForge 3.9.0/tools/*"
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    groups:
+      avalonia:
+        patterns: ["Avalonia*"]
+      mutagen:
+        patterns: ["Mutagen*"]
+      tests:
+        patterns: ["xunit*", "Microsoft.NET.Test.Sdk", "coverlet*"]
 
   - package-ecosystem: github-actions
     directory: /

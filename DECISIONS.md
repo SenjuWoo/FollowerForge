@@ -1,5 +1,18 @@
 # FollowerForge decisions
 
+## 2026-11-14
+
+- Version 3.9.0: new user-facing tools and a package layout change.
+- Reports move to `FollowerForge\<plugin>\` inside the package. It deploys under Data but is unique per follower and never read by the game. Excluding reports from packages was rejected: `rebuild-profile.json` must travel with a follower for Open and Rebuild to work on a shared one.
+- `RSVexclude.ini` stays at the package root: it is meant for a mod to read, and its expected location cannot be verified here. Packs merge it line by line instead of refusing.
+- Rebuild publishes into the parent of the folder each follower was found in, so an installed mod folder is replaced, not duplicated.
+- Repair never edits the original plugin. In-place editing of a Vortex staging file would break its hardlink, and the original is the user's only copy.
+- Repair changes disposition, sound level and NAM5 only when an NPC carries the whole fresh-record set (speed 0, height 0, disposition 0, NAM5 0xFF00), so an author's deliberate values survive.
+- The level multiplier is repaired only above 10 and only when exactly one two-decimal value explains the stored number.
+- Choosers reuse the command palette rather than adding dialogs: one list to learn, already keyboard-driven.
+- xunit v3 with `xunit.v3.mtp-off`: keeps `dotnet test`, CI and the build scripts on the VSTest route that the .NET 10 SDK still supports without opting in to Microsoft.Testing.Platform.
+- Released as GitHub Latest, following the owner's promotion of 3.8.0 without an in-game pass.
+
 ## 2026-11-13
 
 - Version 3.8.0, not 3.7.12: Open follower is a new user-facing feature, and the record fixes change every plugin the app writes.

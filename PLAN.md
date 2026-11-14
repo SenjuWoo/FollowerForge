@@ -1,3 +1,19 @@
+# FollowerForge 3.9.0 — your followers in one place
+
+Status: implemented and validated in `FollowerForge 3.9.0`. Parent `FollowerForge 3.8.0` was not
+edited.
+
+- [x] Package reports out of the Data root (`FollowerForge\<plugin>\`); no two followers share a path.
+- [x] Follower library; Open follower lists built followers and drafts.
+- [x] Rebuild in place (window + CLI `list`/`rebuild`), with a startup notice for pre-3.8.0 builds.
+- [x] Follower packs (window + CLI `pack`).
+- [x] Profile-free repair of pre-3.8.0 plugins (window + CLI `repair`).
+- [x] Save draft.
+- [x] Real version in the header and manifests.
+- [x] Packages updated; xunit v3; 0 warnings; Dependabot repaired and guarded by CI.
+- [ ] One in-game acceptance pass (owner).
+- [ ] Nexus upload (owner).
+
 # FollowerForge 3.8.0 — what the plugin bytes said
 
 Status: implemented and validated in `FollowerForge 3.8.0`. Parent `FollowerForge 3.7.11` was not

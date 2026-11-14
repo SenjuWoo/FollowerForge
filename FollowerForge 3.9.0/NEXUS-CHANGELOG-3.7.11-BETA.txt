@@ -1,0 +1,87 @@
+FollowerForge 3.7.11 (BETA)
+
+This is a beta. The generator and its plugin checks are covered by 615 automated tests, and the
+download verifies itself when it is packaged. But no follower built by this version has been looked
+at in Skyrim yet, and the machine it was built on has no exported RaceMenu head - so the custom-face
+path has never converted a real export. Please test on a disposable character and keep a backup save.
+
+The follower package format is unchanged: an ESPFE plus the files it needs, installed with Vortex or
+MO2 like any other follower. FollowerForge itself is still not a mod - do not install it into Skyrim
+Data or into a mod manager.
+
+====================================================================
+NEW SINCE 3.7.4
+====================================================================
+
+Faces and hair
+
+- Every build now lists the head parts it writes: slot, FormID and EditorID. If a build writes a
+  hair you did not expect, the log says which record it came from.
+- A head part restricted to another race is reported, with the race list and the races inside it.
+  This is the fix for a whole class of "why is her hair wrong" reports: the game silently drops a
+  part that does not fit her race.
+- A hair with no race restriction at all is reported too, and the warning now names the race the
+  hair mesh was built for when the path says so. A custom-race hair applied to a Nord is the
+  mechanism behind "hair below the head" - the warning tells you which race that hair belongs to.
+- Two head parts competing for one slot, or no hair part at all, are flagged.
+- Vampires are audited against the vampire race they actually carry instead of being skipped.
+- If the race list or the head-part record cannot be read, the build says so instead of guessing.
+  That includes a head part whose plugin is missing, or which the plugin no longer contains: it is
+  named with its FormID and slot rather than silently skipped.
+
+Custom faces (RaceMenu Export Head)
+
+- The face result now reports one of four states: complete, partial, needs manual repair, or failed.
+  Before, a head mesh copied without a rewritten tint path counted as a success and as a request to
+  open the Creation Kit at the same time, so different parts of the report disagreed.
+- The face tint is only ever written to the tint shader slot. It used to be possible for a texture
+  that merely lived in the same CharGen folder - a diffuse or normal map - to be overwritten with a
+  tint path. That produced a broken face from the step meant to prevent one.
+- The Creation Kit handoff report (ck-handoff-report.json) is now inside the follower folder, where
+  you can actually find it. It used to be written beside the build folder and never shipped.
+- A partial conversion is listed in the asset inventory and labelled incomplete, so the manifest and
+  the inventory agree instead of contradicting each other.
+
+Placement
+
+- A follower built without choosing a location now stands on the Whiterun plaza. Previously, a
+  profile that named the Whiterun cell but gave no coordinates wrote 0,0,0 - the corner of the map,
+  which is consistent with the "she runs on the spot" and "she is gone after a door" reports.
+- Coordinates you set are still used exactly as given.
+
+Plugin checks
+
+- The plugin is gated on its own bytes: header 1.71, record version 44, the light (ESL) flag, master
+  references, group boundaries, record padding and trailing data. Two of these checks are new since
+  3.7.4 and reject files that used to pass.
+- New command: FollowerForge.Cli.exe verify --plugin FILE runs that gate on any plugin, including one
+  taken out of a finished follower package.
+
+Packaging
+
+- The build script now closes stray copies of the app, reopens the archive it wrote, checks that the
+  expected files are inside and not empty, and prints the size and SHA-256. A locked executable used
+  to make a failed archive look successful.
+
+====================================================================
+KNOWN LIMITATIONS
+====================================================================
+
+- Nothing in this build has been tested in game. Hair placement, face tint, eyes and brows,
+  recruitment, dismissal, cell transitions, save and reload are all unverified.
+- The custom-face path has not converted a real RaceMenu export. If your export does not convert,
+  the build now tells you which step failed and what to do about it.
+- A warning describes a problem; it does not fix one. If a preset uses hair built for another race,
+  build the follower as that race or use a preset made for yours.
+- GitHub issue #2 ("hair below the head") remains open. The diagnostics identify the cause in a
+  build; they do not move a mesh.
+- A RaceMenu body shape or overlay still does not transfer into the plugin. The build warns when a
+  preset carries one.
+
+====================================================================
+UPGRADING FROM 3.7.4
+====================================================================
+
+Replace the whole application folder with this one. Your saved settings and follower profiles live
+in %LOCALAPPDATA%\FollowerForge and are not touched. Rebuild any follower you want the new checks
+and warnings for - an already-built plugin keeps the coordinates and head parts it was built with.

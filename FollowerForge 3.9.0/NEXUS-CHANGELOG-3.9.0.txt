@@ -1,0 +1,36 @@
+FollowerForge 3.9.0
+
+Everything you already built, in one place, and follower packages that no longer clash.
+
+NEW
+
+- Your followers (Studio page). Open a follower... lists every follower you have built and every
+  saved draft, newest first. Pick one, change what you like, build again.
+- Rebuild followers... rebuilds the followers you already built with this version, each into the
+  folder it is in now. Every follower built before 3.8.0 has a speed multiplier of 0 (the "runs on
+  the spot" and "Speed multiplier is zero" reports), a height of 0 and a level about seventeen times
+  yours. The app tells you how many of yours are affected when it starts.
+- Make a follower pack... puts several followers into one zip that installs as a single mod.
+- Repair a plugin... fixes a follower plugin made by an older FollowerForge when you do not have its
+  profile, for example one someone else shared. It writes a fixed copy and never changes the original.
+- Save draft... saves a follower without building her.
+
+FIXED
+
+- Every follower package put its notes (manifest.json, credits.md, rebuild-profile.json, the build
+  report and more) straight into the root of Data, with the same names for every follower. Vortex
+  and MO2 reported any two followers as conflicting. Notes now install to
+  Data\FollowerForge\<plugin name>\, so followers never conflict.
+- The window showed "Creator Studio 3.6" whatever the version. It now shows the real one.
+- The release zip stored its paths with backslashes, which some extractors warn about.
+
+UPDATED
+
+- Avalonia 12.1.6, Mutagen 0.54.4 and current SQLite and drawing libraries.
+
+NOT CHECKED IN GAME
+
+Everything above was verified by building, rebuilding, packing and repairing followers against a
+real load order and reading back the files. Nobody has recruited a follower built by this version
+yet. Face conversion, hair placement and tint are unverified as before; GitHub issue #2 (hair below
+the head) is still open.

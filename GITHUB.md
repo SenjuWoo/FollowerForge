@@ -19,7 +19,8 @@ Publish FollowerForge **CURRENT** snapshot: `src/`, `docs/`, build/publish scrip
 ## Agent update checklist
 
 1. Edit **only** under this owner root (no cross-agent copies).
-2. If versioned: bump via `skyrim-versioned-workspace`; update `CURRENT.txt` / `CHANGELOG.txt`.
+2. If versioned: bump via `skyrim-versioned-workspace`; update `CURRENT.txt` / `CHANGELOG.txt`, and the two
+   snapshot paths in `.github/dependabot.yml` (CI fails until they name the newest snapshot).
 3. Stage the **CURRENT** ship tree (or paths listed above).
 4. **Exclude:** secrets (`GPT_SECRET_KEY.txt`, `.env`), `bin/`, `obj/`, `build/`, `extern/` (CommonLibSSE), game masters (`Skyrim.esm` etc.), promo noise if not part of ship.
 5. Commit on `main` and push:
@@ -27,7 +28,7 @@ Publish FollowerForge **CURRENT** snapshot: `src/`, `docs/`, build/publish scrip
 ```powershell
 # from a clean staging copy of CURRENT (or this folder if it is the ship root)
 git remote -v   # https://github.com/SenjuWoo/FollowerForge.git
-git add -- "FollowerForge 3.8.0" CURRENT.txt STATE.md CHANGELOG.txt README.md
+git add -- "FollowerForge 3.9.0" .github/dependabot.yml CURRENT.txt STATE.md CHANGELOG.txt README.md
 git commit -m "Describe the change"
 git push origin main
 ```

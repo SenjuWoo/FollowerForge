@@ -1,0 +1,10 @@
+FollowerForge 3.7.6 — She stands where she was always meant to
+
+Hotfix. No new features. Followers you already built with an earlier version keep their old placement until you build them again.
+
+Fixed
+- **A follower built from the default profile landed at the world origin.** With no location picked, the tool names the Whiterun cell and no coordinates, and those zeros were written to the placed reference as given. The result is the far corner of the map: she is not where you arrive, and a sandbox package with nowhere to walk looks like running on the spot. A named Whiterun cell with no coordinates now means the plaza in front of the Gildergreen. Coordinates you set yourself are still used exactly as written.
+- **The race warning fired on the correct race.** A custom race mod ships the mortal race plus its vampire and climate variants, and they share one head. 3.7.5 compared whole record IDs and treated those variants as a different race, so building a follower on the preset's own race still produced a warning. Races from the same plugin are now treated as one family. A head part from a different plugin still warns.
+- **The README inside the download said 3.7.4.** It now matches the release.
+
+Verified with automated tests and with real builds whose output plugins were parsed directly: the placed reference now carries the plaza coordinates, the matching race produces no warning, and a mismatched race still produces both warnings. In-game appearance was not checked.

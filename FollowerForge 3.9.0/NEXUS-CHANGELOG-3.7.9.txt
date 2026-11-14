@@ -1,0 +1,29 @@
+FollowerForge 3.7.9
+
+Three correctness fixes. Nothing about how a follower is generated changed.
+
+WHAT CHANGED
+
+- The face tint is written to one slot. The tool used to scan every texture slot on the exported
+  head and treat any path under the CharGen folder as the face tint. On a head export whose diffuse,
+  normal or specular map also lives in that folder, that map was overwritten with a tint path and
+  the face broke. Only the tint slot (7th, index 6) is written now, and a slot holding a skin, hair
+  or normal map is left exactly as it was.
+- A partial face is listed as partial. The asset list only named the FaceGen files when the
+  conversion fully succeeded, while the manifest counted a partially converted face as a custom one.
+  Both now agree: the files are listed and marked incomplete.
+- The plugin check is stricter. It now rejects a record that points at a master the plugin does not
+  list, a record whose size runs past the group it sits in, and leftover bytes after the last group.
+  The checks that were already there - header 1.71, record version 44, the ESL flag and the record
+  count - are unchanged.
+
+WHAT DID NOT CHANGE
+
+Follower generation, ESPFE output, FormIDs, profiles, Vortex and MO2 indexing, and the FaceGen tint
+writing are the same as 3.7.8. Nothing in this release was checked in game: no follower was
+recruited, walked across a cell boundary or reloaded from a save, and no face was inspected in
+Skyrim. If you have a RaceMenu Export Head, converting one and looking at her face is still the
+only real check.
+
+GitHub issue #2 ("hair below the head") is still open. These changes make the tool safer around
+faces and stricter about the plugins it produces; they do not move a mesh or resize hair.

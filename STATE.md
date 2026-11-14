@@ -1,12 +1,11 @@
 # FollowerForge state
 
-Active snapshot: `FollowerForge 3.8.0` (parent `FollowerForge 3.7.11`), released as GitHub
-Latest on 2026-11-13 under the tag v3.8.0-beta; v3.7.11-beta stays a pre-release. 3.8.0 fixes what an audit of the written plugin
-bytes found — speed multiplier 0, height 0, a 16.96x level multiplier and an empty worldspace override in
-every follower — plus Enemy to Ally, the evolution script, a catalogue index that one damaged plugin could
-stop, the MO2 voice scan and the window's missing log, and adds Open follower. 654 Release tests. Nothing
-was checked in game. Current detail lives in that folder's STATE.md and VALIDATION.md; everything below
-this line is history.
+Active snapshot: `FollowerForge 3.9.0` (parent `FollowerForge 3.8.0`, which is GitHub Latest under the
+tag v3.8.0-beta). 3.9.0 adds Your followers — open, rebuild in place, pack, repair without a profile —
+and drafts; moves package reports out of the root of Data, which made any two followers conflict in
+Vortex and MO2; updates dependencies and repairs Dependabot. 674 Release tests, 0 warnings. Nothing was
+checked in game. Current detail lives in that folder's STATE.md and VALIDATION.md; everything below this
+line is history.
 
 # FollowerForge state
 

@@ -1,5 +1,20 @@
 # CHANGELOG — FollowerForge
 
+## [3.9.0] - 2026-11-14 - your followers in one place: open, rebuild, pack, repair
+- **Follower packages no longer write into the root of Data.** Every build put `manifest.json`, `credits.md`, `rebuild-profile.json`, `build-report.html`, `test-in-game.txt`, `SHARE-CHECKLIST.txt` and two more reports at the package root, so they installed into the root of Data under the same names for every follower. Vortex and MO2 reported any two followers as conflicting, and only the last one installed kept its rebuild profile. Reports now go in `FollowerForge\<plugin>\`, which is unique per follower. Only the plugin and the game's own folders sit at the root. A test fails if two followers ever share a file path again.
+- **Your followers, in one place.** The Studio page has a new "Your followers" card, and **Open follower…** lists every follower you have built and every saved draft, newest first, with the ones that need a rebuild marked. No more digging three folders deep for a profile file.
+- **Rebuild followers…** rebuilds the followers you already built with this version, each into the folder it is in now: the ones that need it, all of them, or one. Every follower built before 3.8.0 carries a speed multiplier of 0, a height of 0 and a 16.96x level multiplier; the window says how many of yours do when it starts. Command line: `list` and `rebuild [--only-needed] [--zip]`.
+- **Make a follower pack…** puts several followers into one zip that installs as a single mod (asked for on Nexus). Packs from builds older than 3.9.0 move each follower's reports into her own folder instead of letting them overwrite each other. Two followers that would still overwrite each other stop the pack with their names, and nothing is written. Command line: `pack --out FILE.zip --follower DIR ...` or `--builds DIR`.
+- **Repair a plugin…** fixes a follower plugin an older FollowerForge built, without needing her profile: for followers someone else shared, or whose build folder is gone. It fixes speed multiplier, height, the double-scaled level multiplier, the fresh-record disposition/sound/NAM5 values and the empty worldspace override, writes a repaired copy, and never touches the original. Command line: `repair --plugin FILE`.
+- **Save draft…** saves a follower without building her. Open follower lists drafts beside built followers.
+- The header shows the real version. It read "CREATOR STUDIO 3.6", and development builds reported 1.0.0 everywhere. Manifests now record the version that wrote them.
+- **Dependabot never updated a NuGet package.** Its config pointed at the repository root, where no project lives; it only ever opened GitHub Actions updates. It now points at the active version folder, and CI fails if a version bump leaves it (or `CURRENT.txt`) behind.
+- Updated: Avalonia 12.1.6, Mutagen 0.54.4, Microsoft.Data.Sqlite 10.0.15, System.Drawing.Common 10.0.15, SQLitePCLRaw 2.1.14. The test suite moved from the retired xunit 2 to xunit v3; the build has 0 warnings.
+- The release zip stores paths with forward slashes. Windows PowerShell 5.1's `Compress-Archive` wrote `cli\FollowerForge.Cli.exe`, which the zip format does not allow.
+- The share checklist pointed at `permissions-declaration.md`; the file is `PERMISSIONS.md`.
+- Tests: 654 -> 674.
+- Not checked in game.
+
 ## [3.8.0] - 2026-11-13 - followers that can walk, and a follower you can reopen
 - **Every follower was written with a speed multiplier of 0.** The compiler never set it and a new record starts at zero. That is the Creation Kit's "Speed multiplier is zero" refusal, and in game it is a follower who runs on the spot unless a follower framework overwrites the value. It is now 100. Measured on Skyrim.esm: 5,105 of 5,118 NPCs carry 100 and none carries 0.
 - **Every follower was written with a height of 0.** Now 1.0, with sound level Normal, disposition 35 and NAM5 255, matching the same 5,105 vanilla NPCs.

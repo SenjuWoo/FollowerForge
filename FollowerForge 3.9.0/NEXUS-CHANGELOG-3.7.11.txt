@@ -1,0 +1,29 @@
+FollowerForge 3.7.11
+
+Release-engineering fixes and one clearer warning. How a follower is generated is unchanged from
+3.7.10.
+
+WHAT CHANGED
+
+- The packaging step now proves itself. It closes any running copy of the app first, then reopens
+  the archive it just wrote and checks that the executable, the command-line tool, the README and
+  the changelog are all inside and not empty. It prints the size and checksum it measured. Before,
+  a locked executable could make the archive step fail while the run still looked successful.
+- `FollowerForge.Cli.exe verify --plugin <file>` checks any plugin file on its own, including one
+  taken out of a finished follower package.
+- The warning about a hair that is not restricted to a race now names the race the hair mesh was
+  built for, when the mesh path records it. "Her hair sits wrong" becomes "this hair was built for
+  a TigerKhajiit head", which is the part you can act on.
+
+WHAT DID NOT CHANGE
+
+Follower generation, ESPFE output, FormIDs, profiles, Vortex and MO2 indexing, the face-tint slot
+rule, the four FaceGen states and the plugin checks are the same as 3.7.10.
+
+Nothing in this release was checked in game. There is no exported RaceMenu head on this machine to
+test with - only presets without their exported meshes - so the real-export path and everything that
+depends on it remain unverified: hair placement, face tint, eyes and brows, recruitment, cell
+transitions and save/reload.
+
+GitHub issue #2 ("hair below the head") is still open. The warning now says which race a hair mesh
+belongs to; it does not move a mesh.

@@ -1,0 +1,14 @@
+FollowerForge 3.7.5 — The hair problem now says what it is
+
+Bug-fix release. No new follower features. Followers you already built are unchanged until you build them again. No FormIDs were touched.
+
+Fixed
+- **"The hair is below the head" now has an answer in the build report.** Every build lists the head parts it writes: the slot, the FormID and the EditorID, one line each. Before this, a follower could come out with the wrong hair and the report would not say which hair she had, so a screenshot could not be traced back to a record.
+- **A head part that belongs to another race is named.** Hair, eyes and brows come from the RaceMenu preset, and each one carries a race list. If that list does not include her race, the game leaves the part off her without a word; the build now says which part and which race, and how to fix the preset.
+- **A preset made on one race and built as another warns instead of passing quietly.** Some hair records carry no race list at all, and the game then applies them to every race. A mesh modelled around one head will sit wrong on another — this is the usual cause of hair hanging low or oversized around a follower's jaw. When the preset's other parts name a different race, the build names that hair and its mesh file too.
+- **A preset that names two parts for the same slot, or names parts but no hair at all, warns.** The game keeps one part per slot, so the extra is dropped silently. A preset with no hair part builds a bald follower while everything else looks fine.
+
+Improved
+- The RaceMenu preset is read once per build instead of twice.
+
+Verified with automated tests and live builds against a real load order. In-game appearance was not checked.

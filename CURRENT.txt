@@ -1,5 +1,5 @@
-FollowerForge 3.8.0 — released 2026-11-13 as GitHub Latest (tag v3.8.0-beta, commit 9e20344). Promoted by the owner without an in-game pass.
-Snapshot: FollowerForge 3.8.0 (654 Release tests).
-Fixes: every follower was written with speed multiplier 0, height 0 and a 16.96x level multiplier; an outdoor follower blanked her worldspace record; Enemy-to-Ally hostile form never attacked and had no face; evolution stacked its bonuses; one damaged plugin stopped the whole index; MO2 voice scan missed every mod; the window wrote no log. New: Open follower reloads a built follower.
-Not verified: anything in game. Real RaceMenu export conversion, hair placement, tint, recruitment, movement, cell transitions, save/reload. This machine has presets but no exported head NIF/DDS.
-Details: FollowerForge 3.8.0/VALIDATION.md and STATE.md.
+FollowerForge 3.9.0 — active snapshot; release candidate for GitHub Latest.
+Snapshot: FollowerForge 3.9.0 (674 Release tests, 0 build warnings).
+New: Your followers (open, rebuild in place, pack, repair without a profile), Save draft, real version in the header. Fixed: follower packages wrote eight reports into the root of Data, so any two followers conflicted in Vortex/MO2; Dependabot never updated NuGet. Updated: Avalonia 12.1.6, Mutagen 0.54.4, xunit v3.
+Not verified: anything in game. Real RaceMenu export conversion, hair placement, tint, recruitment, movement, cell transitions, save/reload.
+Details: FollowerForge 3.9.0/VALIDATION.md and STATE.md.
