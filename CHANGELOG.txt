@@ -9,7 +9,7 @@
 - **Save draft…** saves a follower without building her. Open follower lists drafts beside built followers.
 - The header shows the real version. It read "CREATOR STUDIO 3.6", and development builds reported 1.0.0 everywhere. Manifests now record the version that wrote them.
 - **Dependabot never updated a NuGet package.** Its config pointed at the repository root, where no project lives; it only ever opened GitHub Actions updates. It now points at the active version folder, and CI fails if a version bump leaves it (or `CURRENT.txt`) behind.
-- Updated: Avalonia 12.1.6, Mutagen 0.54.4, Microsoft.Data.Sqlite 10.0.15, System.Drawing.Common 10.0.15, SQLitePCLRaw 2.1.14. The test suite moved from the retired xunit 2 to xunit v3; the build has 0 warnings.
+- Updated: Avalonia 12.1.6, Mutagen 0.54.4, Microsoft.Data.Sqlite 11.0.0 with SQLitePCLRaw 3 (native SQLite 3.53.3), System.Drawing.Common 11.0.0. A full re-index of a 3,017-plugin load order ran on the new SQLite stack. The test suite moved from the retired xunit 2 to xunit v3; the build has 0 warnings.
 - The release zip stores paths with forward slashes. Windows PowerShell 5.1's `Compress-Archive` wrote `cli\FollowerForge.Cli.exe`, which the zip format does not allow.
 - The share checklist pointed at `permissions-declaration.md`; the file is `PERMISSIONS.md`.
 - Tests: 654 -> 674.

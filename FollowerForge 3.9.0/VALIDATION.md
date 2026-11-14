@@ -35,6 +35,15 @@
 - `pack --builds` with a second follower: 19 entries, forward-slash paths, each follower's reports in
   its own folder, a contents file, no shared path.
 
+## Dependencies
+
+- Microsoft.Data.Sqlite 11.0.0 resolves SQLitePCLRaw 3.0.5 throughout, with the native library pinned at
+  3.53.3; no 2.x package remains in the graph.
+- On that stack: `races` and `search` read the existing 188 MB catalogue, and `index` rebuilt a fresh
+  one from the real load order — 357,061 records, 855,613 assets, 3,017 plugins, 58 s, nothing skipped.
+- After the 3.9.0 push Dependabot ran against the NuGet projects for the first time and opened PRs
+  #6-#10 (the SQLite and System.Drawing majors); those versions are what this tree now uses.
+
 ## Window
 
 - Headless render (`tools/UiScreenshots`) of all five themes at 1320x900, 2560x1440 and the 1040x700

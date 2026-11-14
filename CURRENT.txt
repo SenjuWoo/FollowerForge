@@ -1,5 +1,5 @@
 FollowerForge 3.9.0 — active snapshot; release candidate for GitHub Latest.
 Snapshot: FollowerForge 3.9.0 (674 Release tests, 0 build warnings).
-New: Your followers (open, rebuild in place, pack, repair without a profile), Save draft, real version in the header. Fixed: follower packages wrote eight reports into the root of Data, so any two followers conflicted in Vortex/MO2; Dependabot never updated NuGet. Updated: Avalonia 12.1.6, Mutagen 0.54.4, xunit v3.
+New: Your followers (open, rebuild in place, pack, repair without a profile), Save draft, real version in the header. Fixed: follower packages wrote eight reports into the root of Data, so any two followers conflicted in Vortex/MO2; Dependabot never updated NuGet. Updated: Avalonia 12.1.6, Mutagen 0.54.4, SQLite 11 / native 3.53.3, xunit v3.
 Not verified: anything in game. Real RaceMenu export conversion, hair placement, tint, recruitment, movement, cell transitions, save/reload.
 Details: FollowerForge 3.9.0/VALIDATION.md and STATE.md.

@@ -31,8 +31,8 @@ and MO2 reported any two followers as conflicting. They now install to `Data\Fol
 - The header shows the real version; manifests record it.
 - Dependabot now updates NuGet packages (its config pointed at a folder with no projects), and CI
   fails if a version bump leaves it behind.
-- Avalonia 12.1.6, Mutagen 0.54.4, Microsoft.Data.Sqlite 10.0.15, System.Drawing.Common 10.0.15;
-  tests on xunit v3; 0 build warnings.
+- Avalonia 12.1.6, Mutagen 0.54.4, Microsoft.Data.Sqlite 11.0.0 with SQLitePCLRaw 3 (SQLite 3.53.3),
+  System.Drawing.Common 11.0.0; tests on xunit v3; 0 build warnings.
 - The release zip uses forward slashes in its paths.
 
 ## Verification
