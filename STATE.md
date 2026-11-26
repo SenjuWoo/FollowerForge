@@ -17,7 +17,6 @@ unreleased; the snapshot STATE.md "Resume here" list is the open work.
 
 - Date: 2026-08-26
 - Current snapshot: `FollowerForge 3.7.0` (parent `FollowerForge 3.6.1` preserved)
-- Active owner application: Claude Code (Opus 5)
 - Milestone: 3.7.0 - creature transformation, the real "Must be fixed", preset body warning
 - Runtime target: Windows 10/11, Skyrim SE/AE, Vortex or Mod Organizer 2
 
@@ -131,13 +130,13 @@ editing, and a searchable Expert Deck for large record catalogues. Five token-dr
 Guided/Expert routing, a responsive dossier, and a command palette are live. UI preferences
 remain separate from follower profiles and existing application settings.
 
-Crash fix (2026-08-18, Kimi): every single-choice Expert Deck catalogue (race, face, voice,
+Crash fix (2026-08-18): every single-choice Expert Deck catalogue (race, face, voice,
 class, combat style, outfit, body records, transform race/spell, location) crashed the app on
 open. Root cause from Windows Application event 1026: `WizardWindow.RefreshDeck` mutated the
 DataGrid `SelectedItems` collection, which Avalonia only allows in Extended selection mode.
 Fixed mode-aware in `DeckGridSelection.SyncSelected`; four regression tests added.
 
-UI polish pass 2 (2026-08-18, Kimi): density/clarity rework of the Studio (roomier cards,
+UI polish pass 2 (2026-08-18): density/clarity rework of the Studio (roomier cards,
 taller rows, 8pt spacing, hover/pressed buttons, larger catalogues, clearer type hierarchy)
 following Raycast/Linear-style token research. Theme leaks fixed: badge chips bind to
 DynamicResource class styles and repaint live on theme switch; MO2 and first-run setup
@@ -157,8 +156,8 @@ so pages/sections/lists now fill the full content column. Overlay raised to full
 (pixel-verified, zero pill ghosting). All 26 catalogue list MaxHeights raised ~1.5× so
 populated lists use tall windows while empty ones still collapse.
 
-Release readiness (2026-08-19, Grok): finished Claude's half-wired review fixes and remaining
-Kimi data-loss / palette / readiness bugs. Expert Deck Apply uses OfferedKeys so armor and
+Release readiness (2026-08-19): finished the half-wired review fixes and the remaining
+data-loss / palette / readiness bugs. Expert Deck Apply uses OfferedKeys so armor and
 belongings slices cannot wipe siblings. Readiness Error is reserved for setup/build failure.
 Command palette Enter/arrows, real EditorIDs (including races), checkbox Apply, overlay-safe
 Ctrl shortcuts, and palette commands for Build / Paths / MO2 / Switch manager. 461 Release

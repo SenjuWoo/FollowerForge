@@ -242,11 +242,11 @@ Next, deliberately NOT in 3.6.1:
 4. [x] Review and approve the written UI design specification.
 5. [x] Produce an implementation plan with test-first milestones.
 6. [x] Implement theme tokens, shell/navigation, cards, dedicated pickers, and Expert Deck.
-6b. [x] Fix Expert Deck single-choice crash (mode-aware selection sync) + 4 regression tests. (Kimi)
-6c. [x] UI polish pass: density/clarity rework + live-theme chips and setup windows (theme-leak fix) + ThemeCoverageTests; 454 tests. (Kimi)
-6d. [x] UI polish pass 3: per-theme distinct status hues + tinted pill chips (user: "still yellow"); 456 tests. (Kimi)
-6e. [x] UI polish pass 4: overlay opacity, Light-theme variant fix, sidebar pills, auto-sizing lists/cards; headless screenshot harness. (Kimi)
-6f. [x] Release-readiness: deck apply no longer wipes sibling slices; readiness not red on empty draft; palette Enter/arrows/Build/Paths/MO2; real EditorIDs including races; checkbox Apply; overlay-safe shortcuts. 461 tests. (Grok)
+6b. [x] Fix Expert Deck single-choice crash (mode-aware selection sync) + 4 regression tests.
+6c. [x] UI polish pass: density/clarity rework + live-theme chips and setup windows (theme-leak fix) + ThemeCoverageTests; 454 tests.
+6d. [x] UI polish pass 3: per-theme distinct status hues + tinted pill chips (user: "still yellow"); 456 tests.
+6e. [x] UI polish pass 4: overlay opacity, Light-theme variant fix, sidebar pills, auto-sizing lists/cards; headless screenshot harness.
+6f. [x] Release-readiness: deck apply no longer wipes sibling slices; readiness not red on empty draft; palette Enter/arrows/Build/Paths/MO2; real EditorIDs including races; checkbox Apply; overlay-safe shortcuts. 461 tests.
 7. [x] Run exact Release tests, UI smoke checks, encoding guard, and source-path scan.
 8. [x] Build the self-contained Windows release, validate archive/hash, and update docs.
 9. [x] Pushed, CI green, tagged `v3.6.0`, zip attached (99,245,718 B, SHA-256 3EFA07D9…),

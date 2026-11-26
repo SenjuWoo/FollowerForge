@@ -16,8 +16,8 @@ FollowerForge is a Windows app that builds custom Skyrim SE/AE followers without
 Kit. It reads the load order you already have in Vortex or Mod Organizer 2: every race, voice,
 outfit, armour piece and place your mods add. You pick who she is, how she looks, sounds, fights,
 dresses and where she waits. It writes an ESPFE follower plugin with her RaceMenu face, packaged
-as a mod you install like any other. Before anything is packaged, every plugin is re-read by its
-own ship gate.
+as a mod you install like any other. Before anything is packaged, the written plugin is read back
+and checked: its header, masters and groups by the ship gate, its NPC values by the build.
 
 FollowerForge itself is **not** a Skyrim mod. Do not install the application into Skyrim
 `Data`, Vortex or MO2 as game content; install only the follower packages it builds.
@@ -26,7 +26,7 @@ FollowerForge itself is **not** a Skyrim mod. Do not install the application int
 
 - **Your own load order, not a fixed list.** Races, voices, outfits, armour, combat styles and spawn places come from the plugins you have enabled, with FormIDs shown so items with the same name can be told apart.
 - **A face that survives.** RaceMenu **Export Head** NIF/DDS files become the follower's FaceGen, with the tint written where the engine reads it and every head part listed by slot, FormID and EditorID.
-- **Plugins that load.** An ESPFE (HEDR 1.71, light-flagged) that only names the masters it needs. The ship gate refuses undeclared masters, records that overrun their group, a speed multiplier or height of 0, and a level multiplier that does not match what you asked for.
+- **Plugins that load.** An ESPFE (HEDR 1.71, light-flagged) that only names the masters it needs. The ship gate refuses undeclared masters and records or groups that overrun their declared size; the build also refuses a speed multiplier or height of 0 and a level multiplier that does not match what you asked for.
 - **Packages that do not conflict.** The plugin and FaceGen go where the game reads them. Notes go under `Data\FollowerForge\<plugin>\`, so two followers never overwrite each other in Vortex or MO2.
 - **Your followers in one place** (3.9.0): open, rebuild with the current version, pack several into one zip, or repair an old plugin whose profile is gone.
 - **Window and command line.** The Studio window guides you through seven categories; the CLI runs the same engine for scripted and batch builds.
@@ -128,7 +128,7 @@ The release zip carries `cli\FollowerForge.Cli.exe`. Run it with no arguments to
 2. **Index.** Reads every enabled plugin into a local SQLite catalogue (records and assets) plus a list of known places. A plugin that cannot be read is skipped and named.
 3. **Choose.** The Studio window (or a profile JSON) sets identity, appearance, voice, combat, outfit and placement. Choices refer to records by FormKey, so they survive load-order changes.
 4. **Compile.** Writes a light-flagged follower plugin with Mutagen: NPC, placed reference, outfit, AI and the scripts for the features you picked. Her face comes from the RaceMenu head export, converted to FaceGen.
-5. **Gate.** Re-reads the written bytes: header, masters, group sizes, NPC speed, height and level multiplier, worldspace record, FaceGen state. An error stops the build.
+5. **Check.** Re-reads the written bytes. The ship gate checks the header, masters and group sizes; the build's validator checks NPC speed, height and level multiplier, the worldspace record and the FaceGen state. An error stops the build.
 6. **Package.** Builds a mod folder (and optionally a zip) with the plugin at its root and the notes in `FollowerForge\<plugin>\`, plus a `rebuild-profile.json` so the follower can be reopened later.
 
 What has been checked, and what still needs an in-game pass, is listed in [docs/STATUS.md](docs/STATUS.md).

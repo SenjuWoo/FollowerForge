@@ -75,3 +75,5 @@ until the last two name the new folder.
   places by LocType keyword or marker type; version the library so it rebuilds itself.
 - Then: rerun the suite several times, republish, check CI on the final commit, tag v3.9.0, create the
   release, verify the asset hash, fill VALIDATION.md's @PACKAGE@ block and the Nexus kit.
+- At release: drop the "3.9.0 not released yet" notes from the root README.md (Quick start),
+  docs/STATUS.md (Release status) and docs/NOTES-BY-VERSION.md (3.9.0 heading).

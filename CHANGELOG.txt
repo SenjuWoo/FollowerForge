@@ -5,6 +5,7 @@
 - The README said "download the latest release" while describing 3.9.0 features; it now says 3.8.0 is the latest release and 3.9.0 is the unreleased source tree. It also listed "one zip that contains several followers" as not done, which `pack` does, and still named 3.7.6 as GitHub Latest.
 - The detailed verified / not-claimed list moved to `docs/STATUS.md`, and the per-version notes to `docs/NOTES-BY-VERSION.md`.
 - GITHUB.md no longer says the old account URL redirects here (that login is unclaimed), and names 3.9.0 as the ship tree.
+- Public-text pass on the active docs: assistant and model names removed from changelog, decision, plan and state history; owner-machine paths replaced in WORKSPACE_OWNERSHIP.md and the implementation map. The snapshot README no longer names 3.7.6 as GitHub Latest or calls follower packs undone. Frozen version folders are unchanged.
 
 ## [3.9.0] - 2026-11-14 - your followers in one place: open, rebuild, pack, repair
 - **Follower packages no longer write into the root of Data.** Every build put `manifest.json`, `credits.md`, `rebuild-profile.json`, `build-report.html`, `test-in-game.txt`, `SHARE-CHECKLIST.txt` and two more reports at the package root, so they installed into the root of Data under the same names for every follower. Vortex and MO2 reported any two followers as conflicting, and only the last one installed kept its rebuild profile. Reports now go in `FollowerForge\<plugin>\`, which is unique per follower. Only the plugin and the game's own folders sit at the root. A test fails if two followers ever share a file path again.
@@ -115,7 +116,6 @@ Unresolved: initial parent batch flake; exhaustive UI/Papyrus/in-game audit not 
 
 ================================================================================
 ## [3.7.0] - 2026-08-26 - transform into anything, and stop blocking a build that was fine
-Agent: Claude Code (Opus 5)
 Parent: FollowerForge 3.6.1
 
 Added:
@@ -168,10 +168,9 @@ Evidence:
 
 ================================================================================
 ## [3.6.0] - 2026-08-19 - complete frontend redesign - CRASH FIXED + UI POLISH PASSES 2-5 + RELEASE-READINESS
-Agent: Codex
 Parent: FollowerForge 3.5.0
 
-Release readiness (Agent: Grok, 2026-08-19):
+Release readiness (2026-08-19):
   Expert Deck Apply no longer wipes sibling armor/belongings slices: each deck commits only
   the keys it offered. Empty drafts no longer paint Identity/Review as Error (missing name is
   Needs attention; empty loadout is Optional; Review is Error only after a must-fix build or
@@ -181,7 +180,7 @@ Release readiness (Agent: Grok, 2026-08-19):
   Paths, MO2 setup, and Switch manager. Multi-select Apply honours checkbox ticks. Ctrl
   shortcuts do not drive the page behind a deck/palette overlay. 461 Release tests pass.
 
-Crash fix (Agent: Kimi, 2026-08-18, evidence: Windows Application event 1026, FollowerForge.exe 3.6.0.0):
+Crash fix (2026-08-18, evidence: Windows Application event 1026, FollowerForge.exe 3.6.0.0):
   Opening any single-choice Expert Deck catalogue (race, face, voice, class, combat style,
   outfit, body, transform race/spell, location) crashed the whole app:
   InvalidOperationException "Can only change SelectedItems collection in Extended selection
@@ -191,7 +190,7 @@ Crash fix (Agent: Kimi, 2026-08-18, evidence: Windows Application event 1026, Fo
   Extended; SelectedItem otherwise), regression-pinned by tests.
   Scroll-menu compression addressed in the UI polish pass below; user re-rating pending.
 
-UI polish (Agent: Kimi, 2026-08-18):
+UI polish (2026-08-18):
   - Density and clarity pass: roomier cards, taller list/grid rows, 8pt spacing, clearer
     type hierarchy, hover/pressed buttons, larger catalogue lists (Raycast/Linear-style
     token guidance; research via kimi_search_v2 — Firecrawl not installed on this machine).
@@ -200,7 +199,7 @@ UI polish (Agent: Kimi, 2026-08-18):
   - ThemePalette gains Info + OnStatus slots on all five themes; ThemeCoverageTests pin
     palette completeness, zero hardcoded brushes in Ui XAML, and chip-class wiring.
 
-UI polish pass 3 (Agent: Kimi, 2026-08-18; user feedback: "no differences, error still yellow"):
+UI polish pass 3 (2026-08-18; user feedback: "no differences, error still yellow"):
   - Root cause of the still-frozen look: pass 2 fixed the plumbing (chips follow theme
     tokens), but every theme's Warning/Danger tokens held nearly the same amber/red hex, so
     a theme switch visibly repainted nothing. Warning and Danger hues are now distinct per
@@ -212,7 +211,7 @@ UI polish pass 3 (Agent: Kimi, 2026-08-18; user feedback: "no differences, error
   - Flake note: two Phase6 build-pipeline tests fail intermittently under full-suite IO load
     (Directory.Move publish step); green isolated and on retry; unrelated to the UI diff.
 
-UI polish pass 4 (Agent: Kimi, 2026-08-19; screenshot-verified with new headless harness):
+UI polish pass 4 (2026-08-19; screenshot-verified with new headless harness):
   - Overlay dim raised 80%→95% opaque: sidebar status labels no longer ghost through the
     deck/palette overlay (the user's "chips overlay the yellow labels").
   - Light theme fixed: App.axaml hardcoded RequestedThemeVariant=Dark, leaving Fluent
@@ -223,7 +222,7 @@ UI polish pass 4 (Agent: Kimi, 2026-08-19; screenshot-verified with new headless
   - tools/UiScreenshots renders the real window headlessly to PNG per theme — UI changes
     are screenshot-verified before shipping from now on.
 
-UI polish pass 5 (Agent: Kimi, 2026-08-19; user 2560x1440 screenshots: "space allocation is
+UI polish pass 5 (2026-08-19; user 2560x1440 screenshots: "space allocation is
 trash, overlay still happening"):
   - Wasted-space root cause, three layers deep: category host was a plain Panel (arranges
     children at desired size, never stretches), page ScrollViewers allowed unconstrained
@@ -262,7 +261,6 @@ Runtime: tool-validated; real-user Skyrim confirmation pending.
 GitHub release: not published in this run.
 ================================================================================
 ## [3.5.0] - 2026-08-16 - werewolf revert after combat
-Agent: Grok
 Parent: FollowerForge 3.4.0
 
 Reported: the werewolf option did not revert once the battle ended.
@@ -288,7 +286,6 @@ Verify: 388 tests pass (386 from 3.4.0 + 2 new; one old werewolf FX assertion in
 Nexus: pending publish
 ================================================================================
 ## [3.4.0] - 2026-08-16 - paths, pronouns, gear FormIDs
-Agent: Grok
 Parent: FollowerForge 3.3.0
 
 Reported by a user who actually used the 3.3.0 wizard:
@@ -315,7 +312,6 @@ Verify: 386 tests pass (367 from 3.3.0 + 19 new).
 Nexus: pending publish
 ================================================================================
 ## [3.3.0] - 2026-08-11 - arrows, stack counts, and honest names
-Agent: Claude
 Parent: FollowerForge 3.2.9
 
 Reported by users on 3.2.9:
@@ -362,7 +358,6 @@ Verify: 367 tests pass. Built with the published CLI and read back with houseCAR
 Nexus: YES
 ================================================================================
 ## [3.2.9] - 2026-08-10 - race name false-positives, manual placement, cell FormVersion
-Agent: Grok
 Parent: FollowerForge 3.2.8
 
 Fixed:
@@ -385,7 +380,6 @@ Verify: 357 tests pass (checked on this machine before the GitHub push).
 Nexus: YES
 ================================================================================
 ## [3.2.8] - 2026-08-10 - MO2 builds find their masters
-Agent: Grok
 Parent: FollowerForge 3.2.7
 
 Fixed:
@@ -404,7 +398,6 @@ Rollback: reinstall 3.2.7; MO2 settings under LocalAppData\FollowerForge are unc
 Nexus: YES
 ================================================================================
 ## [3.2.7] - 2026-08-09 - deterministic MO2 instance/profile setup
-Agent: Codex
 Parent: FollowerForge 3.2.6
 
 Fixed:
@@ -419,7 +412,6 @@ Vortex behavior and all Skyrim follower output formats are unchanged.
 Rollback: reinstall 3.2.6; optionally remove LocalAppData\FollowerForge\mo2-settings.json.
 ================================================================================
 ## [3.2.7] - 2026-08-09 - planned: reliable MO2 instance and profile setup
-Agent: Codex
 Parent: FollowerForge 3.2.6
 
 Reported:
@@ -443,7 +435,6 @@ Runtime: untested.
 Nexus: pending.
 ================================================================================
 ## [3.2.6] - 2026-08-07 - fix a broken faction on every follower ever built
-Agent: Claude
 Parent: FollowerForge 3.2.5
 
 Fixed:
@@ -473,7 +464,6 @@ Verify: 325 tests pass. Published zip boot-checked; rebuilt follower sweeps clea
 Nexus: YES - worth shipping over 3.2.5.
 ================================================================================
 ## [3.2.5] - 2026-08-06 - choose her body; find the game and MO2 off drive C:
-Agent: Claude
 Parent: FollowerForge 3.2.4
 
 Added:
@@ -511,7 +501,6 @@ Verify: 297 tests pass, 0 failed. Published zip boot-checked; `env` on this mach
 Nexus: YES
 ================================================================================
 ## [3.2.4] - 2026-08-06 - MO2 switch during load; Export Head not false NO SCULPT
-Agent: Grok
 Parent: FollowerForge 3.2.3
 
 Fixed:
@@ -525,7 +514,6 @@ Fixed:
 Verify: unit tests + publish.
 Nexus: YES
 ## [3.2.3] - 2026-08-05 - face noise, black-face probe, GUI MO2, overwrite path
-Agent: Grok
 Parent: FollowerForge 3.2.2
 
 Fixed:
@@ -541,7 +529,6 @@ Fixed:
 Verify: unit tests + publish.
 Nexus: YES
 ## [3.2.2] - 2026-08-05 - brand: FollowerForge (pair with FaceForge)
-Agent: Grok
 Parent: FollowerForge 3.2.1
 
 Changed:
@@ -553,7 +540,6 @@ Changed:
 Verify: tests + publish package after rename.
 Nexus: YES
 ## [3.2.1] - 2026-08-05 - hotfix: do not hang on houseCARL Vortex shim
-Agent: Grok
 Parent: FollowerForge 3.2.0
 
 Fixed:
@@ -565,7 +551,6 @@ Verify: 285 tests pass; `fforge env` reports Vortex while SKYRIM_MO2_INSTANCE po
 ================================================================================
 ================================================================================
 ## [3.2.0] - 2026-08-05 - MO2, share package UX, face clarity, Nexus rewrite
-Agent: Grok
 Parent: FollowerForge 3.1.1
 
 Added:
@@ -584,7 +569,6 @@ Runtime: MO2 live catalogue against a large personal instance is user-side; unit
 Nexus: YES (docs ready)
 ================================================================================
 ## [3.1.1] - 2026-08-05 - say so when a preset's shape cannot become a follower
-Agent: Claude
 Parent: FollowerForge 3.1.0
 
 Runtime basis:
@@ -637,7 +621,6 @@ Nexus: NO (local tool)
 
 ================================================================================
 ## [3.1.0] - 2026-08-05 - lore items build, the preset's complexion ships, and the lists finally read
-Agent: Claude
 Parent: FollowerForge 3.0.0
 Note: 3.0.1 was prepared and never released; its fixes are folded in here.
 
@@ -720,7 +703,6 @@ Nexus: NO (local tool)
 
 ================================================================================
 ## [3.0.0] - 2026-07-29 - the follower suite
-Agent: Claude
 Parent: FollowerForge 2.1.3
 
 Everything below this entry shipped during 2.1.3's development and is released as 3.0.0.
@@ -761,7 +743,6 @@ RELEASE STATUS - stated plainly rather than implied:
 
 ================================================================================
 ## [3.0.0 development] — 2026-07-25 — face pairing fix + voice-synthesis groundwork
-Agent: Claude
 
 FACE MATCHING BUG (user-reported): 'A1_Imperial_Matilda_head' failed at BUILD time with
   "has a head export but no readable matching jslot ... re-save the preset" — but the preset
@@ -1364,7 +1345,6 @@ Verify: build 0 warnings / 0 errors; tests 109 -> 162; wizard launches; rebuilt 
 
 ================================================================================
 ## [2.1.3] - 2026-07-28 (Readable custom skill values)
-Agent: Codex
 Parent: FollowerForge 2.1.2
 UI repair:
   - All 18 custom skill editors now reserve 150 pixels for the numeric value and spinner buttons.
@@ -1379,7 +1359,6 @@ Nexus: NO (local tool)
 
 ================================================================================
 ## [2.1.2] - 2026-07-28 (Optional full skill and primary-stat customization)
-Agent: Codex
 Parent: FollowerForge 2.1.1
 Runtime basis:
   - The user confirmed that 2.1.1 works wonderfully in Skyrim.
@@ -1405,7 +1384,6 @@ Nexus: NO (local tool)
 
 ================================================================================
 ## [2.1.1] - 2026-07-28 (Runtime-correct placement, equipment, FaceGen, masters, and cache recovery)
-Agent: Codex
 Parent: FollowerForge 2.1.0
 Confirmed repairs:
   - SQLite cache failures are now self-recovering: broken DB/WAL/SHM files are quarantined
@@ -1438,7 +1416,6 @@ Nexus: NO (local tool)
 
 ================================================================================
 ## [2.1.0] - 2026-07-26 (Equipment-first follower construction + crash hardening)
-Agent: Codex
 Parent: FollowerForge 2.0.0
 Intent:
   - Replace the primary OTFT picker with actual ARMO equipment selection grouped by
@@ -1461,7 +1438,6 @@ Verify (pending):
 Nexus: NO (local tool)
 ================================================================================
 ## [2.0.0] — 2026-07-24 (Location Library + wizard)
-Agent: Claude
 Intent: Turn an engineer's tool into a follower-maker. v1 required hand-written JSON with raw
   FormKeys and could effectively only spawn followers at one hardcoded Whiterun spot.
 Files changed (added):

@@ -1,6 +1,6 @@
 # FollowerForge — Phase 0 Environment-Capability Report
 
-Date: 2026-07-16 · Agent: Claude · All inspection was **read-only**.
+Date: 2026-07-16 · All inspection was **read-only**.
 
 ## 1. Machine / toolchain
 

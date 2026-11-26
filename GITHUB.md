@@ -44,6 +44,6 @@ git remote add origin https://github.com/SenjuWoo/FollowerForge.git
 ## Do not
 
 - Create a second GitHub repo with a different name for the same mod.
-- Push Claude/GPT/Grok twin trees to different remotes.
+- Push per-assistant twin trees to different remotes.
 - Commit API keys or full game ESMs.
 

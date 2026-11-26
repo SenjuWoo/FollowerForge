@@ -161,8 +161,7 @@ Not claimed:
 - A FaceGen conversion that finishes on its own. Nothing here was checked in game, and this machine has no head export to convert
 - A creature transform surviving a real fight. `SetRace()` is engine behaviour this build cannot exercise
 - That a RaceMenu body shape or overlay transfers into the plugin. They do not. The build warns when shaped `bodyMorphs` are present
-- A Fallout 4 port, or one zip that contains several followers
-- Nexus upload of 3.7.6. GitHub Latest is [v3.7.6](https://github.com/SenjuWoo/FollowerForge/releases/tag/v3.7.6) from `67a840a`. The zip is 99403591 bytes, SHA-256 `77e511b026cd23d6b18d1314d188008aa2916f2d523a9c142f89402725536170`
+- A Fallout 4 port
 
 ## Build from source
 

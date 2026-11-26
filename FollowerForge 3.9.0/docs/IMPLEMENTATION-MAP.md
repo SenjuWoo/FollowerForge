@@ -30,7 +30,7 @@
 ## Key mechanisms
 
 ### Read-only enforcement
-`WriteGuard` service: every file write in the app goes through it; it refuses (throws + logs) any path under game root, staging root, or any Vortex-managed folder. Workspace default: `Z:\Backup\!Skyrim AE\z1ClaudeWork\FollowerForge\output\` (configurable). Atomic builds: `workspace\.staging\<buildId>\` → validate → move to `workspace\builds\<FollowerName x.y.z>\`.
+`WriteGuard` service: every file write in the app goes through it; it refuses (throws + logs) any path under game root, staging root, or any Vortex-managed folder. Workspace default: `%LOCALAPPDATA%\FollowerForge\workspace\` (configurable). Atomic builds: `workspace\.staging\<buildId>\` → validate → move to `workspace\builds\<FollowerName x.y.z>\`.
 
 ### Load-order construction
 1. Read active profile `plugins.txt` (enabled = `*` lines) in file order.

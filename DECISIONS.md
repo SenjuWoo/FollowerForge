@@ -41,7 +41,7 @@
 - When no such path exists, claim slot 6 only if it is empty or already a tint path, and only on a shape that is a head (name contains "head", or the diffuse file name does). Otherwise refuse and say how to Ctrl+F4.
 - One skipped head produces one warning. The build summary must not call that outcome the default face.
 
-## 2026-08-26 - 3.7.0: creature transformation, and the outfit branch (Claude Code)
+## 2026-08-26 - 3.7.0: creature transformation, and the outfit branch
 
 - A creature race is excluded from the IDENTITY picker because it carries no head data, so no
   face can ever be built for it. That is a constraint on the race she IS. It does not apply to
@@ -72,7 +72,7 @@
   regardless of use (119 present, 86 shaped in the reference preset), so counting entries
   rather than values would warn on every single build and be ignored within a week.
 
-## 2026-08-19 - 3.6.0 release-readiness: deck apply, readiness colors, palette (Grok)
+## 2026-08-19 - 3.6.0 release-readiness: deck apply, readiness colors, palette
 
 - Stay on snapshot 3.6.0. It was never a public release; 3.5.0 remains the rollback.
 - Expert Deck Apply must replace only OfferedKeys (the session catalogue), never the search
@@ -84,7 +84,7 @@
   refilter. Escape is Handled only when an overlay is actually open.
 - Race rows must carry the plugin EditorID. Friendly names like "Nord" are not NordRace.
 
-## 2026-08-19 - 3.6.0 UI polish pass 4: verify visually, fix variant + overlay (Kimi)
+## 2026-08-19 - 3.6.0 UI polish pass 4: verify visually, fix variant + overlay
 
 - Never ship UI changes unrendered again: three passes of "polish" read fine in XAML but the
   user saw no difference. tools/UiScreenshots (Avalonia.Headless + UseSkia,
@@ -101,7 +101,7 @@
   MaxHeight everywhere now (empty collapses, populated grows). Studio cards dropped their
   fixed 280x172 sizing. Sidebar statuses use the same tinted-pill chip system as rows.
 
-## 2026-08-18 - 3.6.0 UI polish pass 3: status colors must differ per theme (Kimi)
+## 2026-08-18 - 3.6.0 UI polish pass 3: status colors must differ per theme
 
 - User feedback on pass 2 ("no differences, error still yellow no matter the theme") exposed
   a semantic miss: chips followed theme tokens, but every theme's Warning/Danger hex was
@@ -116,7 +116,7 @@
   publish move; passes isolated and on retry; UI-only diff cannot cause it. If it recurs,
   harden the builder's delete+move with a short retry instead of blaming new work.
 
-## 2026-08-18 - 3.6.0 UI polish pass (Kimi)
+## 2026-08-18 - 3.6.0 UI polish pass
 
 - Badge/chip theming uses Avalonia class styles + `Classes.chip-warn="{Binding ChipWarn}"`-style
   bindings on DynamicResource brushes instead of code-held IBrush fields. Static brushes cannot
@@ -131,7 +131,7 @@
   tool visible), so kimi_search_v2 was used instead. Install a Firecrawl MCP server if repeated
   design-site scraping is wanted.
 
-## 2026-08-18 - 3.6.0 crash fix (Kimi)
+## 2026-08-18 - 3.6.0 crash fix
 
 - Fix inside the existing 3.6.0 WIP snapshot instead of cutting 3.6.1: 3.6.0 was never pushed
   or released anywhere, so its local archive is replaceable; 3.5.0 remains the untouched
@@ -142,7 +142,7 @@
 - Cover the fix with real-control tests (a bare `DataGrid` works in the plain xunit host; no
   headless package needed). One test pins that Single-mode `SelectedItems.Clear()` throws, so
   the regression guard cannot silently rot.
-- Kimi shell note: this agent's process tree strips `ProgramFiles`/`ProgramFiles(x86)`/
+- Shell note: one agent's process tree strips `ProgramFiles`/`ProgramFiles(x86)`/
   `ProgramData`/`CommonProgramFiles`, which makes NuGet fail with `Value cannot be null.
   (Parameter 'path1')`. Inject them with `env` per invocation; also run
   `dotnet build-server shutdown` once so reused MSBuild nodes from a stripped-environment

@@ -346,7 +346,7 @@ every named 3.5.0 input/action to its 3.6.0 destination. Any unmapped field bloc
 
 ## 17. Approved visual reference
 
-The approved mockup is the “Studio → Focus Cards → Expert Deck” hybrid shown in the Codex visual
+The approved mockup is the “Studio → Focus Cards → Expert Deck” hybrid shown in the visual
 companion on 2026-08-18. It defines the hierarchy and density model, not pixel-perfect colors or
 placeholder record content. Final implementation must follow this specification and the real
 3.5.0 field inventory.
