@@ -10,8 +10,7 @@ line is history.
 2026-11-25 repository pass (docs only, no app change, no tag): README rebuilt with
 `docs/presentation/` images from real runs (CLI build + ship gate in a temp folder, xunit 674/674),
 detail moved to `docs/STATUS.md` and `docs/NOTES-BY-VERSION.md`, GITHUB.md old-login line fixed,
-ShugokiFable links in the v3.1.1/v3.2.0/v3.2.2 release bodies pointed at SenjuWoo. 3.9.0 is still
-unreleased; the snapshot STATE.md "Resume here" list is the open work.
+ShugokiFable links in the v3.1.1/v3.2.0/v3.2.2 release bodies pointed at SenjuWoo. 3.9.0 was released on GitHub 2026-11-26 as v3.9.0 (Latest; zip sha256 46be9afd6343fa8b71b7b931b54e283fb498f250c4084a65ed82118176c9ed40, verified by download); Nexus upload and an in-game pass are still the owner's; the snapshot STATE.md "Resume here" list is the open work.
 
 # FollowerForge state
 
