@@ -37,7 +37,7 @@ and MO2 reported any two followers as conflicting. They now install to `Data\Fol
 
 ## Verification
 
-674 Release tests. Against a real 2,944-plugin load order: a follower built by 3.7.11 was found,
+674 Release tests. Against a real Vortex load order (2,937 enabled plugins): a follower built by 3.7.11 was found,
 marked as needing a rebuild, rebuilt in place, and separately repaired from its plugin alone (speed
 100, height 1.0, level multiplier 1.0, full WhiterunWorld record, ship gate passed, original
 untouched); two followers were packed with no shared path. The window was rendered headlessly in all

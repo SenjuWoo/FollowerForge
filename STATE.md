@@ -7,6 +7,12 @@ Vortex and MO2; updates dependencies and repairs Dependabot. 674 Release tests, 
 checked in game. Current detail lives in that folder's STATE.md and VALIDATION.md; everything below this
 line is history.
 
+2026-11-25 repository pass (docs only, no app change, no tag): README rebuilt with
+`docs/presentation/` images from real runs (CLI build + ship gate in a temp folder, xunit 674/674),
+detail moved to `docs/STATUS.md` and `docs/NOTES-BY-VERSION.md`, GITHUB.md old-login line fixed,
+ShugokiFable links in the v3.1.1/v3.2.0/v3.2.2 release bodies pointed at SenjuWoo. 3.9.0 is still
+unreleased; the snapshot STATE.md "Resume here" list is the open work.
+
 # FollowerForge state
 
 - Date: 2026-08-26

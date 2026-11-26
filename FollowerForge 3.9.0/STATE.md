@@ -54,3 +54,24 @@ until the last two name the new folder.
 3. Open: GitHub issue #2 (hair below the head), RaceMenu overlays, black face with custom warpaint;
    all need a real head export to work from.
 4. Unverified: RSVexclude.ini's file name and location for the RSV mod (not installed here).
+
+## Resume here (2026-11-14, session cut by usage limit)
+
+- Pushed: `3ee2811` (3.9.0 features) and `0104a8d` (SQLite 11 / SQLitePCLRaw 3 / System.Drawing 11).
+  CI is green on every check for both commits (xunit, CodeQL C# and Actions, Dependabot), with 0 open
+  Dependabot, code-scanning and secret-scanning alerts.
+- NOT released: no v3.9.0 tag or GitHub release yet. GitHub Latest is still 3.8.0.
+- A republish from `0104a8d` stopped at its test step with "tests failed (1)"; the failing test's name
+  was lost. A rerun straight after passed 674/674. Treat it as a possible intermittent failure: run
+  the suite several times before publishing again.
+- Local, uncommitted: `release-notes-3.9.0.md` now says "2,937 enabled plugins".
+- Dependabot PRs #6-#10 propose the versions `0104a8d` already uses; Dependabot should close them
+  on its next run.
+- New request, not started: more spawn locations such as farms. Diagnosis: outdoor grid cells are
+  marked not placeable (`SpawnLocation.Placeable`), and base-game plugins are skipped by
+  `LocationScanner.IsBaseGame`. Plan: place grid spots via the worldspace's persistent cell at their
+  coordinates; harvest named map markers (`PlacedObject.MapMarker`: Name, Type) and door arrival
+  points (`PlacedObject.TeleportDestination`: Door, Position, Rotation) into named interiors; tag
+  places by LocType keyword or marker type; version the library so it rebuilds itself.
+- Then: rerun the suite several times, republish, check CI on the final commit, tag v3.9.0, create the
+  release, verify the asset hash, fill VALIDATION.md's @PACKAGE@ block and the Nexus kit.

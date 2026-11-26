@@ -4,10 +4,10 @@
 |--|--|
 | **Repo** | https://github.com/SenjuWoo/FollowerForge |
 | **Clone** | `git clone https://github.com/SenjuWoo/FollowerForge.git` |
-| **Account** | SenjuWoo (the old ShugokiFable URL redirects here) |
+| **Account** | SenjuWoo. The old login was released and is unclaimed: link only to `github.com/SenjuWoo/...` |
 | **Default branch** | `main` |
 | **Owner work root** | workspace `FollowerForge` (versioned snapshots under this folder) |
-| **Current ship tree** | the snapshot named in `CURRENT.txt` (now `FollowerForge 3.8.0/`) |
+| **Current ship tree** | the snapshot named in `CURRENT.txt` (now `FollowerForge 3.9.0/`) |
 | **This folder** | canonical publish home for this app |
 
 ## What to push

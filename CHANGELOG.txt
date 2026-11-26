@@ -1,5 +1,11 @@
 # CHANGELOG — FollowerForge
 
+## [Unreleased] - 2026-11-25 - repository presentation (no app change)
+- README rebuilt around a cover image, real terminal shots (a CLI build checked by the ship gate, and the test suite) and the existing Studio screenshot. Images live in `docs/presentation/`, which the release zip does not include.
+- The README said "download the latest release" while describing 3.9.0 features; it now says 3.8.0 is the latest release and 3.9.0 is the unreleased source tree. It also listed "one zip that contains several followers" as not done, which `pack` does, and still named 3.7.6 as GitHub Latest.
+- The detailed verified / not-claimed list moved to `docs/STATUS.md`, and the per-version notes to `docs/NOTES-BY-VERSION.md`.
+- GITHUB.md no longer says the old account URL redirects here (that login is unclaimed), and names 3.9.0 as the ship tree.
+
 ## [3.9.0] - 2026-11-14 - your followers in one place: open, rebuild, pack, repair
 - **Follower packages no longer write into the root of Data.** Every build put `manifest.json`, `credits.md`, `rebuild-profile.json`, `build-report.html`, `test-in-game.txt`, `SHARE-CHECKLIST.txt` and two more reports at the package root, so they installed into the root of Data under the same names for every follower. Vortex and MO2 reported any two followers as conflicting, and only the last one installed kept its rebuild profile. Reports now go in `FollowerForge\<plugin>\`, which is unique per follower. Only the plugin and the game's own folders sit at the root. A test fails if two followers ever share a file path again.
 - **Your followers, in one place.** The Studio page has a new "Your followers" card, and **Open follower…** lists every follower you have built and every saved draft, newest first, with the ones that need a rebuild marked. No more digging three folders deep for a profile file.
